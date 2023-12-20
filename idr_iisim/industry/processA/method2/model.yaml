@@ -1,0 +1,36 @@
+# Model file
+
+name: method2
+id: industry-process_a-method2
+description: method 2 description
+version: 1.0.0
+
+constants:
+  - name: alpha
+    label: alpha
+    description: constant1 description
+    value: 0.5
+
+inputs:
+  - name: Ao
+    label: Ao
+    description: Ao description
+    value: null
+    from: industry-process_a-method1
+
+
+# Expected number of outputs. In this case: 1
+# The formula can use other outputs as inputs
+outputs:
+  - name: Xo
+    label: Xo
+    operation: Ao * alpha # sympify valid expression
+    args:
+      - name: Ao
+        type: inputs
+      - name: alpha
+        type: constants
+    description: Xo output description
+    value: null
+
+    # more outputs can be defined here
