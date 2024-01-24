@@ -1,28 +1,43 @@
-# Model file
+# Model Template for any method
+# This YAML file represents the configuration of a mathematical model named "method1" within an industrial process.
 
-name: method1
+# Model information
+name: method1 # The name of the model without spaces. It must be the same name as the method folder.
+
+# 'id' represents the unique identifier for the model within a specific industry process.
+# It is composed by the industry name, the process name and the model name separated by '_'.
 id: industry-process_a-method1
-description: A description
-version: 1.0.0
+description: A description # A description of the model
+version: 1.0.0 # The version of the model
+debug: false # If true, the model will be executed in debug mode. In this mode, the model will print the operations and
+             # values of the operations.
 
+# Constants are values that are not expected to change during the simulation. These values are defined beforehand.
 constants:
-  - name: alpha
-    label: alpha
-    description: constant1 description
-    # cita, fuente, etc
-    # source: https://www.google.com
-    value: 0.25
-    # units: km
+  - name: alpha # constant name. It must be unique within the model, and it must not contain spaces.
+    label: alpha # constant label used to represent the constant in the block diagram.
+    description: constant1 description # A description of the constant
+    source: https://www.google.com # Cite, source or reference of the constant
+    value: 0.25 # The value of the constant
+    units: km # The units of the constant
 
     # more constants can be defined here
+    # .
 
+# Inputs relates to the values that are used as inputs for the model. These values might change during the simulation.
+# The values can be defined here, or they can be gotten from other models. If the value is obtained from other model,
+# the 'from' field must be defined with the id of such model, and it's name must be the name of the output of the model.
+#
+# For example, if the 'industry-process_a-method2' has an output named 'Xo', and this method needs
+# this value as input, the 'from' field of the input 'Xo' of  this model must be defined as 'industry-process_a-method2'.
+#
 inputs:
-  - name: a0
-    label: a0
-    description: a0 description
-    value: 10
-    # units: m
-    from: null  # industry-process_name-method_name
+  - name: a0 # name of the input. It must be unique within the model, and it must not contain spaces.
+    label: a0 # label used to represent the input in the block diagram.
+    description: a0 description # A description of the input
+    value: 10 # The value of the input
+    units: m
+    from: null  # null if the value is defined here, or the id of the model if the value is obtained from other model.
 
   - name: b0
     label: b0
@@ -30,22 +45,35 @@ inputs:
     value: 20
     from: null
 
-  - name: c0
-    label: c0
-    description: c0 description
-    value: 30
-    from: null
+  - name: Xo
+    label: Xo
+    description: Xo description
+    value: null
+    # In this case the value of the input Xo is obtained from the output Xo of the model method2
+    from: industry-process_a-method2
+
 
     # more inputs can be defined here
 
 
-# Expected number of outputs. In this case: 1
-# The formula can use other outputs as inputs
+# Outputs relates to the values that are obtained from the model. These values are calculated from the inputs, constants
+# and other outputs of the model. The 'operation' field defines the operation that is used to calculate the output.
+#
+# Outputs can be vectors. In this case the 'range' field must be defined with the variable that is used as the range of
+# the vector. The 'start', 'end' and 'step' fields define the start, end and step of the range.
+# In the case of the vectorized outputs that are inputs of other outputs, the last value of the vector is used.
 outputs:
-  - name: Ao
-    label: Ao
-    operation: a0 + b0 # sympify valid expression
+  - name: Ao # output name. It must be unique within the model, and it must not contain spaces.
+    label: Ao # label used to represent the output in the block diagram.
+    operation: a0 + b0 # sympy valid expression (https://docs.sympy.org/latest/index.html)
+    range:
+      variable: t
+      start: 0
+      end: 10
+      step: 1
     args:
+      ## The args field defines the inputs and constants that are used in the operation. In this case the operation is
+      ## f(a0,b0) so the args field must contain the inputs a0 and b0.
       - name: a0
         type: inputs
       - name: b0
@@ -56,14 +84,6 @@ outputs:
   - name: Bo
     label: Bo
     operation: a0 + b0 * alpha
-    # init:  # inital args
-      # - name: a0
-      #   type: inputs
-      # - name: b0
-      #   type: inputs
-      # - name: alpha
-      #   type: constants
-
     args:
       - name: a0
         type: inputs
@@ -74,8 +94,7 @@ outputs:
     description: output2 description
     value: null
 
-
-
+  ## In this case the output Co is obtained from the outputs Ao and Bo of the model method1.
   - name: Co
     label: Co
     operation: Ao + Bo
@@ -88,11 +107,3 @@ outputs:
     value: null
 
     # more outputs can be defined here
-
-# TODO: definir salidas finales por proceso. Añadir nodo return.
-# TODO: Añadir modo debug para ver operaciones y valores de las mismas.
-# TODO: El output puede ser un vector de rango T. Si el output llama a otro ouput que es un vector se coge el ultimo valor de este
-# A_t = a0 + b0 // donde A_t va de 0 a T
-# B_t = A_T + alpha
-
-# support for recursive functions: https://docs.sympy.org/latest/modules/series/sequences.html#recursive-sequences
