@@ -74,6 +74,9 @@ def main() -> None:
             # calculate the model
             instance.calculate()
             models_dict.mark_model_as_processed(model_instance_id)
+
+            # print diagrams
+            instance.print_diagram()
             print("\n\n")
 
 
