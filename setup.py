@@ -6,7 +6,7 @@ from idr_iisim.utils.config import GlobalVariables
 from idr_iisim.utils.execution import generate_execution_queue
 from idr_iisim.utils.logger import i_logger
 from idr_iisim.utils.models_dict import models_dict
-from idr_iisim.utils.types import ArgumentStruct
+from idr_iisim.utils.schema import Validator
 
 class_name = "MethodModel"
 
@@ -37,6 +37,12 @@ def init() -> None:
     i_logger.logger.debug("reading config file")
     GlobalVariables()
     i_logger.logger.debug("config file read")
+
+    # init yaml validator
+    i_logger.logger.debug("initializing yaml validator")
+    Validator()
+    i_logger.logger.debug("yaml validator initialized")
+
 
     # find processes
     i_logger.logger.debug("finding processes")

@@ -17,10 +17,10 @@ class ModelDict:
 
         # add dependencies
         # model_id -> list[dependent_models_ids]
-        model_dependecies = list(filter(lambda x: x["from"] is not None, model.config.inputs))
+        model_dependencies = list(filter(lambda x: x["from"] is not None, model.config.inputs))
 
         # filter from values
-        from_list = list(map(lambda x: x["from"], model_dependecies))
+        from_list = list(map(lambda x: x["from"], model_dependencies))
         if len(from_list) > 0:
             self.dependencies[key] = from_list
         pass

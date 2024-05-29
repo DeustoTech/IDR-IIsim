@@ -4,13 +4,14 @@ name: method1
 id: industry-process_a-method1
 description: A description
 version: 1.0.0
+debug: false
 
 constants:
   - name: alpha
     label: alpha
     description: constant1 description
-    # cita, fuente, etc
-    # source: https://www.google.com
+    citation: test
+    source: https://www.google.com
     value: 0.25
     # units: km
 
@@ -20,20 +21,20 @@ inputs:
   - name: a0
     label: a0
     description: a0 description
-    value: 10
+    value: [10, 15]
     # units: m
     from: null  # industry-process_name-method_name
 
   - name: b0
     label: b0
     description: b0 description
-    value: 20
+    value: [20, 35]
     from: null
 
   - name: c0
     label: c0
     description: c0 description
-    value: 30
+    value: [30]
     from: null
 
     # more inputs can be defined here
@@ -56,14 +57,6 @@ outputs:
   - name: Bo
     label: Bo
     operation: a0 + b0 * alpha
-    # init:  # inital args
-      # - name: a0
-      #   type: inputs
-      # - name: b0
-      #   type: inputs
-      # - name: alpha
-      #   type: constants
-
     args:
       - name: a0
         type: inputs
@@ -73,8 +66,6 @@ outputs:
         type: constants
     description: output2 description
     value: null
-
-
 
   - name: Co
     label: Co
@@ -86,12 +77,14 @@ outputs:
         type: outputs
     description: output3 description
     value: null
+#
+#    # more outputs can be defined here
 
-    # more outputs can be defined here
 
 # TODO: definir salidas finales por proceso. Añadir nodo return.
 # TODO: Añadir modo debug para ver operaciones y valores de las mismas.
-# TODO: El output puede ser un vector de rango T. Si el output llama a otro ouput que es un vector se coge el ultimo valor de este
+# TODO: El output puede ser un vector de rango T. Si el output llama a otro ouput que es un vector se coge el ultimo valor de este. Asumir que los inputs son vectores de rango T.
+# TODO: Almacenar dimensiones de los inputs y outputs para comprobar que las operaciones son válidas. Asumimos que las dimensiones van a ser siempore validas de momento.
 # A_t = a0 + b0 // donde A_t va de 0 a T
 # B_t = A_T + alpha
 

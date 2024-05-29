@@ -35,14 +35,14 @@ inputs:
   - name: a0 # name of the input. It must be unique within the model, and it must not contain spaces.
     label: a0 # label used to represent the input in the block diagram.
     description: a0 description # A description of the input
-    value: 10 # The value of the input
+    value: [10, 15] # The value of the input shaped as an array
     units: m
     from: null  # null if the value is defined here, or the id of the model if the value is obtained from other model.
 
   - name: b0
     label: b0
     description: b0 description
-    value: 20
+    value: [20, 35]
     from: null
 
   - name: Xo
@@ -56,7 +56,7 @@ inputs:
     # more inputs can be defined here
 
 
-# Outputs relates to the values that are obtained from the model. These values are calculated from the inputs, constants
+# Outputs defines the values that are obtained from the model. These values are calculated from the inputs, constants
 # and other outputs of the model. The 'operation' field defines the operation that is used to calculate the output.
 #
 # Outputs can be vectors. In this case the 'range' field must be defined with the variable that is used as the range of

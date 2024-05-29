@@ -5,3 +5,7 @@ A_t = a0 + b0 // donde A_t va de 0 a T
 B_t = A_T + alpha
 
 support for recursive functions: https://docs.sympy.org/latest/modules/series/sequences.html#recursive-sequences
+
+
+TODO: Poner units como obligatorias.
+TODO: poner keywords en consantes y en el modelo general (proceso)

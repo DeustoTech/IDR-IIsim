@@ -20,7 +20,7 @@ method folders. The diagrams will be saved as `model.png`.
 ## Next steps
 - [ ] Add support for vectorized outputs. For the moment, the tool only supports scalar values.
 - [ ] Add support for recursive operations.
-- [ ] Improve diagrams visualizations.
+- [ ] Improve diagrams visualization.
 - [ ] Add support for debug mode.
-- [ ] Add results folder where the results of the execution will be saved. It might be necessary to include a new
+- [ ] Add a results folder where the results of the execution will be saved. It might be necessary to include a new
       section in the `model.yaml` file to define the values that are considered as results.

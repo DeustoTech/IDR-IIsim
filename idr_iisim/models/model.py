@@ -1,10 +1,9 @@
 __package__ = "models"
 
 from functools import partial
-
 import graphviz
 import yaml
-from sympy import parse_expr
+from sympy import parse_expr, Array, Matrix
 from idr_iisim.utils.logger import i_logger
 from idr_iisim.utils.types import ModelStruct, ArgumentStruct
 
@@ -38,8 +37,8 @@ class Model:
     model_config: str
     config: ModelStruct
     functions_map: dict
-    results: dict[str, float] = {}
-    external_inputs: dict[str, dict[str, float]] = {}  # dict[model_id, dict[arg_name, value]]
+    results: dict[str, Matrix] = {}
+    external_inputs: dict[str, dict[str, Matrix]] = {}  # dict[model_id, dict[arg_name, value]]
 
     def setup(self) -> None:
         # read config file
@@ -72,9 +71,9 @@ class Model:
             for arg in outputs["args"]:
                 type_arg = arg["type"]
                 arg_name = arg["name"]
-                value: float
+                value: Matrix | float
                 if type_arg == "outputs":
-                    value = self.results[arg_name]
+                    value = Matrix(self.results[arg_name])
                 else:
                     list_type = getattr(self.config, type_arg)
                     input_arg = next(x for x in list_type if x["name"] == arg_name)
@@ -83,10 +82,11 @@ class Model:
                         from_value: str = input_arg["from"]
                         if from_value is not None:
                             # the input is the output of another process
-                            value = self.external_inputs[from_value][arg_name]
+                            value = Matrix(self.external_inputs[from_value][arg_name])
                         else:
-                            value = input_arg["value"]
+                            value = Matrix(input_arg["value"])
                     else:
+                        # value is a constant
                         value = input_arg["value"]
 
                 args[arg_name] = value

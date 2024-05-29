@@ -1,7 +1,6 @@
 __package__ = "industry.processA.method1"
 
 import os
-
 from idr_iisim.models.model import Model
 
 

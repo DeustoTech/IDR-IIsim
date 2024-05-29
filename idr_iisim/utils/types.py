@@ -14,7 +14,10 @@ class ConstantStruct:
     name: str
     label: str
     description: str
+    citation: str
+    source: str
     value: float
+    units: str
 
 
 @dataclass
@@ -24,6 +27,7 @@ class InputStruct:
     description: str
     value: float
     input_from: list[str]
+    units: str
 
 
 @dataclass
@@ -42,6 +46,7 @@ class ModelStruct:
     id: str
     description: str
     version: str
+    debug: str
     constants: list[ConstantStruct]
     inputs: list[InputStruct]
     outputs: list[OutputStruct]
