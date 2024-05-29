@@ -1,0 +1,144 @@
+"$id": https://example.com/person.schema.json
+"$schema": https://json-schema.org/draft/2020-12/schema
+title: IDR-Schema
+type: object
+required:
+  - name
+  - id
+  - description
+  - version
+  - outputs
+properties:
+  name:
+    type: string
+    description: Name of the method
+  id:
+    type: string
+    description: ID of the method
+  description:
+    type: string
+    description: Description of the method
+  version:
+    type: string
+    description: Version of the method
+  debug:
+    type: boolean
+    description: Debug mode. If true, it will print all the intermedary results
+  constants:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - label
+        - value
+      properties:
+        name:
+          type: string
+          description: Name of the constant
+        label:
+          type: string
+          description: Label of the constant
+        description:
+          type: string
+          description: Description of the constant
+        value:
+          type: number
+          description: Value of the constant
+        source:
+          type: string
+          description: Source of the constant
+        units:
+          type: string
+          description: Units of the constant
+  inputs:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - label
+        - value
+        - from
+      properties:
+        name:
+          type: string
+          description: Name of the input
+        label:
+          type: string
+          description: Label of the input
+        description:
+          type: string
+          description: Description of the input
+        value:
+          type: array
+          description: Value of the input
+          items:
+            type: number
+        units:
+          type: string
+          description: Units of the input
+        from:
+          type: string
+          description: Source of the input
+  outputs:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - label
+        - operation
+        - args
+      properties:
+        name:
+          type: string
+          description: Name of the output
+        label:
+          type: string
+          description: Label of the output
+        operation:
+          type: string
+          description: Valid sympy operation to calculate the output
+        range:
+          type: object
+          description: Dimension of the output
+          required:
+            - variable
+            - start
+            - end
+            - step
+          properties:
+            variable:
+              type: string
+              description: Variable of the output
+            start:
+              type: number
+              description: Start of the output
+            end:
+              type: number
+              description: End of the output
+            step:
+              type: number
+              description: Step of the output
+        args:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - type
+            properties:
+              name:
+                type: string
+                description: Name of the argument
+              type:
+                type: string
+                description: defines whether the argument is a constant, input or
+                  output
+        description:
+          type: string
+          description: Description of the output
+        value:
+          type: number
+          description: Value of the output
