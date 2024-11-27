@@ -1,14 +1,18 @@
-"$id": https://example.com/person.schema.json
-"$schema": https://json-schema.org/draft/2020-12/schema
-title: IDR-Schema
-type: object
+$id     : https://example.com/person.schema.json
+$schema : https://json-schema.org/draft/2020-12/schema
+$comment: This schema It defines the structure, rules, and requirements for data related to a method or process in the IDR-Schema context
+title   : IDR-Schema
+type    : object
+
 required:
   - name
   - id
   - description
   - version
   - outputs
+  
 properties:
+  $comment: Describes the method-n of the x-process of the industry
   name:
     type: string
     description: Name of the method
@@ -24,7 +28,9 @@ properties:
   debug:
     type: boolean
     description: Debug mode. If true, it will print all the intermedary results
+  
   constants:
+    $comment: constants are the values that are used in the calculation of the outputs
     type: array
     items:
       type: object
@@ -51,7 +57,9 @@ properties:
         units:
           type: string
           description: Units of the constant
+  
   inputs:
+    $comment: inputs values of the method-n thta are used in the calculation of the outputs
     type: array
     items:
       type: object
@@ -81,7 +89,9 @@ properties:
         from:
           type: string
           description: Source of the input
+  
   outputs:
+    $comment: outputs are the results of the method-n that are calculated using the inputs and constants
     type: array
     items:
       type: object

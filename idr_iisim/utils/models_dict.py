@@ -2,13 +2,14 @@ from idr_iisim.models.model import Model
 
 
 class ModelDict:
-    models: dict[str, Model]
-    dependencies: dict[str, list[str]] = {}
-    loaded: bool = False
-    processed_models: dict[str, bool] = {}
+    models          : dict[str, Model]              # model_id -> Model,  models maps unique model IDs to their respective instances.
+    dependencies    : dict[str, list[str]] = {}     # model_id -> list[dependent_models_ids],  dependencies maps model IDs to the IDs of models they depend on.
+    loaded          : bool = False                  # flag to check if the models have been loaded
+    processed_models: dict[str, bool] = {}          # model_id -> bool,  processed_models tracks whether each model has been processed.
 
     def __init__(self):
-        self.models = {}
+        # initializes an object of the class with an empty models dictionary.
+        self.models = {}        # model_id -> Model,  models maps unique model IDs to their respective instances.
         pass
 
     def add_model(self, key: str, model: Model):
