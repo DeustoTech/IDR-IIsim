@@ -10,6 +10,7 @@ from idr_iisim.utils.types  import ModelStruct, ArgumentStruct
 from string                 import Template  # Use Template for substitution
 
 
+
 def generate_centered_list(num_elements: int) -> list[int]:
     """
     Generate a list of integers centered around 0.
@@ -35,6 +36,9 @@ def generate_centered_list(num_elements: int) -> list[int]:
 
 
 class Model:
+    """ Model class that represents a model in the system. 
+    It contains the model configuration, functions map, results, and external inputs.
+"""
     directory       : str
     model_config    : str
     config          : ModelStruct
@@ -46,6 +50,10 @@ class Model:
     
     
     def setup(self) -> None:
+        """ Reads the model configuration file and sets up the model for calculation.
+        Args: None
+        Returns: None
+        """
         # read config file
         try:
             with open(self.model_config) as file:
@@ -69,6 +77,12 @@ class Model:
     
     
     def prepare_calculation(self, model_id: str, outputs: dict[str, float]) -> None:
+        """ Prepares the external inputs for the calculation of a model.   
+        Args: 
+            model_id (str): The identifier of the model.
+            outputs (dict[str, float]): The outputs of the model.
+        Returns: None
+        """
         self.external_inputs[model_id] = outputs
         i_logger.logger.debug(f"external inputs: {self.external_inputs}")
         pass
@@ -79,7 +93,12 @@ class Model:
         """Iterates through a functions_map, which likely maps variable names to functions and their required arguments.
         1. Fetches and prepares arguments from: inputs, constants, or external inputs.
         2. Executes the function associated with each variable in the functions_map.
-        3. Stores the computed result in a results attribute."""
+        3. Stores the computed result in a results attribute.
+        4. Prints the result.
+        
+        Argds: None
+        Returns: None
+        """
         
         i_logger.logger.debug(f"calculating {self.config.name}")
         for variable_name in self.functions_map:
@@ -127,7 +146,11 @@ class Model:
     
     def print_diagram(self):
         """generates and exports a diagram in PNG format that visually represents 
-        the inputs, outputs, and processing flow of a model. """
+        the inputs, outputs, and processing flow of a model. 
+        
+        Args: None
+        Returns: None
+        """
         i_logger.logger.debug(f"printing diagram (png) {self.config.name}")
         
         # Initialize Graphviz - Initializes a new directed graph (Digraph) with a comment identifying the model (self.config.name).
@@ -174,8 +197,12 @@ class Model:
     
     
     
-    def script_generator(self, template_path: str) -> None:
-        """Generates a Python script that contains the constants and operations of the model."""
+    def script_generator(self, template_path: str, generated_model_script_filename: str) -> None:
+        """Generates a Python script that contains the constants and operations of the model.
+        Args:
+            template_path (str): The path to the template file.
+        Returns: None
+        """
         import os
         from string import Template
 
@@ -277,7 +304,7 @@ class Model:
         )
 
         # Define output path and write script
-        script_path = os.path.join(self.directory, "generated_script.py")
+        script_path = os.path.join(self.directory, generated_model_script_filename)
         i_logger.logger.debug(f"Saving script to: {script_path}")
 
         try:

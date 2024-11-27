@@ -1,6 +1,6 @@
 __pycache__
 desktop.ini
-.idea
+idr_iisim/*/*/*/*.png
 idr_iisim/*/*/*/model.png
 idr_iisim/*/*/*/generated*.py
 tmp

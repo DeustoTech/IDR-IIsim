@@ -111,7 +111,8 @@ def main() -> None:
             i_logger.logger.debug(f"results: {instance.results}")
         
         # call script_generator
-        instance.script_generator(GlobalVariables().templates_path + GlobalVariables().template_generated_script_filename)
+        instance.script_generator(GlobalVariables().templates_path + GlobalVariables().template_generated_script_filename,
+                                  GlobalVariables().generated_model_script_filename)
        
          
 
