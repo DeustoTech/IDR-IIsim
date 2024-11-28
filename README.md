@@ -33,45 +33,45 @@ This process defines how an industrial process method is represented as a data m
 
       <br>Example Structure of model.yaml:
             
-            name: method2
-            id: industry-process_a-method2
-            description: A description
-            version: 1.0.0
-            debug: false
+        name: method2
+        id: industry-process_a-method2
+        description: A description
+        version: 1.0.0
+        debug: false
 
-            constants:
-              - name: alpha
-                label: alpha
-                description: constant1 description
-                citation: test
-                source: https://www.google.com
-                value: 0.25
-                # units: km
-            # more constants can be defined here
+        constants:
+          - name: alpha
+            label: alpha
+            description: constant1 description
+            citation: test
+            source: https://www.google.com
+            value: 0.25
+            # units: km
+        # more constants can be defined here
 
-            inputs:
+        inputs:
+          - name: a0
+            label: a0
+            description: a0 description
+            value: [20, 25]
+            # units: m
+            from: null  # industry-process_name-method_name
+        # more inputs can be defined here
+
+        # Expected number of outputs. In this case: 1
+        # The formula can use other outputs as inputs
+        outputs:
+          - name: Ao
+            label: Ao
+            operation: a0 - b0 # sympify valid expression
+            args:
               - name: a0
-                label: a0
-                description: a0 description
-                value: [20, 25]
-                # units: m
-                from: null  # industry-process_name-method_name
-            # more inputs can be defined here
-
-            # Expected number of outputs. In this case: 1
-            # The formula can use other outputs as inputs
-            outputs:
-              - name: Ao
-                label: Ao
-                operation: a0 - b0 # sympify valid expression
-                args:
-                  - name: a0
-                    type: inputs
-                  - name: b0
-                    type: inputs
-                description: output1 description
-                value: null
-            # more outputs can be defined here
+                type: inputs
+              - name: b0
+                type: inputs
+            description: output1 description
+            value: null
+        # more outputs can be defined here
 
 
 See the example of the modelling of a method to understand how the data is structured: [model.py](idr_iisim/industry/processA/method1/model.yaml)
@@ -117,6 +117,23 @@ python setup.py
 
 As a result of the execution, the tool will print the results in the console and will generate the model diagrams in the
 method folders. The diagrams will be saved as `model.png`.
+
+### 2.1 Entry point - workflow
+
+This flowchart illustrates the execution process of setup.py in a Python-based application, detailing its interactions with key components and steps involved in configuring, validating, and running models.
+Key Steps:
+
+1. *Star*t: Execution begins with setup.py.
+2. *Call main()*: The main function initializes the setup process.
+3. *Initialization (init())*: Sets up the environment and pre-requisites for execution.
+4. *Load Configuration*: Reads the config.yaml file to fetch configuration data using config.py.
+5. *Validate Schema*: Validates the configuration and .yaml files using schema.py to ensure correctness.
+6. *Scan Industry Directory*: Scans the industry/ directory for model files.
+7. *Discover and Register Models*: Discovers available models and registers them using models_dict.py.
+8. *Generate Execution Queue*: Creates an execution order for models using execution.py.
+9. *Execute Models*: Runs the model calculations using model.py.
+10. *Log Results*: Logs the results or any errors using logger.py.
+11. *End Execution*: Marks the completion of the execution process.
 
 ## Next steps
 - [x] Add funtion to dinamiclly generate the model script.
