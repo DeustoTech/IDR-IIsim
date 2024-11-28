@@ -27,11 +27,11 @@ flowchart.edge("LoadConfigYAML", "Config")
 flowchart.edge("Config", "ValidateSchema")
 flowchart.edge("ValidateSchema", "ScanIndustry")
 flowchart.edge("ScanIndustry", "DiscoverModels")
-flowchart.edge("DiscoverModels", "RegisterModels", "Register models", fontsize="10")
-flowchart.edge("RegisterModels", "GenerateQueue", "Create execution order", fontsize="10")
-flowchart.edge("GenerateQueue", "ExecuteModels", "Run model calculations", fontsize="10")
-flowchart.edge("ExecuteModels", "LogStatus", "Log results/errors", fontsize="10")
-flowchart.edge("LogStatus", "End", "Complete execution", fontsize="10")
+flowchart.edge("DiscoverModels", "RegisterModels", "  Register models", fontsize="10")
+flowchart.edge("RegisterModels", "GenerateQueue", "  Create execution order", fontsize="10")
+flowchart.edge("GenerateQueue", "ExecuteModels", "  Run model calculations", fontsize="10")
+flowchart.edge("ExecuteModels", "LogStatus", "  Log results/errors", fontsize="10")
+flowchart.edge("LogStatus", "End", "  Complete execution", fontsize="10")
 
 # Save and render the diagram
 output_path = "./docs/Setup_Flowchart"

@@ -99,10 +99,6 @@ See the example of the modelling of a method to understand how the data is struc
    - The validation process involves verifying the .yaml file’s structure and content through a validator.
    - Once validated, setup.py calls model.py to create an instantiated model class from the validated data.
    - Finally, the model class is returned to setup.py, and the results are displayed to the user.
-<br>
- 
-1. **Advantages**
-
 <hr>
 
 ## 2. Execution
@@ -119,15 +115,17 @@ As a result of the execution, the tool will print the results in the console and
 method folders. The diagrams will be saved as `model.png`.
 
 ### 2.1 Entry point - workflow
+This flowchart provides a high-level overview of the execution process of setup.py, highlighting the logical flow, modularity, and sequence of operations. It details the interactions between setup.py and key components, outlining the steps involved in configuring, validating, and running models.
 
-This flowchart illustrates the execution process of setup.py in a Python-based application, detailing its interactions with key components and steps involved in configuring, validating, and running models.
+![Setup - workflow](docs/Setup_Flowchart.png)
+
 Key Steps:
 
-1. *Star*t: Execution begins with setup.py.
+1. *Star*t: Execution begins with [setup.py](setup.py).
 2. *Call main()*: The main function initializes the setup process.
 3. *Initialization (init())*: Sets up the environment and pre-requisites for execution.
-4. *Load Configuration*: Reads the config.yaml file to fetch configuration data using config.py.
-5. *Validate Schema*: Validates the configuration and .yaml files using schema.py to ensure correctness.
+4. *Load Configuration*: Reads the config.yaml file to fetch configuration data using [config.py](idr_iisim/models/model.py).
+5. *Validate Schema*: Validates the configuration and .yaml files using [schema.py](idr_iisim/utils/schema.py) to ensure correctness.
 6. *Scan Industry Directory*: Scans the industry/ directory for model files.
 7. *Discover and Register Models*: Discovers available models and registers them using models_dict.py.
 8. *Generate Execution Queue*: Creates an execution order for models using execution.py.
