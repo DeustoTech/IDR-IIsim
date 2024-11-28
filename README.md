@@ -127,10 +127,10 @@ Key Steps:
 4. *Load Configuration*: Reads the config.yaml file to fetch configuration data using [config.py](idr_iisim/models/model.py).
 5. *Validate Schema*: Validates the configuration and .yaml files using [schema.py](idr_iisim/utils/schema.py) to ensure correctness.
 6. *Scan Industry Directory*: Scans the industry/ directory for model files.
-7. *Discover and Register Models*: Discovers available models and registers them using models_dict.py.
+7. *Discover and Register Models*: Discovers available models and registers them using [models_dict.py](idr_iisim/utils/models_dict.py).
 8. *Generate Execution Queue*: Creates an execution order for models using execution.py.
-9. *Execute Models*: Runs the model calculations using model.py.
-10. *Log Results*: Logs the results or any errors using logger.py.
+9. *Execute Models*: Runs the model calculations using [model.py](idr_iisim/models/model.py).
+10. *Log Results*: Logs the results or any errors using [logger.py](idr_iisim/utils/logger.py).
 11. *End Execution*: Marks the completion of the execution process.
 
 ## Next steps
