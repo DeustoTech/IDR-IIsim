@@ -6,9 +6,8 @@ import graphviz
 import yaml
 from sympy import parse_expr, Array, Matrix
 from idr_iisim.utils.logger import i_logger
-from idr_iisim.utils.types  import ModelStruct, ArgumentStruct
-from string                 import Template  # Use Template for substitution
-
+from idr_iisim.utils.types import ModelStruct, ArgumentStruct
+from string import Template  # Use Template for substitution
 
 
 def generate_centered_list(num_elements: int) -> list[int]:
@@ -36,21 +35,23 @@ def generate_centered_list(num_elements: int) -> list[int]:
 
 
 class Model:
-    """ Model class that represents a model in the system. 
+    """Model class that represents a model in the system.
     It contains the model configuration, functions map, results, and external inputs.
-"""
-    directory       : str
-    model_config    : str
-    config          : ModelStruct
-    functions_map   : dict
-    results         : dict[str, Matrix] = {}
-    external_inputs: dict[str, dict[str, Matrix]] = {}  # dict[model_id, dict[arg_name, value]]
-    
-    txt_constants   : str = ""
-    
-    
+    """
+
+    directory: str
+    model_config: str
+    config: ModelStruct
+    functions_map: dict
+    results: dict[str, Matrix] = {}
+    external_inputs: dict[
+        str, dict[str, Matrix]
+    ] = {}  # dict[model_id, dict[arg_name, value]]
+
+    txt_constants: str = ""
+
     def setup(self) -> None:
-        """ Reads the model configuration file and sets up the model for calculation.
+        """Reads the model configuration file and sets up the model for calculation.
         Args: None
         Returns: None
         """
@@ -65,20 +66,25 @@ class Model:
         # read functions
         self.functions_map = {}
         for output in self.config.outputs:
-            operation = parse_expr(output["operation"])   
+            operation = parse_expr(output["operation"])
             f = partial(lambda op, **kwargs: op.subs(kwargs), op=operation)
             key = output["name"]
-            self.functions_map[key] = dict(function=f, args=output["args"], expression=operation, description=output["description"])
-         
+            self.functions_map[key] = dict(
+                function=f,
+                args=output["args"],
+                expression=operation,
+                description=output["description"],
+            )
+
         i_logger.logger.debug(f"setup completed for {self.config.name}")
-        i_logger.logger.debug(f"functions_map: \n{self.functions_map}")    
+        i_logger.logger.debug(f"functions_map: \n{self.functions_map}")
         pass
-    
-    
-    
-    def prepare_calculation(self, model_id: str, outputs: dict[str, float]) -> None:
-        """ Prepares the external inputs for the calculation of a model.   
-        Args: 
+
+    def prepare_calculation(
+        self, model_id: str, outputs: dict[str, float]
+    ) -> None:
+        """Prepares the external inputs for the calculation of a model.
+        Args:
             model_id (str): The identifier of the model.
             outputs (dict[str, float]): The outputs of the model.
         Returns: None
@@ -86,23 +92,21 @@ class Model:
         self.external_inputs[model_id] = outputs
         i_logger.logger.debug(f"external inputs: {self.external_inputs}")
         pass
-    
-    
-    
+
     def calculate(self) -> None:
         """Iterates through a functions_map, which likely maps variable names to functions and their required arguments.
         1. Fetches and prepares arguments from: inputs, constants, or external inputs.
         2. Executes the function associated with each variable in the functions_map.
         3. Stores the computed result in a results attribute.
         4. Prints the result.
-        
+
         Argds: None
         Returns: None
         """
-        
+
         i_logger.logger.debug(f"calculating {self.config.name}")
         for variable_name in self.functions_map:
-            # Iterates over each variable name in self.functions_map. 
+            # Iterates over each variable name in self.functions_map.
             # Fetching and Preparing Arguments
             outputs = self.functions_map[variable_name]
             i_logger.logger.debug(f"calculating {variable_name}")
@@ -114,19 +118,26 @@ class Model:
                 value: Matrix | float
                 if type_arg == "outputs":
                     # Fetch its value from self.results & Convert the value to a Matrix.
-                    value = Matrix(self.results[arg_name])
+                    if isinstance(self.results[arg_name], Matrix):
+                        value = Matrix(self.results[arg_name])
+                    else:
+                        value = Matrix([[self.results[arg_name]]])
                 else:
                     list_type = getattr(self.config, type_arg)
-                    input_arg = next(x for x in list_type if x["name"] == arg_name)
+                    input_arg = next(
+                        x for x in list_type if x["name"] == arg_name
+                    )
 
                     if type_arg == "inputs":
                         from_value: str = input_arg["from"]
                         if from_value is not None:
                             # the input is the output of another process
-                            value = Matrix(self.external_inputs[from_value][arg_name])
+                            value = Matrix(
+                                self.external_inputs[from_value][arg_name]
+                            )
                         else:
                             value = Matrix(input_arg["value"])
-                        #i_logger.logger.debug(f"input {arg_name} = {value}")    
+                        # i_logger.logger.debug(f"input {arg_name} = {value}")
                     else:
                         # value is a constant
                         value = input_arg["value"]
@@ -141,63 +152,93 @@ class Model:
             print(f"{variable_name} = {result}")
         i_logger.logger.debug(f"finished calculating {self.config.name}")
         return None
-    
-    
-    
+
     def print_diagram(self):
-        """generates and exports a diagram in PNG format that visually represents 
-        the inputs, outputs, and processing flow of a model. 
-        
+        """generates and exports a diagram in PNG format that visually represents
+        the inputs, outputs, and processing flow of a model.
+
         Args: None
         Returns: None
         """
         i_logger.logger.debug(f"printing diagram (png) {self.config.name}")
-        
+
         # Initialize Graphviz - Initializes a new directed graph (Digraph) with a comment identifying the model (self.config.name).
         graphviz.set_default_engine("neato")
         dot = graphviz.Digraph(comment=self.config.name)
-        
+
         # Graph attributes - Adjusts visual: Padding, margins, and spacing are set for better readability.
         # Direction left-to-right layout (LR), Node shapes are set to BOX.
-        # Adds a placeholder node input_line to organize inputs && add a central node representing 
+        # Adds a placeholder node input_line to organize inputs && add a central node representing
         #      the model (self.config.name) at position (0, 0).
-        dot.attr(pad='0.5', margin='0.5', ranksep='0.5', nodesep='0.5', rankdir='LR')
-        dot.node_attr.update(shape='box')
-        dot.node('input_line', shape='point', width='0')
-        dot.node(self.config.name, label=self.config.name, pos='0,0!')
+        dot.attr(
+            pad="0.5", margin="0.5", ranksep="0.5", nodesep="0.5", rankdir="LR"
+        )
+        dot.node_attr.update(shape="box")
+        dot.node("input_line", shape="point", width="0")
+        dot.node(self.config.name, label=self.config.name, pos="0,0!")
 
         # print inputs
         # Enumerate the inputs and generate a list of positions centered around 0.
         inputs_blocks = enumerate(self.config.inputs)
         positions_list = generate_centered_list(len(self.config.inputs))
-        for (i, input_block) in inputs_blocks:
+        for i, input_block in inputs_blocks:
             """Add Input Nodes and Edges for each input block"""
-            position = f'-2,{positions_list[i]}!'
+            position = f"-2,{positions_list[i]}!"
             # input nodo name and value
             input_nodo = f"*{input_block['name']} = {input_block['value']}"
-            #dot.node(input_nodo, shape='point', width='0', rank='same', pos=position)
-            dot.node(input_block["name"], shape='point', width='0', rank='same', pos=position)
-            dot.edge(input_block["name"], self.config.name, label=input_block["label"], color='black',
-                     fontcolor='black', tailport='e', headport='w')
+            # dot.node(input_nodo, shape='point', width='0', rank='same', pos=position)
+            dot.node(
+                input_block["name"],
+                shape="point",
+                width="0",
+                rank="same",
+                pos=position,
+            )
+            dot.edge(
+                input_block["name"],
+                self.config.name,
+                label=input_block["label"],
+                color="black",
+                fontcolor="black",
+                tailport="e",
+                headport="w",
+            )
 
         # print outputs and edges for each output block
         outputs_blocks = enumerate(self.config.outputs)
         positions_list = generate_centered_list(len(self.config.outputs))
-        for (i, output_block) in outputs_blocks:
-            position = f'2,{positions_list[i]}!'
-            dot.node(output_block["name"], shape='point', width='0', orientation='90', pos=position)
-            dot.edge(self.config.name, output_block["name"], label=output_block["label"], color='black',
-                     fontcolor='black', tailport='e', headport='w')
-            
+        for i, output_block in outputs_blocks:
+            position = f"2,{positions_list[i]}!"
+            dot.node(
+                output_block["name"],
+                shape="point",
+                width="0",
+                orientation="90",
+                pos=position,
+            )
+            dot.edge(
+                self.config.name,
+                output_block["name"],
+                label=output_block["label"],
+                color="black",
+                fontcolor="black",
+                tailport="e",
+                headport="w",
+            )
+
         # Export the diagram in PNG format.
-        dot.render(filename="model", directory=self.directory, format="png", cleanup=True)
+        dot.render(
+            filename="model",
+            directory=self.directory,
+            format="png",
+            cleanup=True,
+        )
         i_logger.logger.debug(f"finished printing {self.config.name}")
         pass
-    
-    
-    
-    
-    def script_generator(self, template_path: str, generated_model_script_filename: str) -> None:
+
+    def script_generator(
+        self, template_path: str, generated_model_script_filename: str
+    ) -> None:
         """Generates a Python script that contains the constants and operations of the model.
         Args:
             template_path (str): The path to the template file.
@@ -207,15 +248,17 @@ class Model:
         from string import Template
 
         # Initialize variables for template placeholders
-        log_library     = ""
-        log_message     = ""
-        constants_code  = ""
-        args_code       = ""
+        log_library = ""
+        log_message = ""
+        constants_code = ""
+        args_code = ""
         operations_code = ""
-        results_code    = "{"   # Start of dictionary
-        return_code     = ""
+        results_code = "{"  # Start of dictionary
+        return_code = ""
 
-        i_logger.logger.debug(f"Generating script for model: {self.config.name}")
+        i_logger.logger.debug(
+            f"Generating script for model: {self.config.name}"
+        )
         i_logger.logger.debug(f"Template path: {template_path}")
 
         # Load the template content
@@ -242,8 +285,8 @@ class Model:
         for variable_name, outputs in self.functions_map.items():
             # Operations and results
             operations_code += f"# {outputs['description']}\n    {variable_name} = {outputs['expression']}\n"
-            results_code += f" \"{variable_name}\" : {variable_name},"
-            return_code += f" \"{variable_name}\" : {variable_name},"
+            results_code += f' "{variable_name}" : {variable_name},'
+            return_code += f' "{variable_name}" : {variable_name},'
             i_logger.logger.debug(f"Processing variable: {variable_name}")
 
             # Prepare arguments
@@ -254,15 +297,24 @@ class Model:
 
                 if arg_type == "outputs":
                     # Value from previous results
-                    value = Matrix(self.results[arg_name])
+                    if isinstance(self.results[arg_name], Matrix):
+                        value = Matrix(self.results[arg_name])
+                    else:
+                        value = Matrix([[self.results[arg_name]]])
                 else:
                     # Input or constant
                     source_list = getattr(self.config, arg_type)
-                    input_data  = next(x for x in source_list if x["name"] == arg_name)
+                    input_data = next(
+                        x for x in source_list if x["name"] == arg_name
+                    )
                     if arg_type == "inputs":
                         args_code += f" {arg_name},"
                         from_value = input_data.get("from")
-                        value = Matrix(self.external_inputs[from_value][arg_name]) if from_value else Matrix(input_data["value"])
+                        value = (
+                            Matrix(self.external_inputs[from_value][arg_name])
+                            if from_value
+                            else Matrix(input_data["value"])
+                        )
                     else:
                         value = input_data["value"]
 
@@ -274,7 +326,11 @@ class Model:
         args_code = ", ".join(args_list)
 
         # Directory adjustments
-        dir_path = self.directory.replace(os.getcwd(), ".").replace(".\\", "").replace("\\", ".")
+        dir_path = (
+            self.directory.replace(os.getcwd(), ".")
+            .replace(".\\", "")
+            .replace("\\", ".")
+        )
 
         # Prepare logging details if in debug mode
         if self.config.debug:
@@ -304,7 +360,9 @@ class Model:
         )
 
         # Define output path and write script
-        script_path = os.path.join(self.directory, generated_model_script_filename)
+        script_path = os.path.join(
+            self.directory, generated_model_script_filename
+        )
         i_logger.logger.debug(f"Saving script to: {script_path}")
 
         try:
@@ -314,7 +372,9 @@ class Model:
             i_logger.logger.error(f"Error writing script to file: {e}")
             raise
 
-        i_logger.logger.debug(f"Script successfully generated at: {script_path}")
+        i_logger.logger.debug(
+            f"Script successfully generated at: {script_path}"
+        )
 
 
 run = Model()
