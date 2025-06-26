@@ -118,10 +118,7 @@ class Model:
                 value: Matrix | float
                 if type_arg == "outputs":
                     # Fetch its value from self.results & Convert the value to a Matrix.
-                    if isinstance(self.results[arg_name], Matrix):
-                        value = Matrix(self.results[arg_name])
-                    else:
-                        value = Matrix([[self.results[arg_name]]])
+                    value = Matrix([[self.results[arg_name]]])
                 else:
                     list_type = getattr(self.config, type_arg)
                     input_arg = next(
@@ -300,10 +297,7 @@ class Model:
 
                 if arg_type == "outputs":
                     # Value from previous results
-                    if isinstance(self.results[arg_name], Matrix):
-                        value = Matrix(self.results[arg_name])
-                    else:
-                        value = Matrix([[self.results[arg_name]]])
+                    value = Matrix([[self.results[arg_name][-1]]])
                 else:
                     # Input or constant
                     source_list = getattr(self.config, arg_type)
