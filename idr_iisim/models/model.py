@@ -4,7 +4,7 @@ from functools import partial
 import os
 import graphviz
 import yaml
-from sympy import parse_expr, Array, Matrix
+from sympy import parse_expr, Array, Matrix, ImmutableDenseMatrix
 from idr_iisim.utils.logger import i_logger
 from idr_iisim.utils.types import ModelStruct, ArgumentStruct
 from string import Template  # Use Template for substitution
@@ -148,7 +148,10 @@ class Model:
             # calculate the output & Store and Print the Result
             fn = outputs["function"]
             result = fn(**args)
-            self.results[variable_name] = result
+            if isinstance(result, (Matrix, ImmutableDenseMatrix)):
+                self.results[variable_name] = result
+            else:
+                self.results[variable_name] = ImmutableDenseMatrix([[result]])
             print(f"{variable_name} = {result}")
         i_logger.logger.debug(f"finished calculating {self.config.name}")
         return None
