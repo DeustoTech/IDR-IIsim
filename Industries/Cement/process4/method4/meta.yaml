@@ -5,7 +5,7 @@ version: 1.0.0
 debug: false
 constants:
   - name: limestone_demand_pre
-    label: SP1_Inp_1
+    label: limeston demand pre
     description: limestone used in SP1
     citation: text
     source: https://www.google.com
@@ -19,7 +19,7 @@ constants:
     value: 375
     units: Kg 
   - name: mechanical_energy_pre
-    label: SP1_Inp_3
+    label: Mechanical energy pre
     description: Mechanical Energy  need in SP1
     citation: text
     source: https://www.google.com
