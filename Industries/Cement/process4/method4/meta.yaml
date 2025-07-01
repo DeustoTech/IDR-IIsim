@@ -1,0 +1,185 @@
+name: Cement production
+id: Cemento-process4-Meta
+description: Meta archivo de la industria del cemento
+version: 1.0.0
+debug: false
+constants:
+  - name: limestone_demand_pre
+    label: SP1_Inp_1
+    description: limestone used in SP1
+    citation: text
+    source: https://www.google.com
+    value: 1035
+    units: Kg 
+  - name: clay_demand_pre
+    label: Clay demand pre
+    description: Clay useed in SP1
+    citation: text
+    source: https://www.google.com
+    value: 375
+    units: Kg 
+  - name: mechanical_energy_pre
+    label: SP1_Inp_3
+    description: Mechanical Energy  need in SP1
+    citation: text
+    source: https://www.google.com
+    value: 115.92
+    units: MJ
+  - name: water_demand_oven
+    label: Water demand Oven
+    description: Water used in SP2
+    citation: text
+    source: https://www.google.com
+    value: 222
+    units: L 
+  - name: fuel_demand_oven
+    label: fuel demand oven
+    description: Fuel used in SP2
+    citation: text
+    source: https://www.google.com
+    value: 130
+    units: Kg 
+  - name: mechanical_energy_oven
+    label: mechanical energy Oven
+    description: Mechanical Energy need for SP2
+    citation: text
+    source: https://www.google.com
+    value: 69.552
+    units: MJ
+  - name: mechanical_energy_milling
+    label: mechanical energy milling
+    description: Mechanical Energy need for SP3
+    citation: text
+    source: https://www.google.com
+    value: 135.792
+    units: MJ
+inputs:
+  - name: PM10_emission_pre
+    label: PM10 Emissions SP1
+    description: PM10 emission SP1
+    value: null
+    units: Kg
+    from: Cemento-process1-Pre
+  - name: PM10_emission_oven
+    label: PM10 emission Oven
+    description: PM10 emission SP2
+    value: null
+    units: Kg
+    from: Cemento-process2-Oven
+  - name: cement_emission
+    label: Cement air emission SP3
+    description: Cement air emission m3
+    value: null
+    units: Kg
+    from: Cemento-process3-Milling
+  - name: clinker_demand_oven
+    label: Clinker consumption in SP2
+    description: Clinker demand by process Oven
+    value: null
+    units: Kg
+    from: Cemento-process2-Oven
+  - name: CO2_emissions_oven
+    label: CO2 emissions SP2
+    description: CO2 emissions m2
+    value: null
+    units: Kg
+    from: Cemento-process2-Oven
+  - name: heat_losses
+    label: Heat Loos in SP2
+    description: Heat_Loos m2
+    value: null
+    units: MJ
+    from: Cemento-process2-Oven
+  - name: water_demand_oven
+    label: Water demand OVEN
+    description: Water consumption SP2
+    value: null
+    units: Kg
+    from: Cemento-process2-Oven
+  - name: gypsum_losses_milling
+    label: Gympsun losses
+    description: gympsum losses from the process milling
+    value: null
+    units: Kg
+    from: Cemento-process3-Milling
+outputs:
+  - name: limestone_overall_demand
+    label: Limestone consumption in SP1
+    operation: limestone_demand_pre
+    args:
+      - name: limestone_demand_pre
+        type: constants
+    description: limestone consumption
+    value: null
+  - name: clay_overall_demand
+    label: Clay consumption
+    operation: clay_demand_pre
+    args:
+      - name: clay_demand_pre
+        type: constants
+    description: Clay consumption in SP1
+    value: null
+  - name: mechanical_energy_cement
+    label: Mechanical Energy
+    operation: mechanical_energy_pre + mechanical_energy_oven + mechanical_energy_milling
+    args:
+      - name: mechanical_energy_pre
+        type: constants
+      - name: mechanical_energy_oven
+        type: constants
+      - name: mechanical_energy_milling
+        type: constants
+    description: Mechanical energy
+    value: null
+  - name: CO2_overall_emission
+    label: CO2 emissions
+    operation: CO2_emissions_oven
+    args:
+     - name: CO2_emissions_oven
+       type: inputs
+    description: Total C02 emissions
+    value: null
+  - name: heat_overall_losses
+    label: Heat losses
+    operation: heat_losses
+    args:
+      - name: heat_losses
+        type: inputs
+    description: Total Heat losses
+    value: null
+  - name: water_overall_demand
+    label: Water 
+    operation: water_demand_oven
+    args:
+      - name: water_demand_oven
+        type: inputs
+    description: Total water use/loss
+    value: null
+  - name: PM10_overall_emission
+    label: PM10 emissions
+    operation: PM10_emission_pre + PM10_emission_oven + cement_emission
+    args:
+      - name: PM10_emission_pre
+        type: inputs
+      - name: PM10_emission_oven
+        type: inputs
+      - name: cement_emission
+        type: inputs
+    description: Total PM10 emissions
+    value: null
+  - name: fuel_overall_demand
+    label: Fuel consumption
+    operation: fuel_demand_oven
+    args:
+      - name: fuel_demand_oven
+        type: constants
+    description: Fuel consumption
+    value: null
+  - name: gympsum_overall_losses
+    label: gympsum losses
+    operation: gypsum_losses_milling
+    args:
+      - name: gypsum_losses_milling
+        type: inputs
+    description: gympsum losses from process milling
+    value: null

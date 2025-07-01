@@ -3,5 +3,8 @@ desktop.ini
 idr_iisim/*/*/*/*.png
 idr_iisim/*/*/*/model.png
 idr_iisim/*/*/*/generated*.py
+Industries/*/*/*/*.png
+Industries/*/*/*/generated*.py
 tmp
-
+.venv/
+*.zip

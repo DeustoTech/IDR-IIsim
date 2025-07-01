@@ -1,0 +1,61 @@
+name: Milling 
+id: Cemento-process3-Milling
+description: Milling
+version: 1.0.0
+debug: false
+constants:
+  - name: cement_losses
+    label: Cement losses
+    description: Cement losses
+    citation: text
+    source: https://www.google.com
+    value: 0.01
+    units: p.u
+  - name: gypsum_losses
+    label: Gypsum losses
+    description: Gypsum
+    citation: text
+    source: https://www.google.com
+    value: 0.04
+    units: p.u
+  - name: conversion_factor
+    label: Ton
+    description: conversion factors from tons to kg
+    citation: text
+    source: https://www.google.com
+    value: 1000
+    # units: kg
+inputs:
+  - name: gypsum
+    label: Gypsum
+    description: Gypsum description
+    value: [34.6183]
+    # units: kg
+    from: null
+  - name: Mechanical_energy_milling
+    label: Mechanical energy
+    description: Mechanical energy description
+    value: [135.792]
+    # units: MJ
+    from: null
+outputs:
+  - name: cement_emission
+    label: Cement air emissions
+    operation: conversion_factor * cement_losses
+    args:
+      - name: conversion_factor
+        type: constants
+      - name: cement_losses
+        type: constants
+    description: cement air emissions description
+    value: null
+  - name: gypsum_losses_milling
+    label: Gypsum losses milling
+    operation: gypsum * gypsum_losses
+    args:
+      - name: gypsum
+        type: inputs
+      - name: gypsum_losses
+        type: constants
+    description: cement air emissions description
+    value: null
