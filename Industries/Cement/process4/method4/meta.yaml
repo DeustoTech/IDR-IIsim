@@ -6,35 +6,35 @@ debug: false
 constants:
   - name: limestone_demand_pre
     label: limeston demand pre
-    description: limestone used in SP1
+    description: limestone used in Pre
     citation: text
     source: https://www.google.com
     value: 1035
     units: Kg 
   - name: clay_demand_pre
     label: Clay demand pre
-    description: Clay useed in SP1
+    description: Clay useed in Pre
     citation: text
     source: https://www.google.com
     value: 375
     units: Kg 
   - name: mechanical_energy_pre
     label: Mechanical energy pre
-    description: Mechanical Energy  need in SP1
+    description: Mechanical Energy  need in Pre
     citation: text
     source: https://www.google.com
     value: 115.92
     units: MJ
   - name: water_demand_oven
     label: Water demand Oven
-    description: Water used in SP2
+    description: Water used in Oven
     citation: text
     source: https://www.google.com
     value: 222
     units: L 
   - name: fuel_demand_oven
     label: fuel demand oven
-    description: Fuel used in SP2
+    description: Fuel used in Oven
     citation: text
     source: https://www.google.com
     value: 130
@@ -47,52 +47,52 @@ constants:
     value: 69.552
     units: MJ
   - name: mechanical_energy_milling
-    label: mechanical energy milling
-    description: Mechanical Energy need for SP3
+    label: Mechanical energy milling
+    description: Mechanical Energy need for Milling
     citation: text
     source: https://www.google.com
     value: 135.792
     units: MJ
 inputs:
   - name: PM10_emission_pre
-    label: PM10 Emissions SP1
-    description: PM10 emission SP1
+    label: PM10 Emissions Pre
+    description: PM10 emission Pre
     value: null
     units: Kg
     from: Cemento-process1-Pre
   - name: PM10_emission_oven
     label: PM10 emission Oven
-    description: PM10 emission SP2
+    description: PM10 emission Oven
     value: null
     units: Kg
     from: Cemento-process2-Oven
   - name: cement_emission
-    label: Cement air emission SP3
-    description: Cement air emission m3
+    label: Cement air emission Milling
+    description: Cement air emission Milling
     value: null
     units: Kg
     from: Cemento-process3-Milling
   - name: clinker_demand_oven
-    label: Clinker consumption in SP2
+    label: Clinker consumption in Pre
     description: Clinker demand by process Oven
     value: null
     units: Kg
     from: Cemento-process2-Oven
   - name: CO2_emissions_oven
-    label: CO2 emissions SP2
-    description: CO2 emissions m2
+    label: CO2 emissions Pre
+    description: CO2 emissions Oven
     value: null
     units: Kg
     from: Cemento-process2-Oven
   - name: heat_losses
-    label: Heat Loos in SP2
-    description: Heat_Loos m2
+    label: Heat Loos in Oven
+    description: Heat_Loos Oven
     value: null
     units: MJ
     from: Cemento-process2-Oven
   - name: water_demand_oven
-    label: Water demand OVEN
-    description: Water consumption SP2
+    label: Water demand Oven
+    description: Water consumption Oven
     value: null
     units: Kg
     from: Cemento-process2-Oven
@@ -104,7 +104,7 @@ inputs:
     from: Cemento-process3-Milling
 outputs:
   - name: limestone_overall_demand
-    label: Limestone consumption in SP1
+    label: Limestone consumption
     operation: limestone_demand_pre
     args:
       - name: limestone_demand_pre
@@ -117,10 +117,10 @@ outputs:
     args:
       - name: clay_demand_pre
         type: constants
-    description: Clay consumption in SP1
+    description: Clay consumption in Pre
     value: null
   - name: mechanical_energy_cement
-    label: Mechanical Energy
+    label: Mechanical energy demand
     operation: mechanical_energy_pre + mechanical_energy_oven + mechanical_energy_milling
     args:
       - name: mechanical_energy_pre
@@ -148,7 +148,7 @@ outputs:
     description: Total Heat losses
     value: null
   - name: water_overall_demand
-    label: Water 
+    label: Water aml filesdemand
     operation: water_demand_oven
     args:
       - name: water_demand_oven
@@ -176,7 +176,7 @@ outputs:
     description: Fuel consumption
     value: null
   - name: gympsum_overall_losses
-    label: gympsum losses
+    label: Gympsum losses
     operation: gypsum_losses_milling
     args:
       - name: gypsum_losses_milling

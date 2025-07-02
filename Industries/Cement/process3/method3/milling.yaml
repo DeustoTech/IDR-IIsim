@@ -27,7 +27,7 @@ constants:
     # units: kg
 inputs:
   - name: gypsum
-    label: Gypsum
+    label: Gypsum demand
     description: Gypsum description
     value: [34.6183]
     # units: kg
@@ -50,7 +50,7 @@ outputs:
     description: cement air emissions description
     value: null
   - name: gypsum_losses_milling
-    label: Gypsum losses milling
+    label: Gypsum losses
     operation: gypsum * gypsum_losses
     args:
       - name: gypsum

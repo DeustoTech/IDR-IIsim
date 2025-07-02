@@ -58,7 +58,7 @@ inputs:
       - 69.552
     from: null
   - name: water_consumption
-    label: Water consumption
+    label: Water demand
     description: Water consumption
     value:
       - 222
