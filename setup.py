@@ -84,42 +84,37 @@ def main() -> None:
     i_logger.logger.info("iDesignRES tool started")
 
     all_dependencies = models_dict.dependencies
-    for key in sorted(models_dict.models):
-        queue = generate_execution_queue(key)
+    print(all_dependencies)
+    # for key in sorted(models_dict.models):
+    for model_instance_id in generate_execution_queue(
+        list(models_dict.models.keys()), all_dependencies
+    ):
+        print(f"Calculating model: {model_instance_id}")
+        instance = models_dict.models[model_instance_id]
 
-        # perform calculations for each model in the queue so that the dependencies are met
-        for model_instance_id in queue:
-            print(f"Calculating model: {model_instance_id}")
-            instance = models_dict.models[model_instance_id]
-
-            # check whether the model in the queue has any dependencies
-            if model_instance_id in all_dependencies:
-                # if there are dependencies, then check whether they are already calculated
-                dependencies = all_dependencies[model_instance_id]
-                i_logger.logger.debug(
-                    f"checking model dependencies: {dependencies}"
-                )
-                for dependency in dependencies:
-                    # if calculated, then get the results
-                    output_dependency = models_dict.models[dependency].results
-                    instance.prepare_calculation(dependency, output_dependency)
-
-            if models_dict.is_model_processed(model_instance_id):
-                continue
-
-            # calculate the model
-            instance.calculate()
-            models_dict.mark_model_as_processed(model_instance_id)
-
-            # print diagrams
-            instance.print_diagram()
-            print("\n\n")
-
-            # log input and results
+        # check whether the model in the queue has any dependencies
+        if model_instance_id in all_dependencies:
+            # if there are dependencies, then check whether they are already calculated
+            dependencies = all_dependencies[model_instance_id]
             i_logger.logger.debug(
-                f"external inputs: {instance.external_inputs}"
+                f"checking model dependencies: {dependencies}"
             )
-            i_logger.logger.debug(f"results: {instance.results}")
+            for dependency in dependencies:
+                # if calculated, then get the results
+                output_dependency = models_dict.models[dependency].results
+                instance.prepare_calculation(dependency, output_dependency)
+
+        # calculate the model
+        instance.calculate()
+        models_dict.mark_model_as_processed(model_instance_id)
+
+        # print diagrams
+        instance.print_diagram()
+        print("\n\n")
+
+        # log input and results
+        i_logger.logger.debug(f"external inputs: {instance.external_inputs}")
+        i_logger.logger.debug(f"results: {instance.results}")
 
         # call script_generator
         instance.script_generator(
@@ -128,11 +123,9 @@ def main() -> None:
             GlobalVariables().generated_model_script_filename,
         )
 
+    print("\n")
+    i_logger.logger.info("iDesignRES tool finished")
 
-print("\n")
-
-i_logger.logger.info("iDesignRES tool finished")
-pass
 
 if __name__ == "__main__":
     #
