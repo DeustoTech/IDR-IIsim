@@ -1,4 +1,5 @@
 # IDR-IIsim
+
 Repository with industry models tailored to the integration on large scale energy system models and circular economy assessment
 <hr>
 
@@ -7,6 +8,7 @@ Repository with industry models tailored to the integration on large scale energ
 This process defines how an industrial process method is represented as a data model (model.yaml), validated for correctness using a schema (schema.py), and then converted into an executable Python script (generated_script.py) that implements the operations described.
 
 ### Components of the Data Modelling
+
 1. **Folder structure**: The tool is designed to be flexible, enabling users to define their own data models. The folder structure is organized hierarchically: first, the industry is defined, followed by the process, and finally the method. This structure is illustrated in the following figure.
 
             ├── idr_iisim
@@ -24,7 +26,6 @@ This process defines how an industrial process method is represented as a data m
                                     .
                                     .
 
-  
 2. **Model File (model.yaml)**: A YAML file that describes the industrial method. It contains the following key sections:<br><br>
      - **Constants**: Predefined values used in the operations.
      - **Inputs**: External parameters required for the method.
@@ -32,7 +33,7 @@ This process defines how an industrial process method is represented as a data m
      - **Operations**: Mathematical or logical expressions that define how the outputs are derived from constants and inputs.
 
       <br>Example Structure of model.yaml:
-            
+
         name: method2
         id: industry-process_a-method2
         description: A description
@@ -73,7 +74,6 @@ This process defines how an industrial process method is represented as a data m
             value: null
         # more outputs can be defined here
 
-
 See the example of the modelling of a method to understand how the data is structured: [model.py](idr_iisim/industry/processA/method1/model.yaml)
 
 3. **Schema File**: The file: [schema.yaml](config/schema.yaml), is a schema that defines the structure or blueprint that describe the expected structure, types, and constraints of the data in the YAML file ).  This schema (.yaml) is used by [schema.py](idr_iisim/utils/schema.py) for validating data to ensure data integrity by verifying its format, types, and values. And to catch errors early by rejecting invalid data. Validation checks that:
@@ -82,7 +82,7 @@ See the example of the modelling of a method to understand how the data is struc
    - All outputs have a valid expression.
    - No duplicate names exist across constants, inputs, and outputs.
   
-   <br>A schema in Python is a powerful tool for defining and enforcing data structure rules, making applications more robust and error-resistant. 
+   <br>A schema in Python is a powerful tool for defining and enforcing data structure rules, making applications more robust and error-resistant.
    <br>
 
 4. **Generated Method Script**: A Model class is generated when [config.py](idr_iisim/models/model.py)) is executed. This class includes the method: *script_generator()*, which dynamically generates a Python script based on the model constants, inputs, outputs and operations defined in the data model (e.g., [model.yaml](idr_iisim/industry/processA/method1/model.yaml)).
@@ -94,15 +94,21 @@ See the example of the modelling of a method to understand how the data is struc
   This UML sequence diagram illustrates the process of validating a .yaml file and generating a model class in a Python application.
 
   Key Steps:
-   - A user provides a .yaml file to setup.py.
-   - setup.py interacts with config.py to load the file and uses schema.py to validate it against a predefined schema.
-   - The validation process involves verifying the .yaml file’s structure and content through a validator.
-   - Once validated, setup.py calls model.py to create an instantiated model class from the validated data.
-   - Finally, the model class is returned to setup.py, and the results are displayed to the user.
+
+- A user provides a .yaml file to setup.py.
+- setup.py interacts with config.py to load the file and uses schema.py to validate it against a predefined schema.
+- The validation process involves verifying the .yaml file’s structure and content through a validator.
+- Once validated, setup.py calls model.py to create an instantiated model class from the validated data.
+- Finally, the model class is returned to setup.py, and the results are displayed to the user.
+
 <hr>
 
 ## 2. Execution
+
+In order to execute this tool succesfully, you need to have the application `graphviz` installed in your system.
+
 The tool can be executed by running the following commands:
+
 ```bash
 # install dependencies
 pip install -r requirements.txt
@@ -115,6 +121,7 @@ As a result of the execution, the tool will print the results in the console and
 method folders. The diagrams will be saved as `model.png`.
 
 ### 2.1 Entry point - workflow
+
 This flowchart provides a high-level overview of the execution process of setup.py, highlighting the logical flow, modularity, and sequence of operations. It details the interactions between setup.py and key components, outlining the steps involved in configuring, validating, and running models.
 
 ![Setup - workflow](docs/Setup_Flowchart.png)
@@ -134,6 +141,7 @@ Key Steps:
 11. *End Execution*: Marks the completion of the execution process.
 
 ## Next steps
+
 - [x] Add funtion to dinamiclly generate the model script.
 - [ ] Add support for vectorized outputs. For the moment, the tool only supports scalar values.
 - [ ] Add support for recursive operations.
