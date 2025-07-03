@@ -51,6 +51,7 @@ class ModelDict:
     def check_types(self) -> None:
         for model in self.models.values():
             for input in model.config.inputs:
+                # Check if units are the same in both processess
                 if input.input_from is not None:
                     model_from = self.models[input.input_from]
                     if input.name not in model_from.outputs:

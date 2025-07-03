@@ -88,11 +88,29 @@ class Model:
                 description=output.description,
             )
 
-        # Parse inputs, constants and outputs
+        # Parse inputs
         for input in self.config.inputs:
             self.inputs[input.name] = input
+            if input.range:
+                for value in input.value:
+                    if not (input.range[0] <= value <= input.range[-1]):
+                        raise ValueError(
+                            f"Input '{input.name}' in process "
+                            + f"'{self.config.name}' is not inside the valid range"
+                            + f" ({input.value} not inside {input.range})"
+                        )
+        # Parse constants
         for constant in self.config.constants:
             self.constants[constant.name] = constant
+            if constant.range and not (
+                constant.range[0] <= constant.value <= constant.range[-1]
+            ):
+                raise ValueError(
+                    f"Constant '{constant.name}' in process "
+                    + f"'{self.config.name}' is not inside the valid range"
+                    + f" ({constant.value} not inside {constant.range})"
+                )
+        # Parse outputs
         for output in self.config.outputs:
             self.outputs[output.name] = output
 

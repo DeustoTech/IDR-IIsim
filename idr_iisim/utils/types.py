@@ -1,6 +1,8 @@
 __package__ = "utils"
 
+import math
 from dataclasses import dataclass, field
+from typing import Optional
 
 
 @dataclass
@@ -18,6 +20,7 @@ class ConstantStruct:
     source: str
     value: float
     units: str
+    range: Optional[list[float]] = None
 
 
 @dataclass
@@ -25,9 +28,10 @@ class InputStruct:
     name: str
     label: str
     description: str
-    value: float
+    value: list[float]
     input_from: str = field(metadata={"json_key": "from"})
     units: str
+    range: Optional[list[float]] = None
 
 
 @dataclass
@@ -38,7 +42,8 @@ class OutputStruct:
     operation: str
     args: list[str]
     units: str
-    value: float | None = None
+    value: Optional[float] = None
+    range: Optional[list[float]] = None
 
 
 @dataclass
