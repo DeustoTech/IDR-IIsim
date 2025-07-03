@@ -68,3 +68,4 @@ outputs:
         type: outputs
     description: Mix (Clay + Limestone) 
     value: null
+    units: kg

@@ -49,6 +49,7 @@ outputs:
         type: constants
     description: cement air emissions description
     value: null
+    units: kg
   - name: gypsum_losses_milling
     label: Gypsum losses
     operation: gypsum * gypsum_losses
@@ -59,3 +60,4 @@ outputs:
         type: constants
     description: cement air emissions description
     value: null
+    units: kg

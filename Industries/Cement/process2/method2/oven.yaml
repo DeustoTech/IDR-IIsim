@@ -82,6 +82,7 @@ outputs:
         type: inputs
     description:  PM10 emission (Limestone + Clay)
     value: null
+    units: kg
   - name: CO2_emissions_oven
     label: CO2
     operation: CO2_emissions
@@ -90,6 +91,7 @@ outputs:
         type: constants
     description: CO2 emission per product unit
     value: null
+    units: kg
   - name: heat_losses
     label: Heat losses
     operation: fuel_demand  * fuel_HC * energy_losses
@@ -102,6 +104,7 @@ outputs:
         type: constants
     description: Heat Losses in the process
     value: null
+    units: MJ
   - name: water_demand_oven
     label: water
     operation: water_consumption
@@ -110,6 +113,7 @@ outputs:
         type: inputs
     description: water consumption per product unit
     value: null
+    units: l
   - name: clinker_demand_Oven
     label: Clinker
     operation: Raw_Mix * ( 1 - Clinker_losses )
@@ -120,3 +124,4 @@ outputs:
         type: constants
     description: Clinker consumption
     value: null
+    units: kg

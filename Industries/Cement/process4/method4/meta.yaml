@@ -111,6 +111,7 @@ outputs:
         type: constants
     description: limestone consumption
     value: null
+    units: kg
   - name: clay_overall_demand
     label: Clay consumption
     operation: clay_demand_pre
@@ -119,6 +120,7 @@ outputs:
         type: constants
     description: Clay consumption in Pre
     value: null
+    units: kg
   - name: mechanical_energy_cement
     label: Mechanical energy demand
     operation: mechanical_energy_pre + mechanical_energy_oven + mechanical_energy_milling
@@ -131,6 +133,7 @@ outputs:
         type: constants
     description: Mechanical energy
     value: null
+    units: kg
   - name: CO2_overall_emission
     label: CO2 emissions
     operation: CO2_emissions_oven
@@ -139,6 +142,7 @@ outputs:
        type: inputs
     description: Total C02 emissions
     value: null
+    units: kg
   - name: heat_overall_losses
     label: Heat losses
     operation: heat_losses
@@ -147,6 +151,7 @@ outputs:
         type: inputs
     description: Total Heat losses
     value: null
+    units: MJ
   - name: water_overall_demand
     label: Water aml filesdemand
     operation: water_demand_oven
@@ -155,6 +160,7 @@ outputs:
         type: inputs
     description: Total water use/loss
     value: null
+    units: l
   - name: PM10_overall_emission
     label: PM10 emissions
     operation: PM10_emission_pre + PM10_emission_oven + cement_emission
@@ -167,6 +173,7 @@ outputs:
         type: inputs
     description: Total PM10 emissions
     value: null
+    units: kg
   - name: fuel_overall_demand
     label: Fuel consumption
     operation: fuel_demand_oven
@@ -175,6 +182,7 @@ outputs:
         type: constants
     description: Fuel consumption
     value: null
+    units: kg
   - name: gympsum_overall_losses
     label: Gympsum losses
     operation: gypsum_losses_milling
@@ -183,3 +191,4 @@ outputs:
         type: inputs
     description: gympsum losses from process milling
     value: null
+    units: kg
