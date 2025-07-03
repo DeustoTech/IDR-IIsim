@@ -66,5 +66,5 @@ outputs:
         type: inputs
       - name: PM10_emission_pre
         type: outputs
-    description: Mix (Ckay + Limestone) 
+    description: Mix (Clay + Limestone) 
     value: null
