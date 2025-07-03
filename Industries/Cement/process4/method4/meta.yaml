@@ -31,14 +31,14 @@ constants:
     citation: text
     source: https://www.google.com
     value: 222
-    units: L 
+    units: l
   - name: fuel_demand_oven
     label: fuel demand oven
     description: Fuel used in Oven
     citation: text
     source: https://www.google.com
     value: 130
-    units: Kg 
+    units: kg 
   - name: mechanical_energy_oven
     label: mechanical energy Oven
     description: Mechanical Energy need for SP2

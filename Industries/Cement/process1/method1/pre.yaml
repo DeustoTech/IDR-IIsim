@@ -10,30 +10,35 @@ constants:
     citation: text
     source: https://www.google.com
     value: 0.01
+    units: p.u.
   - name: clay_losses
     label: Clay losses
     description: Loss clay
     citation: text
     source: https://www.google.com
     value: 0.01
+    units: p.u.
 inputs:
   - name: limestone_demand
     label: Limestone
     description: Limestone needs by the process
     value:
       - 1035
+    units: kg
     from: null
   - name: clay_demand
     label: Clay
     description: Clay needs by the process
     value:
       - 375
+    units: kg
     from: null
   - name: mechanical_energy
     label: Mechanical Energy
     description: Mechanical Energy used by the process
     value:
       - 115.92
+    units: MJ
     from: null
 outputs:
   - name: PM10_emission_pre

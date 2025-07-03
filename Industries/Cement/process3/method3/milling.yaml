@@ -24,19 +24,19 @@ constants:
     citation: text
     source: https://www.google.com
     value: 1000
-    # units: kg
+    units: kg
 inputs:
   - name: gypsum
     label: Gypsum demand
     description: Gypsum description
     value: [34.6183]
-    # units: kg
+    units: kg
     from: null
   - name: Mechanical_energy_milling
     label: Mechanical energy
     description: Mechanical energy description
     value: [135.792]
-    # units: MJ
+    units: MJ
     from: null
 outputs:
   - name: cement_emission
