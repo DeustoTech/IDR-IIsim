@@ -25,11 +25,11 @@ class ModelDict:
         # add dependencies
         # model_id -> list[dependent_models_ids]
         model_dependencies = list(
-            filter(lambda x: x["from"] is not None, model.config.inputs)
+            filter(lambda x: x.input_from is not None, model.config.inputs)
         )
 
         # filter from values
-        from_list = set(map(lambda x: x["from"], model_dependencies))
+        from_list = set(map(lambda x: x.input_from, model_dependencies))
         if len(from_list) > 0:
             self.dependencies[key] = from_list
         pass
@@ -47,6 +47,24 @@ class ModelDict:
 
     def get_model(self, key: str) -> Model:
         return self.models[key]
+
+    def check_types(self) -> None:
+        for model in self.models.values():
+            for input in model.config.inputs:
+                if input.input_from is not None:
+                    model_from = self.models[input.input_from]
+                    if input.name not in model_from.outputs:
+                        raise ValueError(
+                            f"'{input.name}' does not exist in "
+                            + f"'{model_from.config.name}'"
+                        )
+                    units_from = model_from.outputs[input.name].units
+                    if units_from != input.units:
+                        raise ValueError(
+                            f"Unit for '{input.name}' differs in "
+                            + f"'{model.config.name}' ({input.units}) and "
+                            + f"'{model_from.config.name}' ({units_from})"
+                        )
 
 
 models_dict = ModelDict()

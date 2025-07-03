@@ -4,10 +4,17 @@ from functools import partial
 import os
 import graphviz
 import yaml
-from sympy import parse_expr, Array, Matrix, ImmutableDenseMatrix
+from sympy import parse_expr, Matrix, ImmutableDenseMatrix
 from idr_iisim.utils.logger import i_logger
-from idr_iisim.utils.types import ModelStruct, ArgumentStruct
+from idr_iisim.utils.types import (
+    ConstantStruct,
+    InputStruct,
+    ModelStruct,
+    OutputStruct,
+    json_to_model_struct,
+)
 from string import Template  # Use Template for substitution
+from typing import Optional
 
 
 def generate_centered_list(num_elements: int) -> list[int]:
@@ -43,10 +50,13 @@ class Model:
     model_config: str
     config: ModelStruct
     functions_map: dict
-    results: dict[str, Matrix] = {}
+    results: dict[str, Matrix | ImmutableDenseMatrix] = {}
     external_inputs: dict[
         str, dict[str, Matrix]
     ] = {}  # dict[model_id, dict[arg_name, value]]
+    inputs: dict[str, InputStruct] = {}
+    constants: dict[str, ConstantStruct] = {}
+    outputs: dict[str, OutputStruct] = {}
 
     txt_constants: str = ""
 
@@ -59,29 +69,38 @@ class Model:
         try:
             with open(self.model_config) as file:
                 data: dict = yaml.safe_load(file)
-            self.config = ModelStruct(**data)
+            # self.config = ModelStruct(**data)
+            i_logger.logger.debug(f"parsing {data['name']}")
+            self.config = json_to_model_struct(data)
         except Exception as e:
             raise e
 
         # read functions
         self.functions_map = {}
         for output in self.config.outputs:
-            operation = parse_expr(output["operation"])
+            operation = parse_expr(output.operation)
             f = partial(lambda op, **kwargs: op.subs(kwargs), op=operation)
-            key = output["name"]
+            key = output.name
             self.functions_map[key] = dict(
                 function=f,
-                args=output["args"],
+                args=output.args,
                 expression=operation,
-                description=output["description"],
+                description=output.description,
             )
+
+        # Parse inputs, constants and outputs
+        for input in self.config.inputs:
+            self.inputs[input.name] = input
+        for constant in self.config.constants:
+            self.constants[constant.name] = constant
+        for output in self.config.outputs:
+            self.outputs[output.name] = output
 
         i_logger.logger.debug(f"setup completed for {self.config.name}")
         i_logger.logger.debug(f"functions_map: \n{self.functions_map}")
-        pass
 
     def prepare_calculation(
-        self, model_id: str, outputs: dict[str, float]
+        self, model_id: str, outputs: dict[str, Matrix]
     ) -> None:
         """Prepares the external inputs for the calculation of a model.
         Args:
@@ -122,22 +141,22 @@ class Model:
                 else:
                     list_type = getattr(self.config, type_arg)
                     input_arg = next(
-                        x for x in list_type if x["name"] == arg_name
+                        x for x in list_type if x.name == arg_name
                     )
 
                     if type_arg == "inputs":
-                        from_value: str = input_arg["from"]
+                        from_value: Optional[str] = input_arg.input_from
                         if from_value is not None:
                             # the input is the output of another process
                             value = Matrix(
                                 self.external_inputs[from_value][arg_name]
                             )
                         else:
-                            value = Matrix(input_arg["value"])
+                            value = Matrix(input_arg.value)
                         # i_logger.logger.debug(f"input {arg_name} = {value}")
                     else:
                         # value is a constant
-                        value = input_arg["value"]
+                        value = input_arg.value
 
                 args[arg_name] = value
                 i_logger.logger.debug(f"arg {arg_name} = {value}")
@@ -185,19 +204,19 @@ class Model:
             """Add Input Nodes and Edges for each input block"""
             position = f"-2,{positions_list[i]}!"
             # input nodo name and value
-            input_nodo = f"*{input_block['name']} = {input_block['value']}"
+            input_nodo = f"*{input_block.name} = {input_block.value}"
             # dot.node(input_nodo, shape='point', width='0', rank='same', pos=position)
             dot.node(
-                input_block["name"],
+                input_block.name,
                 shape="point",
                 width="0",
                 rank="same",
                 pos=position,
             )
             dot.edge(
-                input_block["name"],
+                input_block.name,
                 self.config.name,
-                label=input_block["label"],
+                label=input_block.label,
                 color="black",
                 fontcolor="black",
                 tailport="e",
@@ -210,7 +229,7 @@ class Model:
         for i, output_block in outputs_blocks:
             position = f"2,{positions_list[i]}!"
             dot.node(
-                output_block["name"],
+                output_block.name,
                 shape="point",
                 width="0",
                 orientation="90",
@@ -218,8 +237,8 @@ class Model:
             )
             dot.edge(
                 self.config.name,
-                output_block["name"],
-                label=output_block["label"],
+                output_block.name,
+                label=output_block.label,
                 color="black",
                 fontcolor="black",
                 tailport="e",
@@ -244,8 +263,6 @@ class Model:
             template_path (str): The path to the template file.
         Returns: None
         """
-        import os
-        from string import Template
 
         # Initialize variables for template placeholders
         log_library = ""
@@ -277,7 +294,7 @@ class Model:
 
         # Generate constants dynamically from model configuration
         constants_code = "\n".join(
-            f"{constant['name']} = {constant['value']}  # {constant['description']}"
+            f"{constant.name} = {constant.value}  # {constant.description}"
             for constant in self.config.constants
         )
 
@@ -298,25 +315,28 @@ class Model:
                 if arg_type == "outputs":
                     # Value from previous results
                     value = Matrix([[self.results[arg_name][-1]]])
+                    units = self.outputs[arg_name].units
                 else:
                     # Input or constant
                     source_list = getattr(self.config, arg_type)
                     input_data = next(
-                        x for x in source_list if x["name"] == arg_name
+                        x for x in source_list if x.name == arg_name
                     )
                     if arg_type == "inputs":
                         args_code += f" {arg_name},"
-                        from_value = input_data.get("from")
+                        from_value = input_data.input_from
                         value = (
                             Matrix(self.external_inputs[from_value][arg_name])
                             if from_value
-                            else Matrix(input_data["value"])
+                            else Matrix(input_data.value)
                         )
+                        units = self.inputs[arg_name].units
                     else:
-                        value = input_data["value"]
+                        value = input_data.value
+                        units = self.constants[arg_name].units
 
                 args[arg_name] = value
-                i_logger.logger.debug(f"Argument {arg_name}: {value}")
+                i_logger.logger.debug(f"Argument {arg_name}: {value} {units}")
 
         # Process and clean arguments list
         args_list = sorted(set(args_code.split(",")[:-1]))
