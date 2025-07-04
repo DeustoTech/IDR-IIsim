@@ -43,7 +43,7 @@ inputs:
 outputs:
   - name: PM10_emission_pre
     label: PM10 emission
-    operation: (limestone_losses * limestone_demand) + (Clay_losses * Clay_demand)
+    operation: (limestone_losses * limestone_demand) + (clay_losses * clay_demand)
     args:
       - name: limestone_losses
         type: constants
@@ -58,7 +58,7 @@ outputs:
     units: kg
   - name: raw_mix
     label: Raw Mix
-    operation: limestone_demand + Clay_demand - PM10_emission_pre
+    operation: limestone_demand + clay_demand - PM10_emission_pre
     args:
       - name: limestone_demand
         type: inputs

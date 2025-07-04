@@ -11,8 +11,8 @@ constants:
     source: https://www.google.com
     value: 0.01
     units: p.u
-  - name: gypsum_losses
-    label: Gypsum losses
+  - name: gypsum
+    label: Gypsum need per product unit
     description: Gypsum
     citation: text
     source: https://www.google.com
@@ -26,7 +26,13 @@ constants:
     value: 1000
     units: kg
 inputs:
-  - name: gypsum
+  - name: clinker_production_oven
+    label: Clinker demand
+    description: Clinker
+    value: null
+    units: kg
+    from: Cemento-process2-Oven
+  - name: gypsum_demand
     label: Gypsum demand
     description: Gypsum description
     value: [34.6183]
@@ -50,13 +56,13 @@ outputs:
     description: cement air emissions description
     value: null
     units: kg
-  - name: gypsum_losses_milling
-    label: Gypsum losses
-    operation: gypsum * gypsum_losses
+  - name: gypsum_consumption_milling
+    label: Gypsum need
+    operation: gypsum_demand * gypsum
     args:
-      - name: gypsum
+      - name: gypsum_demand
         type: inputs
-      - name: gypsum_losses
+      - name: gypsum
         type: constants
     description: cement air emissions description
     value: null

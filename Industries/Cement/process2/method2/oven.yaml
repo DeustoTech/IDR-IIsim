@@ -40,18 +40,19 @@ constants:
     value: 309.3
     units: kg
 inputs:
-  - name: PM10_emission_pre
-    label: PM10 emission
-    description: patricular matter emissions
-    value: null
-    units: kg
-    from: Cemento-process1-Pre
   - name: raw_mix
     label: Mix consumption
     description: Mix description m1
     value: null
     units: kg
     from: Cemento-process1-Pre
+  - name: water_consumption
+    label: Water demand
+    description: Water consumption
+    value:
+      - 222
+    units: l
+    from: null
   - name: fuel_demand
     label: Fuel demand
     description: Fuel as a Material
@@ -66,13 +67,12 @@ inputs:
       - 69.552
     units: MJ
     from: null
-  - name: water_consumption
-    label: Water demand
-    description: Water consumption
-    value:
-      - 222
-    units: l
-    from: null
+  - name: PM10_emission_pre
+    label: PM10 emission
+    description: patricular matter emissions
+    value: null
+    units: kg
+    from: Cemento-process1-Pre
 outputs:
   - name: PM10_emission_oven
     label: PM10 emission
@@ -92,7 +92,7 @@ outputs:
     description: CO2 emission per product unit
     value: null
     units: kg
-  - name: heat_losses
+  - name: heat_losses_oven
     label: Heat losses
     operation: fuel_demand  * fuel_HC * energy_losses
     args:
@@ -105,7 +105,7 @@ outputs:
     description: Heat Losses in the process
     value: null
     units: MJ
-  - name: water_demand_oven
+  - name: water_consumption_oven
     label: water
     operation: water_consumption
     args:
@@ -114,9 +114,9 @@ outputs:
     description: water consumption per product unit
     value: null
     units: l
-  - name: clinker_demand_Oven
+  - name: clinker_production_oven
     label: Clinker
-    operation: Raw_Mix * ( 1 - Clinker_losses )
+    operation: raw_mix * ( 1 - clinker_losses )
     args:
       - name: raw_mix 
         type: inputs
