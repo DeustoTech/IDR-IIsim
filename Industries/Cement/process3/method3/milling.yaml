@@ -32,12 +32,6 @@ inputs:
     value: null
     units: kg
     from: Cemento-process2-Oven
-  - name: gypsum_demand
-    label: Gypsum demand
-    description: Gypsum description
-    value: [34.6183]
-    units: kg
-    from: null
   - name: Mechanical_energy_milling
     label: Mechanical energy
     description: Mechanical energy description
@@ -58,9 +52,9 @@ outputs:
     units: kg
   - name: gypsum_consumption_milling
     label: Gypsum need
-    operation: gypsum_demand * gypsum
+    operation: clinker_production_oven * gypsum
     args:
-      - name: gypsum_demand
+      - name: clinker_production_oven
         type: inputs
       - name: gypsum
         type: constants
