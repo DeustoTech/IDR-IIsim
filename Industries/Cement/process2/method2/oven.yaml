@@ -12,7 +12,7 @@ constants:
     value: 0.38
     units: p.u.
   - name: fuel_HC
-    label: Fuel
+    label: Fuel heat capacity
     description: Fuel HC
     citation: text
     source: https://www.google.com

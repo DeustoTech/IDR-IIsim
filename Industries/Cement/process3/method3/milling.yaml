@@ -39,17 +39,6 @@ inputs:
     units: MJ
     from: null
 outputs:
-  - name: cement_emission
-    label: Cement air emissions
-    operation: conversion_factor * cement_losses
-    args:
-      - name: conversion_factor
-        type: constants
-      - name: cement_losses
-        type: constants
-    description: cement air emissions description
-    value: null
-    units: kg
   - name: gypsum_consumption_milling
     label: Gypsum need
     operation: clinker_production_oven * gypsum
@@ -57,6 +46,19 @@ outputs:
       - name: clinker_production_oven
         type: inputs
       - name: gypsum
+        type: constants
+    description: cement air emissions description
+    value: null
+    units: kg
+  - name: cement_emission
+    label: Cement air emissions
+    operation: (clinker_production_oven + gypsum_consumption_milling) * cement_losses
+    args:
+      - name: clinker_production_oven
+        type: inputs
+      - name: gypsum_consumption_milling
+        type: outputs
+      - name: cement_losses
         type: constants
     description: cement air emissions description
     value: null
