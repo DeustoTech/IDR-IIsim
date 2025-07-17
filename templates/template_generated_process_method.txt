@@ -1,0 +1,3 @@
+    def self.__$name(self$args) -> None:
+        """ $description """
+        $operation

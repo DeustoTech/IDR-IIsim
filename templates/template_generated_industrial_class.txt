@@ -1,0 +1,45 @@
+""" $description """
+
+$constants
+
+class $name:
+    
+    def __init__(self, final_units: float$args):
+        """ constructor """
+        self.__validate_total_production(final_units)
+        $constructor_method
+
+    def __validate_total_production(self, final_units) -> None:
+        if final_units < $min_units or final_units > $max_units:
+            raise ValueError(
+                "The production should be a value between 0 and 99999"
+            )
+        self.__total_production = final_units
+
+    $process_methods
+    $get_methods
+    def csv(self, separator: str = ";") -> None:
+        attributes = vars(self)
+        lines = [[], []]
+        for name, value in attributes.items():
+            name = name.replace(f"_{self.__class__.__name__}__", "")
+            if name in units:
+                unit = units[name]
+                lines[0].append(name)
+                lines[1].append(str(value))
+                lines[0].append(name + "_unit")
+                lines[1].append(unit)
+        for line in lines:
+            print(separator.join(line))
+
+    def __str__(self) -> str:
+        final_str = NAME
+        final_str += "\n" + "-" * len(final_str) + "\n"
+        attributes = vars(self)
+        for name, value in attributes.items():
+            name = name.replace(f"_{self.__class__.__name__}__", "")
+            if name in units:
+                unit = units[name]
+                print_name = name.replace("_", " ").title()
+                final_str += f"{print_name}: {value:.2f} {unit}\n"
+        return final_str
