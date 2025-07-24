@@ -1,0 +1,228 @@
+id: Cemento-process4-Meta
+name: Cement production
+short_name: Cement
+type: industry
+description: Meta archivo de la industria del cemento
+version: 1.0.0
+debug: false
+constants:
+  - name: LIMESTONE_PROPORTION
+    label: limestone proportion
+    description: limestone proportion
+    citation: text
+    source: https://www.google.com
+    value: 1035
+    units: Kg/p.u.
+  - name: CLAY_PROPORTION
+    label: Clay proportion
+    description: Clay proportion
+    citation: text
+    source: https://www.google.com
+    value: 375
+    units: Kg/p.u.
+  - name: MECHANICAL_ENERGY_PRE_PROPORTION
+    label: Mechanical energy proportion in pre process
+    description: Mechanical Energy pre proportion
+    citation: text
+    source: https://www.google.com
+    value: 115.92
+    units: MJ/p.u.
+  - name: WATER_PROPORTION
+    label: Water proportion
+    description: Water proportion
+    citation: text
+    source: https://www.google.com
+    value: 222
+    units: l/p.u.
+  - name: FUEL_PROPORTION
+    label: fuel proportion
+    description: Fuel proportion
+    citation: text
+    source: https://www.google.com
+    value: 130
+    units: kg/p.u.
+  - name: MECHANICAL_ENERGY_OVEN_PROPORTION
+    label: Mechanical energy proportion in oven process
+    description: Mechanical Energy oven proportion
+    citation: text
+    source: https://www.google.com
+    value: 69.552
+    units: MJ/p.u.
+  - name: GYPSUM_PROPORTION
+    label: gypsum proportion
+    description: Gypsum proportion
+    citation: text
+    source: https://www.google.com
+    value: 0.04
+    units: kg/p.u.
+  - name: MECHANICAL_ENERGY_MILLING_PROPORTION
+    label: Mechanical energy
+    description: Mechanical Energy used by the process
+    citation: text
+    source: https://www.google.com
+    value: 135.792
+    units: MJ
+inputs:
+  - name: clinker_production_oven
+    label: Clinker
+    description: Clinker consumption
+    units: kg
+    value: null
+    from: Cemento-process2-Oven
+  - name: pm10_emission_pre
+    label: PM10 emsision pre
+    description: Particular matter (PM10) emissions
+    units: kg
+    value: null
+    from: Cemento-process1-Pre
+  - name: pm10_emission_oven
+    label: PM10 emsision oven
+    description: PM10 emission (Limestone + Clay)
+    units: kg
+    value: null
+    from: Cemento-process2-Oven
+  - name: cement_emission
+    label: PM10 emsision milling
+    description: cement air emissions description
+    units: kg
+    value: null
+    from: Cemento-process3-Milling
+outcome:
+  - name: total_cement_production
+    label: Total cement production
+    description: Total cement production
+    units: ton
+    same_result:
+      process: Cemento1-process3-Milling
+      output: cement_production
+demands:
+  - name: limestone_demand
+    units: kg
+    operation: total_cement_production * LIMESTONE_PROPORTION
+    used: Cemento-process1-Pre
+    args:
+      - name: LIMESTONE_PROPORTION
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total limestone demand
+  - name: clay_demand
+    operation: total_cement_production * CLAY_PROPORTION
+    args:
+      - name: CLAY_PROPORTION
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    units: kg
+    description: Total clay demand
+    used: Cemento-process1-Pre
+  - name: fuel_demand
+    operation: total_cement_production * FUEL_PROPORTION
+    args:
+      - name: FUEL_PROPORTION
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    units: kg
+    description: Total fuel demand
+    used: Cemento-process2-Oven
+  - name: water_demand
+    operation: total_cement_production * WATER_PROPORTION
+    args:
+      - name: WATER_PROPORTION
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total water demand
+    units: l
+    used: Cemento-process2-Oven
+  - name: gypsum_demand
+    operation: clinker_production_oven * GYPSUM_PROPORTION
+    args:
+      - name: clinker_production_oven
+        type: inputs
+      - name: GYPSUM_PROPORTION
+        type: constants
+    description: gympsum total demand
+    units: kg
+    used: Cemento-process3-Milling
+  - name: mechanical_energy_pre
+    operation: total_cement_production * MECHANICAL_ENERGY_PRE_PROPORTION
+    args:
+      - name: MECHANICAL_ENERGY_PRE
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total mechanical energy pre
+    units: MJ
+    used: Cemento-process1-Pre
+    meta: mechanical_energy
+  - name: mechanical_energy_oven
+    operation: total_cement_production * MECHANICAL_ENERGY_OVEN_PROPORTION
+    args:
+      - name: MECHANICAL_ENERGY_OVEN
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total mechanical energy oven
+    units: MJ
+    used: Cemento-process2-Oven
+    meta: mechanical_energy
+  - name: mechanical_energy_milling
+    operation: total_cement_production * MECHANICAL_ENERGY_MILLING_PROPORTION
+    args:
+      - name: MECHANICAL_ENERGY_MILLING
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total mechanical energy milling
+    units: MJ
+    used: Cemento-process3-Milling
+    meta: mechanical_energy
+meta:
+  - name: mechanical_energy
+    operation: mechanical_energy_pre + mechanical_energy_oven + mechanical_energy_milling
+    args:
+      - name: mechanical_energy_pre
+        type: demand
+      - name: mechanical_energy_oven
+        type: demand
+      - name: mechanical_energy_milling
+        type: demand
+    description: Total mechanical energy
+    units: MJ
+outputs:
+  - name: co2_overall_emissions
+    label: CO2 emissions
+    operation: co2_emissions_oven
+    args:
+      - name: co2_emissions_oven
+        type: outputs
+        from: Cemento-process2-Oven
+    description: Total C02 emissions
+    units: kg
+  - name: heat_overall_losses
+    label: Heat losses
+    operation: heat_losses_oven
+    args:
+      - name: heat_losses_oven
+        type: outputs
+        from: Cemento-process2-Oven
+    description: Total Heat losses
+    units: MJ
+  - name: pm10_overall_emission
+    label: PM10 emissions
+    operation: (pm10_emission_pre + pm10_emission_oven + cement_emission)
+    args:
+      - name: pm10_emission_pre
+        type: inputs
+        from: Cemento-process1-Pre
+      - name: pm10_emission_oven
+        type: inputs
+        from: Cemento-process2-Oven
+      - name: cement_emission
+        type: inputs
+        from: Cemento-process3-Milling
+    description: Total PM10 emissions
+    value: null
+    units: kg

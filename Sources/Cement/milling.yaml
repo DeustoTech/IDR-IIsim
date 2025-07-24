@@ -1,0 +1,63 @@
+id: Cemento-process3-Milling
+name: Milling
+short_name: milling
+type: process
+description: Milling
+version: 1.0.0
+debug: false
+constants:
+  - name: CEMENT_LOSSES
+    label: Cement losses
+    description: Cement losses
+    citation: text
+    source: https://www.google.com
+    value: 0.01
+    units: p.u
+inputs:
+  - name: clinker_production_oven
+    label: Clinker demand
+    description: Clinker
+    value: null
+    units: kg
+    from: Cemento-process2-Oven
+  - name: gypsum_demand
+    label: Gypsum need per product unit
+    description: Gypsum
+    value:
+      - 0.04
+    from: null
+    units: kg
+  - name: mechanical_energy_milling
+    label: Mechanical energy milling
+    description: Mechanical Energy used by the process
+    value:
+      - 135.792
+    units: MJ
+    from: null
+outputs:
+  - name: cement_emission
+    label: Cement air emissions
+    operation: (clinker_production_oven + gypsum_demand) * CEMENT_LOSSES
+    args:
+      - name: clinker_production_oven
+        type: inputs
+      - name: gypsum_demand
+        type: inputs
+      - name: CEMENT_LOSSES
+        type: constants
+    description: cement air emissions description
+    value: null
+    units: kg
+  - name: cement_production
+    label: Final cement production
+    operation: (clinker_production_oven + gypsum_demand) * (1 - CEMENT_LOSSES)
+    args:
+      - name: clinker_production_oven
+        type: inputs
+      - name: gypsum_demand
+        type: inputs
+      - name: CEMENT_LOSSES
+        type: constants
+    description: cement air emissions description
+    value: null
+    units: kg

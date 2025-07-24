@@ -1,5 +1,6 @@
-name: Milling 
+name: Milling
 id: Cemento-process3-Milling
+type: process
 description: Milling
 version: 1.0.0
 debug: false
@@ -63,3 +64,4 @@ outputs:
     description: cement air emissions description
     value: null
     units: kg
+

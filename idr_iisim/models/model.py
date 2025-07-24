@@ -60,20 +60,19 @@ class Model:
 
     txt_constants: str = ""
 
+    def __init__(self, data: dict, path: str):
+        self.directory = os.path.dirname(path)
+        # self.model_config = os.path.basename(path)
+        self.model_config = path
+        # Parse data
+        i_logger.logger.debug(f"parsing {data['name']}")
+        self.config = json_to_model_struct(data)
+        self.setup()
+
     def setup(self) -> None:
         """Reads the model configuration file and sets up the model for calculation.
-        Args: None
         Returns: None
         """
-        # read config file
-        try:
-            with open(self.model_config) as file:
-                data: dict = yaml.safe_load(file)
-            # self.config = ModelStruct(**data)
-            i_logger.logger.debug(f"parsing {data['name']}")
-            self.config = json_to_model_struct(data)
-        except Exception as e:
-            raise e
 
         # read functions
         self.functions_map = {}
@@ -273,6 +272,21 @@ class Model:
         i_logger.logger.debug(f"finished printing {self.config.name}")
         pass
 
+    def constants_generator(self) -> str:
+        constants_code = ""
+
+        # Generate constants dynamically from model configuration
+        constants_code = "\n".join(
+            f"{constant.name} = {constant.value}  # {constant.description}"
+            for constant in self.config.constants
+        )
+        if constants_code:
+            constants_code = (
+                f"# {self.config.name}'s constants\n" + constants_code
+            )
+
+        return constants_code
+
     def script_generator(
         self, template_path: str, generated_model_script_filename: str
     ) -> None:
@@ -411,5 +425,91 @@ class Model:
             f"Script successfully generated at: {script_path}"
         )
 
+    def getters_generator(self) -> str:
+        """Generate getter methods"""
+        getters = []
 
-run = Model()
+        # Load the template content
+        template_path = "templates/template_generated_getter.txt"
+        try:
+            with open(template_path, "r") as template_file:
+                template_content = template_file.read()
+        except FileNotFoundError:
+            i_logger.logger.error(f"Template file not found: {template_path}")
+            raise
+        except Exception as e:
+            i_logger.logger.error(f"Error reading template file: {e}")
+            raise
+
+        for variable_name, outputs in self.functions_map.items():
+            getter_template = Template(template_content)
+            getter_script = getter_template.substitute(
+                name=variable_name, description=outputs["description"]
+            )
+            getters.append(getter_script)
+        return "\n".join(getters)
+
+    def operations_generator(self) -> str:
+        process_methods = []
+        for variable_name, outputs in self.functions_map.items():
+            expression = str(outputs["expression"])
+            for arg in outputs["args"]:
+                if arg["type"] == "outputs":
+                    expression = expression.replace(
+                        arg["name"], f"self.__{arg['name']}"
+                    )
+            method_script = f"self.__{variable_name} = {expression}"
+            process_methods.append(method_script)
+        return "\n        ".join(process_methods)
+
+    def process_methods_generator(self) -> str:
+        # Load the template content
+        template_path = "templates/template_generated_process_method.txt"
+        try:
+            with open(template_path, "r") as template_file:
+                template_content = template_file.read()
+        except FileNotFoundError:
+            i_logger.logger.error(f"Template file not found: {template_path}")
+            raise
+        except Exception as e:
+            i_logger.logger.error(f"Error reading template file: {e}")
+            raise
+
+        method_template = Template(template_content)
+
+        args = []
+        for outputs in self.functions_map.values():
+            for arg in outputs["args"]:
+                if arg["type"] == "inputs":
+                    if arg["name"] not in args:
+                        args.append(arg["name"])
+
+        args_script = "self"
+        if args:
+            args_script += ", "
+            args_script += ", ".join(args)
+
+        return method_template.substitute(
+            name=self.config.short_name,
+            args=args_script,
+            description=self.config.description,
+            operation=self.operations_generator(),
+        )
+
+    def process_call_method_generator(self) -> str:
+        script = f"self.__{self.config.short_name}("
+
+        args = []
+        for outputs in self.functions_map.values():
+            for arg in outputs["args"]:
+                if arg["type"] == "inputs":
+                    name = f"self.__{arg['name']}"
+                    if name not in args:
+                        args.append(name)
+
+        script += ", ".join(args)
+        script += ")"
+        return "\n        " + script
+
+
+# run = Model()

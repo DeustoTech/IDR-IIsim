@@ -1,5 +1,7 @@
-name: Cement production
 id: Cemento-process4-Meta
+name: Cement production
+short_name: cement
+type: industry
 description: Meta archivo de la industria del cemento
 version: 1.0.0
 debug: false
@@ -146,7 +148,7 @@ outputs:
     description: Mechanical energy
     value: null
     units: kg
-  - name: CO2_overall_emission
+  - name: co2_overall_emission
     label: CO2 emissions
     operation: CO2_emissions_oven * cement_production
     args:
@@ -179,7 +181,7 @@ outputs:
     description: Total water use/loss
     value: null
     units: l
-  - name: PM10_overall_emission
+  - name: pm10_overall_emission
     label: PM10 emissions
     operation: (PM10_emission_pre + PM10_emission_oven + cement_emission) * cement_production
     args:
@@ -194,9 +196,9 @@ outputs:
     description: Total PM10 emissions
     value: null
     units: kg
-  - name: fuel_overall_demand * cement_production
+  - name: fuel_demand_oven
     label: Fuel consumption
-    operation: fuel_demand_oven
+    operation: fuel_overall_demand * cement_production
     args:
       - name: cement_production
         type: inputs

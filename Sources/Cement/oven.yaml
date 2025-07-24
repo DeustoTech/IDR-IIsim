@@ -1,44 +1,45 @@
-name: Oven
 id: Cemento-process2-Oven
+name: Oven
+short_name: oven
 type: process
 description: OVEN - Calcination, clinkerization, combustion, cooling
 version: 1.0.0
 debug: false
 constants:
-  - name: clinker_losses
+  - name: CLINKER_LOSSES
     label: Clinker losses
     description: Loss Clinker
     citation: text
     source: https://www.google.com
     value: 0.38
     units: p.u.
-  - name: fuel_HC
+  - name: FUEL_HC
     label: Fuel heat capacity
     description: Fuel HC
     citation: text
     source: https://www.google.com
     value: 26.93
     units: MJ/kg
-  - name: energy_losses
+  - name: ENERGY_LOSSES
     label: Energy losses
     description: Energy losses
     citation: text
     source: https://www.google.com
     value: 0.1871
     units: p.u.
-  - name: water_demand
-    label: Water
+  - name: WATER_DEMAND
+    label: Water demand
     description: Water
     citation: text
     source: https://www.google.com
     value: 222
     units: l
-  - name: CO2_emissions
-    label: CO2
+  - name: CO2_EMISSIONS
+    label: CO2 emissions
     description: CO2
     citation: text
     source: https://www.google.com
-    value: 309.3
+    value: 0.85
     units: kg
 inputs:
   - name: raw_mix
@@ -68,62 +69,52 @@ inputs:
       - 69.552
     units: MJ
     from: null
-  - name: PM10_emission_pre
+  - name: pm10_emission_pre
     label: PM10 emission
     description: patricular matter emissions
     value: null
     units: kg
     from: Cemento-process1-Pre
 outputs:
-  - name: PM10_emission_oven
+  - name: pm10_emission_oven
     label: PM10 emission
-    operation: PM10_emission_pre
+    operation: pm10_emission_pre
     args:
-      - name: PM10_emission_pre
+      - name: pm10_emission_pre
         type: inputs
     description: PM10 emission (Limestone + Clay)
     value: null
     units: kg
-  - name: CO2_emissions_oven
+  - name: co2_emissions_oven
     label: CO2
-    operation: CO2_emissions
+    operation: CO2_EMISSIONS
     args:
-      - name: CO2_emissions
+      - name: CO2_EMISSIONS
         type: constants
     description: CO2 emission per product unit
     value: null
     units: kg
   - name: heat_losses_oven
     label: Heat losses
-    operation: fuel_demand  * fuel_HC * energy_losses
+    operation: fuel_demand  * FUEL_HC * ENERGY_LOSSES
     args:
       - name: fuel_demand
         type: inputs
-      - name: fuel_HC
+      - name: FUEL_HC
         type: constants
-      - name: energy_losses
+      - name: ENERGY_LOSSES
         type: constants
     description: Heat Losses in the process
     value: null
     units: MJ
-  - name: water_consumption_oven
-    label: water
-    operation: water_consumption
-    args:
-      - name: water_consumption
-        type: inputs
-    description: water consumption per product unit
-    value: null
-    units: l
   - name: clinker_production_oven
     label: Clinker
-    operation: raw_mix * ( 1 - clinker_losses )
+    operation: raw_mix * ( 1 - CLINKER_LOSSES )
     args:
       - name: raw_mix
         type: inputs
-      - name: clinker_losses
+      - name: CLINKER_LOSSES
         type: constants
     description: Clinker consumption
     value: null
     units: kg
-
