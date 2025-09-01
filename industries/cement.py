@@ -18,7 +18,6 @@ CLAY_LOSSES = 0.01  # Loss clay
 CLINKER_LOSSES = 0.38  # Loss Clinker
 FUEL_HC = 26.93  # Fuel HC
 ENERGY_LOSSES = 0.1871  # Energy losses
-WATER_DEMAND = 222  # Water
 CO2_EMISSIONS = 0.85  # CO2
 # Milling's constants
 CEMENT_LOSSES = 0.01  # Cement losses
@@ -38,7 +37,8 @@ UNITS = {
 }
 
 class Cement:
-    
+    """ Cement industry """
+
     def __init__(self, total_cement_production):
         """ constructor """
         self.__validate_total_production(total_cement_production)
@@ -123,6 +123,7 @@ class Cement:
         return self.__pm10_overall_emission
 
     def csv(self, separator: str = ";") -> None:
+        """ print the industry as CSV format """
         attributes = vars(self)
         lines = [[], []]
         for name, value in attributes.items():
