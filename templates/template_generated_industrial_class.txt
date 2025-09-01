@@ -8,7 +8,8 @@ $constants
 UNITS = $units
 
 class $name:
-    
+    """ $name industry """
+
     def __init__($args):
         """ constructor """
         self.__validate_total_production($outcome_name)
@@ -24,6 +25,7 @@ class $name:
 $process_methods
 $get_methods
     def csv(self, separator: str = ";") -> None:
+        """ print the industry as CSV format """
         attributes = vars(self)
         lines = [[], []]
         for name, value in attributes.items():
