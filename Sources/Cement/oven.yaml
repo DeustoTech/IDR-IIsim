@@ -27,13 +27,6 @@ constants:
     source: https://www.google.com
     value: 0.1871
     units: p.u.
-  - name: WATER_DEMAND
-    label: Water demand
-    description: Water
-    citation: text
-    source: https://www.google.com
-    value: 222
-    units: l
   - name: CO2_EMISSIONS
     label: CO2 emissions
     description: CO2
@@ -48,7 +41,7 @@ inputs:
     value: null
     units: kg
     from: Cemento-process1-Pre
-  - name: water_consumption
+  - name: water_demand
     label: Water demand
     description: Water consumption
     value:
