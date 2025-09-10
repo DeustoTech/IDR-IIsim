@@ -39,6 +39,25 @@ $get_methods
         for line in lines:
             print(separator.join(line))
 
+    def csv_header(self) -> list:
+        attributes = vars(self)
+        line = []
+        for name in attributes:
+            name = name.replace(f"_{self.__class__.__name__}__", "")
+            if name in UNITS:
+                unit = UNITS[name]
+                line.append(f"{name} ({unit})")
+        return line
+
+    def csv_row(self) -> list:
+        attributes = vars(self)
+        line = []
+        for name, value in attributes.items():
+            name = name.replace(f"_{self.__class__.__name__}__", "")
+            if name in UNITS:
+                line.append(str(value))
+        return line
+
     def __str__(self) -> str:
         final_str = NAME
         final_str += "\n" + "-" * len(final_str) + "\n"
