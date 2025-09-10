@@ -26,14 +26,14 @@ inputs:
     description: Limestone needs by the process
     value:
       - 1035
-    units: kg
+    units: kt
     from: null
   - name: clay_demand
     label: Clay
     description: Clay needs by the process
     value:
       - 375
-    units: kg
+    units: kt
     from: null
   - name: mechanical_energy_pre
     label: Mechanical energy pre
@@ -41,7 +41,7 @@ inputs:
     value:
       - 115.92
     from: null
-    units: MJ
+    units: GJ
 outputs:
   - name: pm10_emission_pre
     label: PM10 emission
@@ -57,7 +57,7 @@ outputs:
         type: inputs
     description: Particular matter (PM10) emissions
     value: null
-    units: kg
+    units: kt
   - name: raw_mix
     label: Raw Mix
     operation: limestone_demand + clay_demand - pm10_emission_pre
@@ -70,4 +70,4 @@ outputs:
         type: outputs
     description: Mix (Clay + Limestone)
     value: null
-    units: kg
+    units: kt

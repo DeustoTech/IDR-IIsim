@@ -18,21 +18,19 @@ inputs:
     label: Clinker demand
     description: Clinker
     value: null
-    units: kg
+    units: kt
     from: Cemento-process2-Oven
   - name: gypsum_demand
     label: Gypsum need per product unit
     description: Gypsum
-    value:
-      - 0.04
+    value: null
     from: null
-    units: kg
+    units: kt
   - name: mechanical_energy_milling
     label: Mechanical energy milling
     description: Mechanical Energy used by the process
-    value:
-      - 135.792
-    units: MJ
+    value: null
+    units: GJ
     from: null
 outputs:
   - name: cement_emission
@@ -47,7 +45,7 @@ outputs:
         type: constants
     description: cement air emissions description
     value: null
-    units: kg
+    units: kt
   - name: cement_production
     label: Final cement production
     operation: (clinker_production_oven + gypsum_demand) * (1 - CEMENT_LOSSES)
@@ -60,4 +58,4 @@ outputs:
         type: constants
     description: cement air emissions description
     value: null
-    units: kg
+    units: kt

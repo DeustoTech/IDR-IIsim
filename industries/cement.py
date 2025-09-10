@@ -1,39 +1,39 @@
 """ Meta archivo de la industria del cemento """
 
 # Constants
-NAME = "Cement production"
-# Cement production's constants
-LIMESTONE_PROPORTION = 1035  # limestone proportion
-CLAY_PROPORTION = 375  # Clay proportion
-MECHANICAL_ENERGY_PRE_PROPORTION = 115.92  # Mechanical Energy pre proportion
-WATER_PROPORTION = 222  # Water proportion
-FUEL_PROPORTION = 130  # Fuel proportion
-MECHANICAL_ENERGY_OVEN_PROPORTION = 69.552  # Mechanical Energy oven proportion
+NAME = "Cement industry"
+# Cement industry's constants
+LIMESTONE_PROPORTION = 1.035  # limestone proportion
+CLAY_PROPORTION = 0.375  # Clay proportion
+MECHANICAL_ENERGY_PRE_PROPORTION = 0.11592  # Mechanical Energy pre proportion
+WATER_PROPORTION = 0.222  # Water proportion
+FUEL_PROPORTION = 0.13  # Fuel proportion
+MECHANICAL_ENERGY_OVEN_PROPORTION = 0.069552  # Mechanical Energy oven proportion
 GYPSUM_PROPORTION = 0.04  # Gypsum proportion
-MECHANICAL_ENERGY_MILLING_PROPORTION = 135.792  # Mechanical Energy used by the process
+MECHANICAL_ENERGY_MILLING_PROPORTION = 0.135792  # Mechanical Energy used by the process
+CO2_EMISSIONS_PROPORTION = 0.9  # CO2
 # Pre-homogenization and grinding's constants
 LIMESTONE_LOSSES = 0.01  # Limestone losses
 CLAY_LOSSES = 0.01  # Loss clay
 # Oven's constants
 CLINKER_LOSSES = 0.38  # Loss Clinker
-FUEL_HC = 26.93  # Fuel HC
+FUEL_HC = 0.02693  # Fuel HC
 ENERGY_LOSSES = 0.1871  # Energy losses
-CO2_EMISSIONS = 0.85  # CO2
 # Milling's constants
 CEMENT_LOSSES = 0.01  # Cement losses
 
 # units
 UNITS = {
-    "total_cement_production": "ton",
-    "limestone_demand": "kg",
-    "clay_demand": "kg",
-    "fuel_demand": "kg",
-    "water_demand": "l",
-    "gypsum_demand": "kg",
-    "mechanical_energy": "MJ",
-    "co2_overall_emissions": "kg",
-    "heat_overall_losses": "MJ",
-    "pm10_overall_emission": "kg"
+    "total_cement_production": "kt",
+    "limestone_demand": "kt",
+    "clay_demand": "kt",
+    "fuel_demand": "kt",
+    "water_demand": "m3",
+    "gypsum_demand": "kt",
+    "mechanical_energy": "GJ",
+    "co2_overall_emissions": "kt",
+    "heat_overall_losses": "GJ",
+    "pm10_overall_emission": "kt"
 }
 
 class Cement:
@@ -55,14 +55,14 @@ class Cement:
         self.__mechanical_energy_milling = self.__total_cement_production * MECHANICAL_ENERGY_MILLING_PROPORTION
         self.__milling(self.__clinker_production_oven, self.__gypsum_demand)
         self.__mechanical_energy = self.__mechanical_energy_pre + self.__mechanical_energy_oven + self.__mechanical_energy_milling
-        self.__co2_overall_emissions = self.__co2_emissions_oven
+        self.__co2_overall_emissions = total_cement_production * CO2_EMISSIONS_PROPORTION
         self.__heat_overall_losses = self.__heat_losses_oven
         self.__pm10_overall_emission = (self.__pm10_emission_pre + self.__pm10_emission_oven + self.__cement_emission)
 
     def __validate_total_production(self, total_cement_production) -> None:
-        if total_cement_production < 5 or total_cement_production > 1000:
+        if total_cement_production < 1 or total_cement_production > 1000000000:
             raise ValueError(
-                "The production should be a value between 5 and 1000"
+                "The production should be a value between 1 and 1000000000"
             )
 
     def __pre_homogeneization_and_grinding(self, limestone_demand, clay_demand) -> None:
@@ -73,7 +73,6 @@ class Cement:
     def __oven(self, pm10_emission_pre, fuel_demand, raw_mix) -> None:
         """ OVEN - Calcination, clinkerization, combustion, cooling """
         self.__pm10_emission_oven = pm10_emission_pre
-        self.__co2_emissions_oven = CO2_EMISSIONS
         self.__heat_losses_oven = ENERGY_LOSSES*FUEL_HC*fuel_demand
         self.__clinker_production_oven = raw_mix*(1 - CLINKER_LOSSES)
 

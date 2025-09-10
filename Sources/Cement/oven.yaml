@@ -18,7 +18,7 @@ constants:
     description: Fuel HC
     citation: text
     source: https://www.google.com
-    value: 26.93
+    value: 0.02693
     units: MJ/kg
   - name: ENERGY_LOSSES
     label: Energy losses
@@ -27,46 +27,36 @@ constants:
     source: https://www.google.com
     value: 0.1871
     units: p.u.
-  - name: CO2_EMISSIONS
-    label: CO2 emissions
-    description: CO2
-    citation: text
-    source: https://www.google.com
-    value: 0.85
-    units: kg
 inputs:
   - name: raw_mix
     label: Mix consumption
     description: Mix description m1
     value: null
-    units: kg
+    units: kt
     from: Cemento-process1-Pre
   - name: water_demand
     label: Water demand
     description: Water consumption
-    value:
-      - 222
-    units: l
+    value: null
+    units: m3
     from: null
   - name: fuel_demand
     label: Fuel demand
     description: Fuel as a Material
-    value:
-      - 130
-    units: kg
+    value: null
+    units: kt
     from: null
   - name: mechanical_energy_oven
     label: Mechanical energy
     description: Mechanical energy description
-    value:
-      - 69.552
-    units: MJ
+    value: null
+    units: GJ
     from: null
   - name: pm10_emission_pre
     label: PM10 emission
     description: patricular matter emissions
     value: null
-    units: kg
+    units: kt
     from: Cemento-process1-Pre
 outputs:
   - name: pm10_emission_oven
@@ -77,16 +67,7 @@ outputs:
         type: inputs
     description: PM10 emission (Limestone + Clay)
     value: null
-    units: kg
-  - name: co2_emissions_oven
-    label: CO2
-    operation: CO2_EMISSIONS
-    args:
-      - name: CO2_EMISSIONS
-        type: constants
-    description: CO2 emission per product unit
-    value: null
-    units: kg
+    units: kt
   - name: heat_losses_oven
     label: Heat losses
     operation: fuel_demand  * FUEL_HC * ENERGY_LOSSES
@@ -99,7 +80,7 @@ outputs:
         type: constants
     description: Heat Losses in the process
     value: null
-    units: MJ
+    units: GJ
   - name: clinker_production_oven
     label: Clinker
     operation: raw_mix * ( 1 - CLINKER_LOSSES )
@@ -110,4 +91,4 @@ outputs:
         type: constants
     description: Clinker consumption
     value: null
-    units: kg
+    units: kt
