@@ -12,13 +12,13 @@ Although there are several types of cement, and different production processes, 
 
 The storage and distribution phase is very different from one plant to another as it depends mainly on the customer, and is therefore excluded from this model.
 
-The three phases to be modelled are therefore the pre-homogenisation, where the raw material is crushed and mixed, the oven, where the main chemical reactions take place, and finally the milling phase, where the necessary components are added to obtain the precise product desired. 
+The three phases to be modelled are therefore the pre-homogenisation, where the raw material is crushed and mixed, the oven, where the main chemical reactions take place, and finally the milling phase, where the necessary components are added to obtain the precise product desired.
 
-![Schematic representation of a generic cement production process](Cement_process.png)
+![Schematic representation of a generic cement production process](images/Cement_process.png)
 
 Figure 1\. Schematic representation of a generic cement production process
 
-![Legends of process symbols](Cement_process_lejend.png)
+![Legends of process symbols](images/Cement_process_lejend.png)
 
 Figure 2\. Legends of process symbols
 
@@ -26,7 +26,7 @@ Figure 2\. Legends of process symbols
 
 The model developed corresponds to the red rectangle in Figure 1, leaving out of this study the storage and packaging phases. Each block represents a sub-process, and although some material and energy flows are internal to the plant itself, the data model allows for the possibility of recirculation loops being diverted to the outside. Therefore, each sub-process is defined independently, without considering the internal loops.
 
-The model presented here corresponds to the production of “n” tonnes of cement. 
+The model presented here corresponds to the production of “n” tonnes of cement.
 
 The symbol \* means product.
 
@@ -40,7 +40,7 @@ The pre-homogenised materials are then transported to the mills via conveyor bel
 
 #### Energy consumption
 
-This phase requires mechanical energy, which is usually produced by electromechanical drives, and Therefore electricity consumption is the reference data. From \[2\] electrical energy consumption per ton of cement is  32.2 kW·h=115.92 MJ. 
+This phase requires mechanical energy, which is usually produced by electromechanical drives, and Therefore electricity consumption is the reference data. From \[2\] electrical energy consumption per ton of cement is  32.2 kW·h=115.92 MJ.
 
 The efficiency of the actuators and the installation in general can range from 70 to 85%.
 
@@ -79,17 +79,17 @@ The hot air generated during the cooling process is recycled back into the furna
 
 This phase requires mechanical energy, which is usually produced by electromechanical drives, and Therefore electricity consumption is the reference data. From \[2\] electrical energy consumption per ton of cement is  19.32 kW·h=69.552 MJ.
 
-The heat required to produce one tonne of cement is 3.5 GJ \[6\]. This thermal energy comes from different fuels, including waste from other processes. The average value of fuels consumed in Spain in the period 2011-2015 per tonne of cement produced is taken from \[7\]. 
+The heat required to produce one tonne of cement is 3.5 GJ \[6\]. This thermal energy comes from different fuels, including waste from other processes. The average value of fuels consumed in Spain in the period 2011-2015 per tonne of cement produced is taken from \[7\].
 
 In addition, the nature of the fuel influences the characteristics of the product, so that, depending on the desired product, different fuels or fuel blends are used.
 
 From the fuel consumption and heat generation data, it is deduced that the average heat capacity of the fuel is 26.93 MJ/kg. This seems realistic, as petroleum coke has between 29 and 35 MJ/kg.
 
-In addition, the heat loss in the oven is about 18.71% \[6\]. 
+In addition, the heat loss in the oven is about 18.71% \[6\].
 
 #### Water consumption
 
-Water is used to prepare the mixture to be transformed into a clinker and for the cooling sub-process. Water evaporates and comes out as steam. According to data from the Cema Foundation \[8\], water consumption per tonne of cement produced in Spain ranges between 200 and 250 litres. 
+Water is used to prepare the mixture to be transformed into a clinker and for the cooling sub-process. Water evaporates and comes out as steam. According to data from the Cema Foundation \[8\], water consumption per tonne of cement produced in Spain ranges between 200 and 250 litres.
 
 #### Raw materials and emissions
 
@@ -192,8 +192,6 @@ When treating all the boxes as a unified process, the resulting output is as fol
 | mechanical\_energy\_oven | mechanical energy | MJ | 69.55 | Mechanical energy Oven |
 | mechanical\_energy\_milling | mechanical energy | MJ | 135.79 | Mechanical Energy Milling |
 
-
-
 # 5. Outputs Units
 
 New projects within the IAM and energy modelling communities will adopt the IAMC variable list ([https://github.com/IAMconsortium/common-definitions/](https://github.com/IAMconsortium/common-definitions/)). Accordingly, all output units will be formatted following the conventions established by this project. Using a consistent set of variables across all projects will significantly simplify cross-project comparisons.
@@ -212,40 +210,28 @@ New projects within the IAM and energy modelling communities will adopt the IAMC
 
 **Final notes**
 
-There is electricity consumption attributed to General Services and Lighting: General Services 1.84 kWh and lighting 0.92 kWh. 
+There is electricity consumption attributed to General Services and Lighting: General Services 1.84 kWh and lighting 0.92 kWh.
 
 # 6. References
 
-\[1\]	“Impacto ambiental de la industria cementera- Kunak.” Accessed: Nov. 04, 2024\. \[Online\]. Available: [https://kunakair.com/es/impacto-ambiental-industria-cementera-calidad-aire/](https://kunakair.com/es/impacto-ambiental-industria-cementera-calidad-aire/)
+\[1\] “Impacto ambiental de la industria cementera- Kunak.” Accessed: Nov. 04, 2024\. \[Online\]. Available: [https://kunakair.com/es/impacto-ambiental-industria-cementera-calidad-aire/](https://kunakair.com/es/impacto-ambiental-industria-cementera-calidad-aire/)
 
-\[2\] 	C. E. Aristizabal-Alzate and J. González-Manosalva, “Revisión de las medidas en pro de la eficiencia energética y la sostenibilidad de la industria del cemento a nivel mundial,” *Revista UIS Ingenierías*, vol. 20, no. 3, May 2021, doi: 10.18273/revuin.v20n3-2021006.
+\[2\]  C. E. Aristizabal-Alzate and J. González-Manosalva, “Revisión de las medidas en pro de la eficiencia energética y la sostenibilidad de la industria del cemento a nivel mundial,” _Revista UIS Ingenierías_, vol. 20, no. 3, May 2021, doi: 10.18273/revuin.v20n3-2021006.
 
-\[3\] 	Ministerio para la Transición Ecológica y el Reto Demográfico. Gobierno de España, “Sistema Español de Inventario de Emisiones; Metodologías de estimación de emisiones Fabricación del Cemento,” pp. 1–24, 2017, \[Online\]. Available: [https://www.mapama.gob.es/es/calidad-y-evaluacion-ambiental/temas/sistema-espanol-de-inventario-sei-/030311-combust-fabric-cemento\_tcm30-430164.pdf](https://www.mapama.gob.es/es/calidad-y-evaluacion-ambiental/temas/sistema-espanol-de-inventario-sei-/030311-combust-fabric-cemento_tcm30-430164.pdf).
+\[3\]  Ministerio para la Transición Ecológica y el Reto Demográfico. Gobierno de España, “Sistema Español de Inventario de Emisiones; Metodologías de estimación de emisiones Fabricación del Cemento,” pp. 1–24, 2017, \[Online\]. Available: [https://www.mapama.gob.es/es/calidad-y-evaluacion-ambiental/temas/sistema-espanol-de-inventario-sei-/030311-combust-fabric-cemento\_tcm30-430164.pdf](https://www.mapama.gob.es/es/calidad-y-evaluacion-ambiental/temas/sistema-espanol-de-inventario-sei-/030311-combust-fabric-cemento_tcm30-430164.pdf).
 
-\[4\] 	S. Martínez-Martínez et al., “2018-CONAMA 2018paper,” Madrid, Nov. 2018\. Accessed: Nov. 04, 2024\. \[Online\]. Available: [http://www.conama2018.org/web/es/presentacion/asi-es-conama-2018.html](http://www.conama2018.org/web/es/presentacion/asi-es-conama-2018.html)
+\[4\]  S. Martínez-Martínez et al., “2018-CONAMA 2018paper,” Madrid, Nov. 2018\. Accessed: Nov. 04, 2024\. \[Online\]. Available: [http://www.conama2018.org/web/es/presentacion/asi-es-conama-2018.html](http://www.conama2018.org/web/es/presentacion/asi-es-conama-2018.html)
 
-\[5\]	“Lluvia ácida | National Geographic.” Accessed: Nov. 15, 2024\. \[Online\]. Available: [https://www.nationalgeographic.es/medio-ambiente/lluvia-acida](https://www.nationalgeographic.es/medio-ambiente/lluvia-acida)
+\[5\] “Lluvia ácida | National Geographic.” Accessed: Nov. 15, 2024\. \[Online\]. Available: [https://www.nationalgeographic.es/medio-ambiente/lluvia-acida](https://www.nationalgeographic.es/medio-ambiente/lluvia-acida)
 
-\[6\] 	Y. K. Verma, B. Mazumdar, y P. Ghosh, «Thermal energy consumption and its conservation for a cement production unit», Environ. Eng. Res., vol. 26, n.o 3, jun. 2021, doi: 10.4491/eer.2020.111.
+\[6\]  Y. K. Verma, B. Mazumdar, y P. Ghosh, «Thermal energy consumption and its conservation for a cement production unit», Environ. Eng. Res., vol. 26, n.o 3, jun. 2021, doi: 10.4491/eer.2020.111.
 
-\[7\]	Ministerio para la Transición Ecológica y el Reto Demográfico. Gobierno de España, “Sistema Español de Inventario de Emisiones; Metodologías de estimación de emisiones Fabricación del Cemento,” pp. 1–24, 2017, \[Online\]. Available: [https://www.mapama.gob.es/es/calidad-y-evaluacion-ambiental/temas/sistema-espanol-de-inventario-sei-/030311-combust-fabric-cemento\_tcm30-430164.pdf](https://www.mapama.gob.es/es/calidad-y-evaluacion-ambiental/temas/sistema-espanol-de-inventario-sei-/030311-combust-fabric-cemento_tcm30-430164.pdf).
+\[7\] Ministerio para la Transición Ecológica y el Reto Demográfico. Gobierno de España, “Sistema Español de Inventario de Emisiones; Metodologías de estimación de emisiones Fabricación del Cemento,” pp. 1–24, 2017, \[Online\]. Available: [https://www.mapama.gob.es/es/calidad-y-evaluacion-ambiental/temas/sistema-espanol-de-inventario-sei-/030311-combust-fabric-cemento\_tcm30-430164.pdf](https://www.mapama.gob.es/es/calidad-y-evaluacion-ambiental/temas/sistema-espanol-de-inventario-sei-/030311-combust-fabric-cemento_tcm30-430164.pdf).
 
-\[8\]	“Fundación CEMA | Fundación Laboral del Cemento y del Medio Ambiente.” https://www.fundacioncema.org/ (accessed Nov. 04, 2024\)
+\[8\] “Fundación CEMA | Fundación Laboral del Cemento y del Medio Ambiente.” <https://www.fundacioncema.org/> (accessed Nov. 04, 2024\)
 
-\[9\] 	PRTR España | Registro Estatal de Emisiones y Fuentes Contaminantes (PRTR-España).” Accessed: Nov. 15, 2024\. \[Online\]. Available: [https://prtr-es.es/](https://prtr-es.es/)
+\[9\]  PRTR España | Registro Estatal de Emisiones y Fuentes Contaminantes (PRTR-España).” Accessed: Nov. 15, 2024\. \[Online\]. Available: [https://prtr-es.es/](https://prtr-es.es/)
 
-\[10\]	C. E. M. Vi, “Norma Española Cemento Parte 5 : Cemento Portland compuesto CEM II / C-M y,” 2021\.
+\[10\] C. E. M. Vi, “Norma Española Cemento Parte 5 : Cemento Portland compuesto CEM II / C-M y,” 2021\.
 
 \[11\] Aleksei Kholodov, Alexander Zakharenko, Vladimir Drozd, Valery Chernyshev, Konstantin     Kirichenko, Ivan Seryodkin, Alexander Karabtsov, Svetlana Olesik, Ekaterina Khvost, Igor Vakhnyuk, Vladimir Chaika, Antonios Stratidakis, Marco Vinceti, Dimosthenis Sarigiannis, A. Wallace Hayes, Aristidis Tsatsakis, Kirill Golokhvast, Identification of cement in atmospheric particulate matter using the hybrid method of laser diffraction analysis and Raman spectroscopy, Heliyon, Volume 6, Issue 2, 2020, e03299, ISSN 2405-8440, [https://doi.org/10.1016/j.heliyon.2020.e03299](https://doi.org/10.1016/j.heliyon.2020.e03299).
-
-# Anexo I
-
-The figure below illustrates the general process for developing the Meta File. The Meta File follows the same structure as the subprocess, meaning its development must adhere to the same rules. In general terms, the inputs of the subprocess become parameters in the Meta File, while its outputs are treated as inputs.
-
-It is important to note that the approach described here serves as a general guideline; experts should carefully review the Meta File and verify the accuracy of the results.
-
-Additionally, all outputs generated in the Meta File are directly linked to the GDP model results. The final output consists of a series of graphs showing the results by year.
-
-![How to create a metafile, example](Meta_generation.png)
-
-Figure 3\. How to create a metafile, example
