@@ -1,3 +1,5 @@
+[![Linter](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/linter.yml/badge.svg)]()
+
 # IDR-IIsim
 
 Repository with industry models tailored to the integration on large scale energy system models and circular economy assessment
