@@ -1,23 +1,28 @@
+"""Module to process the meta.yaml, the industry's configuration"""
+
 import os
 from functools import partial
 from string import Template
+
 from sympy import parse_expr
+
 from idr_iisim.utils.logger import i_logger
 from idr_iisim.utils.types import (
     ConstantStruct,
+    DemandStruct,
     InputStruct,
     MetaDemandStruct,
-    OutputStruct,
-    DemandStruct,
     OutcomeStruct,
+    OutputStruct,
     json_to_meta_struct,
 )
 
 
-class Meta:
+class Meta:  # pylint: disable=too-many-instance-attributes
+    """Meta class"""
+
     def __init__(self, yaml_data: dict, path: str):
         self.directory = os.path.dirname(path)
-        self.model_config = path
         self.inputs: dict[str, InputStruct] = {}
         self.outcome: dict[str, OutcomeStruct] = {}
         self.demands: dict[str, DemandStruct] = {}
@@ -26,25 +31,25 @@ class Meta:
         self.constants: dict[str, ConstantStruct] = {}
 
         # Parse data
-        i_logger.logger.debug(f"parsing {yaml_data['name']}")
+        i_logger.debug("parsing %s", yaml_data["name"])
         self.config = json_to_meta_struct(yaml_data)
 
         self.functions_map = {}
 
         items = [d for d in self.config.demands if d.meta is None]
-        items += [d for d in self.config.meta]
-        items += [o for o in self.config.outputs]
+        items += list(self.config.meta)
+        items += list(self.config.outputs)
 
         for item in items:
             operation = parse_expr(item.operation)
             f = partial(lambda op, **kwargs: op.subs(kwargs), op=operation)
             key = item.name
-            self.functions_map[key] = dict(
-                function=f,
-                args=item.args,
-                expression=operation,
-                description=item.description,
-            )
+            self.functions_map[key] = {
+                "function": f,
+                "args": item.args,
+                "expression": operation,
+                "description": item.description,
+            }
 
         # Parse constants
         for constant in self.config.constants:
@@ -72,18 +77,22 @@ class Meta:
         self.outcome[self.config.outcome.name] = self.config.outcome
 
         # Parse inputs
-        for input in self.config.inputs:
-            self.inputs[input.name] = input
-            if input.range:
-                for value in input.value:
-                    if not (input.range[0] <= value <= input.range[-1]):
+        for input_field in self.config.inputs:
+            self.inputs[input_field.name] = input_field
+            if input_field.range:
+                for value in input_field.value:
+                    if (
+                        value < input_field.range[0]
+                        or value > input_field.range[-1]
+                    ):
                         raise ValueError(
-                            f"Input '{input.name}' in process "
+                            f"Input '{input_field.name}' in process "
                             + f"'{self.config.name}' is not inside the valid range"
-                            + f" ({input.value} not inside {input.range})"
+                            + f" ({input_field.value} not inside {input_field.range})"
                         )
 
     def constants_generator(self) -> str:
+        """generator of the constants of the industry"""
         constants_code = ""
 
         # Generate constants dynamically from model configuration
@@ -105,13 +114,13 @@ class Meta:
         # Load the template content
         template_path = "templates/template_generated_getter.txt"
         try:
-            with open(template_path, "r") as template_file:
+            with open(template_path, "r", encoding="utf-8") as template_file:
                 template_content = template_file.read()
         except FileNotFoundError:
-            i_logger.logger.error(f"Template file not found: {template_path}")
+            i_logger.error("Template file not found: %s", template_path)
             raise
         except Exception as e:
-            i_logger.logger.error(f"Error reading template file: {e}")
+            i_logger.error("Error reading template file: %r", e)
             raise
 
         # Outcome

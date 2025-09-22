@@ -1,16 +1,18 @@
-import os
-from pathlib import Path
-import traceback
+"""IDR-IISIM Compiler main"""
 
-from idr_iisim.utils.models_dict import Industry, load_yaml
-from idr_iisim.models.model import Model  # import Model class
+import os
+import traceback
+from pathlib import Path
+
 from idr_iisim.models.meta import Meta  # import Model class
+from idr_iisim.models.model import Model  # import Model class
 from idr_iisim.utils.logger import i_logger
+from idr_iisim.utils.models_dict import Industry, load_yaml
 
 
 def process_industry(name: str, industry_path: str) -> None:
-    """Process the industry"""
-    i_logger.logger.info(f"Processing industry: {name}")
+    """process and generate code for industry"""
+    i_logger.info("Processing industry: %s", name)
     industry = Industry()
 
     for file in Path(industry_path).rglob("*.yaml"):
@@ -30,33 +32,33 @@ def process_industry(name: str, industry_path: str) -> None:
     assert industry.meta is not None
 
     industries_final_path = "industries"
-    with open(
-        os.path.join(
-            industries_final_path,
-            f"{industry.meta.config.short_name.lower()}.py",
-        ),
-        "w",
-    ) as f:
+    result_path = os.path.join(
+        industries_final_path,
+        f"{industry.meta.config.short_name.lower()}.py",
+    )
+
+    with open(result_path, "w", encoding="utf-8") as f:
         f.write(industry.script_generator())
 
-    i_logger.logger.info(f"Industry '{name}' processed.")
+    i_logger.info("Industry '%s' processed.", name)
 
 
 def main() -> None:
+    """main"""
     try:
-        i_logger.logger.info("starting iDesignRES tool")
+        i_logger.info("starting iDesignRES tool")
         # industries_path = os.environ.get("INDUSTRIES_PATH", "")
         industries_path = "Sources"
         for elem in os.listdir(industries_path):
             elem_path = os.path.join(industries_path, elem)
             if os.path.isdir(elem_path):
                 process_industry(elem, elem_path)
-        i_logger.logger.info("iDesignRES tool finished")
-    except Exception as err:
+        i_logger.info("iDesignRES tool finished")
+    except Exception as err:  # pylint: disable=broad-exception-caught
         print()
         traceback.print_exc()
-        i_logger.logger.error(err)
-        i_logger.logger.info("iDesignRES tool finished UNSUCCESFULLY")
+        i_logger.error(err)
+        i_logger.info("iDesignRES tool finished UNSUCCESFULLY")
 
 
 if __name__ == "__main__":

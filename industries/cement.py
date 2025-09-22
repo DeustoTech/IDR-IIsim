@@ -60,9 +60,9 @@ class Cement:
         self.__pm10_overall_emission = (self.__pm10_emission_pre + self.__pm10_emission_oven + self.__cement_emission)
 
     def __validate_total_production(self, total_cement_production) -> None:
-        if total_cement_production < 1 or total_cement_production > 1000000000:
+        if total_cement_production < 5 or total_cement_production > 1000:
             raise ValueError(
-                "The production should be a value between 1 and 1000000000"
+                "The production should be a value between 5 and 1000"
             )
 
     def __pre_homogeneization_and_grinding(self, limestone_demand, clay_demand) -> None:
@@ -135,6 +135,25 @@ class Cement:
                 lines[1].append(unit)
         for line in lines:
             print(separator.join(line))
+
+    def csv_header(self) -> list:
+        attributes = vars(self)
+        line = []
+        for name in attributes:
+            name = name.replace(f"_{self.__class__.__name__}__", "")
+            if name in UNITS:
+                unit = UNITS[name]
+                line.append(f"{name} ({unit})")
+        return line
+
+    def csv_row(self) -> list:
+        attributes = vars(self)
+        line = []
+        for name, value in attributes.items():
+            name = name.replace(f"_{self.__class__.__name__}__", "")
+            if name in UNITS:
+                line.append(str(value))
+        return line
 
     def __str__(self) -> str:
         final_str = NAME

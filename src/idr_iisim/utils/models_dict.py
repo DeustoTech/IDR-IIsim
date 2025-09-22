@@ -1,24 +1,30 @@
+"""Industry"""
+
 import json
-import yaml
-from idr_iisim.models.model import Model
-from idr_iisim.models.meta import Meta
 from string import Template  # Use Template for substitution
-from idr_iisim.utils.logger import i_logger
 from typing import Optional
+
+import yaml
+
+from idr_iisim.models.meta import Meta
+from idr_iisim.models.model import Model
+from idr_iisim.utils.logger import i_logger
 
 
 class Industry:
+    """Industry class"""
+
     def __init__(self, meta: Optional[Meta] = None):
         # initializes an object of the class with an empty models dictionary.
         self.models: dict[
             str, Model
         ] = {}  # model_id -> Model,  models maps unique model IDs to their respective instances.
         self.dependencies: dict[str, set[str]] = {}
-        self.loaded: bool = False
         self.processed_models: dict[str, bool] = {}
         self.meta: Optional[Meta] = meta
 
     def add_model(self, key: str, model: Model):
+        """add model to the industry"""
         self.models[key] = model
         self.processed_models[key] = False
 
@@ -34,41 +40,31 @@ class Industry:
             self.dependencies[key] = from_list
 
     def set_meta(self, meta: Meta) -> None:
+        """set or update the meta of this industry"""
         self.meta = meta
 
-    def set_dict_to_loaded(self):
-        self.loaded = True
-
-    def mark_model_as_processed(self, model_id) -> None:
-        self.processed_models[model_id] = True
-
-    def is_model_processed(self, model_id) -> bool:
-        return self.processed_models[model_id]
-
-    def get_model(self, key: str) -> Model:
-        return self.models[key]
-
     def check_types(self) -> None:
+        """check types among processes"""
         assert self.meta is not None
         inputs_checks = [(self.meta.config.name, self.meta.config.inputs)]
         inputs_checks += [
             (name, model.config.inputs) for name, model in self.models.items()
         ]
         for name, inputs in inputs_checks:
-            for input in inputs:
+            for input_field in inputs:
                 # Check if units are the same in both processess
-                if input.input_from is not None:
-                    model_from = self.models[input.input_from]
-                    if input.name not in model_from.outputs:
+                if input_field.input_from is not None:
+                    model_from = self.models[input_field.input_from]
+                    if input_field.name not in model_from.outputs:
                         raise ValueError(
-                            f"'{input.name}' does not exist in "
+                            f"'{input_field.name}' does not exist in "
                             + f"'{model_from.config.name}'"
                         )
-                    units_from = model_from.outputs[input.name].units
-                    if units_from != input.units:
+                    units_from = model_from.outputs[input_field.name].units
+                    if units_from != input_field.units:
                         raise ValueError(
-                            f"Unit for '{input.name}' differs in "
-                            + f"'{name}' ({input.units}) and "
+                            f"Unit for '{input_field.name}' differs in "
+                            + f"'{name}' ({input_field.units}) and "
                             + f"'{model_from.config.name}' ({units_from})"
                         )
         for demand in self.meta.demands.values():
@@ -87,6 +83,7 @@ class Industry:
                 )
 
     def generate_execution_queue(self):
+        """Generate the correct execution queue of the processes"""
         queue: list[str] = []
 
         # Include processes without dependencies
@@ -96,10 +93,10 @@ class Industry:
 
         # Add the rest of the processes once their dependencies are fullfilled
         while len(queue) != len(self.models):
-            for process in self.dependencies:
+            for process, dependencies in self.dependencies.items():
                 if process not in queue:
                     should_include_process = True
-                    for dependency in self.dependencies[process]:
+                    for dependency in dependencies:
                         if dependency not in queue:
                             should_include_process = False
                             break
@@ -109,20 +106,20 @@ class Industry:
         return queue
 
     def script_generator(self) -> str:
+        """Generator of the script"""
         assert self.meta is not None
         # Load the template content
         template_path = "templates/template_generated_industrial_class.txt"
         try:
-            with open(template_path, "r") as template_file:
-                template_content = template_file.read()
+            with open(template_path, "r", encoding="utf-8") as template_file:
+                method_template = Template(template_file.read())
         except FileNotFoundError:
-            i_logger.logger.error(f"Template file not found: {template_path}")
+            i_logger.error("Template file not found: %s", template_path)
             raise
         except Exception as e:
-            i_logger.logger.error(f"Error reading template file: {e}")
+            i_logger.error("Error reading template file: %r", e)
             raise
 
-        method_template = Template(template_content)
         args = "self"
         constructor = ""
         constants = []
@@ -163,12 +160,10 @@ class Industry:
 
 
 def load_yaml(path: str) -> dict:
+    """load industry's yaml file"""
     try:
-        with open(path) as file:
+        with open(path, encoding="utf-8") as file:
             data: dict = yaml.safe_load(file)
             return data
     except Exception as e:
         raise e
-
-
-models_dict = Industry()

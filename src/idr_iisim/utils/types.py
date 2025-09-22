@@ -1,18 +1,13 @@
-__package__ = "utils"
+"""types definition"""
 
-import math
 from dataclasses import dataclass, field
-from typing import Optional, Any
+from typing import Any, Optional
 
 
 @dataclass
-class ArgumentStruct:
-    name: str
-    value: float
+class ConstantStruct:  # pylint: disable=too-many-instance-attributes
+    """Constant Struct"""
 
-
-@dataclass
-class ConstantStruct:
     name: str
     label: str
     description: str
@@ -25,6 +20,8 @@ class ConstantStruct:
 
 @dataclass
 class OutcomeStruct:
+    """Outcome Struct"""
+
     name: str
     label: str
     description: str
@@ -34,6 +31,8 @@ class OutcomeStruct:
 
 @dataclass
 class DemandStruct:
+    """Demand Struct"""
+
     name: str
     description: str
     units: str
@@ -45,6 +44,8 @@ class DemandStruct:
 
 @dataclass
 class MetaDemandStruct:
+    """Meta-Demand Struct"""
+
     name: str
     description: str
     units: str
@@ -54,6 +55,8 @@ class MetaDemandStruct:
 
 @dataclass
 class InputStruct:
+    """Input Struct"""
+
     name: str
     label: str
     description: str
@@ -64,7 +67,9 @@ class InputStruct:
 
 
 @dataclass
-class OutputStruct:
+class OutputStruct:  # pylint: disable=too-many-instance-attributes
+    """Output Struct"""
+
     name: str
     label: str
     description: str
@@ -76,7 +81,9 @@ class OutputStruct:
 
 
 @dataclass
-class ModelStruct:
+class ModelStruct:  # pylint: disable=too-many-instance-attributes
+    """Model Struct"""
+
     name: str
     short_name: str
     id: str
@@ -90,7 +97,9 @@ class ModelStruct:
 
 
 @dataclass
-class MetaStruct:
+class MetaStruct:  # pylint: disable=too-many-instance-attributes
+    """Meta Struct"""
+
     name: str
     short_name: str
     id: str
@@ -107,6 +116,7 @@ class MetaStruct:
 
 
 def json_to_model_struct(data: dict) -> ModelStruct:
+    """Parse the JSON object and transform it to the model struct object"""
     constants = [ConstantStruct(**const) for const in data["constants"]]
     inputs = [
         InputStruct(
@@ -133,6 +143,7 @@ def json_to_model_struct(data: dict) -> ModelStruct:
 
 
 def json_to_meta_struct(data: dict) -> MetaStruct:
+    """Parse the JSON object and transform it to the Meta struct object"""
     constants = [ConstantStruct(**const) for const in data["constants"]]
     outcome = [OutcomeStruct(**out) for out in data["outcome"]][0]
     outputs = [OutputStruct(**out) for out in data["outputs"]]
@@ -147,7 +158,7 @@ def json_to_meta_struct(data: dict) -> MetaStruct:
         for inp in data["inputs"]
     ]
 
-    metaModel = MetaStruct(
+    meta_model = MetaStruct(
         name=data["name"],
         id=data["id"],
         short_name=data["short_name"],
@@ -163,4 +174,4 @@ def json_to_meta_struct(data: dict) -> MetaStruct:
         meta=meta_demands,
     )
 
-    return metaModel
+    return meta_model
