@@ -33,14 +33,14 @@ constants:
     citation: text
     source: https://www.google.com
     value: 222
-    units: l
-  - name: CO2_emissions
+    units: l/p.u.
+  - name: CO2_eq_emissions
     label: CO2
     description: CO2
     citation: text
     source: https://www.google.com
-    value: 309.3
-    units: kg
+    value: 0.85
+    units: p.u.
 inputs:
   - name: raw_mix
     label: Mix consumption
@@ -85,11 +85,11 @@ outputs:
     description: PM10 emission (Limestone + Clay)
     value: null
     units: kg
-  - name: CO2_emissions_oven
+  - name: CO2eq_emissions_oven
     label: CO2
-    operation: CO2_emissions
+    operation: CO2_eq_emissions
     args:
-      - name: CO2_emissions
+      - name: CO2_eq_emissions
         type: constants
     description: CO2 emission per product unit
     value: null

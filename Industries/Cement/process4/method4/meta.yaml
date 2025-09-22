@@ -86,8 +86,8 @@ inputs:
     value: null
     units: kg
     from: Cemento-process2-Oven
-  - name: CO2_emissions_oven
-    label: CO2 emissions Pre
+  - name: CO2eq_emissions_oven
+    label: CO2 eq emissions Pre
     description: CO2 emissions Oven
     value: null
     units: kg
@@ -148,13 +148,13 @@ outputs:
     description: Mechanical energy
     value: null
     units: kg
-  - name: co2_overall_emission
+  - name: CO2_eq_emission
     label: CO2 emissions
-    operation: CO2_emissions_oven * cement_production
+    operation: CO2eq_emissions_oven * cement_production
     args:
       - name: cement_production
         type: inputs
-      - name: CO2_emissions_oven
+      - name: CO2eq_emissions_oven
         type: inputs
     description: Total C02 emissions
     value: null
@@ -207,7 +207,7 @@ outputs:
     description: Fuel consumption
     value: null
     units: kg
-  - name: gympsum_overall_losses
+  - name: gympsum_overall_demand
     label: Gympsum losses
     operation: gypsum_consumption_milling * cement_production
     args:
