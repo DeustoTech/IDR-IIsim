@@ -4,8 +4,8 @@ import os
 import traceback
 from pathlib import Path
 
-from idr_iisim.models.meta import Meta  # import Model class
-from idr_iisim.models.model import Model  # import Model class
+from idr_iisim.models.meta import Meta
+from idr_iisim.models.process import Process
 from idr_iisim.utils.logger import i_logger
 from idr_iisim.utils.models_dict import Industry, load_yaml
 
@@ -22,10 +22,10 @@ def process_industry(name: str, industry_path: str) -> None:
             meta = Meta(yaml_data, yaml_path)
             industry.set_meta(meta)
         else:
-            model = Model(yaml_data, yaml_path)
+            process = Process(yaml_data, yaml_path)
             # save instance in ModelDict class
-            key = model.config.id
-            industry.add_model(key=key, model=model)
+            key = process.config.id
+            industry.add_process(key=key, process=process)
 
     # Check types
     industry.check_types()

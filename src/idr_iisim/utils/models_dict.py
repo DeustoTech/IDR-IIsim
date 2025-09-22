@@ -7,7 +7,7 @@ from typing import Optional
 import yaml
 
 from idr_iisim.models.meta import Meta
-from idr_iisim.models.model import Model
+from idr_iisim.models.process import Process
 from idr_iisim.utils.logger import i_logger
 
 
@@ -16,22 +16,20 @@ class Industry:
 
     def __init__(self, meta: Optional[Meta] = None):
         # initializes an object of the class with an empty models dictionary.
-        self.models: dict[
-            str, Model
-        ] = {}  # model_id -> Model,  models maps unique model IDs to their respective instances.
+        self.models: dict[str, Process] = {}
         self.dependencies: dict[str, set[str]] = {}
         self.processed_models: dict[str, bool] = {}
         self.meta: Optional[Meta] = meta
 
-    def add_model(self, key: str, model: Model):
+    def add_process(self, key: str, process: Process):
         """add model to the industry"""
-        self.models[key] = model
+        self.models[key] = process
         self.processed_models[key] = False
 
         # add dependencies
         # model_id -> list[dependent_models_ids]
         model_dependencies = list(
-            filter(lambda x: x.input_from is not None, model.config.inputs)
+            filter(lambda x: x.input_from is not None, process.config.inputs)
         )
 
         # filter from values

@@ -4,58 +4,60 @@ import os
 from functools import partial
 from string import Template  # Use Template for substitution
 
-from sympy import ImmutableDenseMatrix, Matrix, parse_expr
+from sympy import parse_expr
 
 from idr_iisim.utils.logger import i_logger
 from idr_iisim.utils.types import (
     ConstantStruct,
     InputStruct,
-    ModelStruct,
     OutputStruct,
     json_to_model_struct,
 )
 
 
-class Model:
+class Process:
     """Model class that represents a model in the system.
     It contains the model configuration, functions map, results, and external inputs.
     """
 
-    directory: str
-    config: ModelStruct
-    functions_map: dict
-    results: dict[str, Matrix | ImmutableDenseMatrix] = {}
-    external_inputs: dict[
-        str, dict[str, Matrix]
-    ] = {}  # dict[model_id, dict[arg_name, value]]
-    inputs: dict[str, InputStruct] = {}
-    constants: dict[str, ConstantStruct] = {}
-    outputs: dict[str, OutputStruct] = {}
-
-    def __init__(self, data: dict, path: str):
+    def __init__(self, yaml_data: dict, path: str):
         self.directory = os.path.dirname(path)
+        self.inputs: dict[str, InputStruct] = {}
+        self.outputs: dict[str, OutputStruct] = {}
+        self.constants: dict[str, ConstantStruct] = {}
+
         # Parse data
-        i_logger.debug("parsing %s", data["name"])
-        self.config = json_to_model_struct(data)
-        self.setup()
+        i_logger.debug("parsing %s", yaml_data["name"])
+        self.config = json_to_model_struct(yaml_data)
 
-    def setup(self) -> None:
-        """Reads the model configuration file and sets up the model for calculation.
-        Returns: None
-        """
-
-        # read functions
         self.functions_map = {}
-        for output in self.config.outputs:
-            operation = parse_expr(output.operation)
+
+        for item in self.config.outputs:
+            operation = parse_expr(item.operation)
             f = partial(lambda op, **kwargs: op.subs(kwargs), op=operation)
-            key = output.name
+            key = item.name
             self.functions_map[key] = {
                 "function": f,
-                "args": output.args,
+                "args": item.args,
                 "expression": operation,
-                "description": output.description,
+                "description": item.description,
             }
+
+        # Parse constants
+        for constant in self.config.constants:
+            self.constants[constant.name] = constant
+            if constant.range and not (
+                constant.range[0] <= constant.value <= constant.range[-1]
+            ):
+                raise ValueError(
+                    f"Constant '{constant.name}' in process "
+                    + f"'{self.config.name}' is not inside the valid range"
+                    + f" ({constant.value} not inside {constant.range})"
+                )
+
+        # Parse outputs
+        for output in self.config.outputs:
+            self.outputs[output.name] = output
 
         # Parse inputs
         for input_field in self.config.inputs:
@@ -71,23 +73,6 @@ class Model:
                             + f"'{self.config.name}' is not inside the valid range"
                             + f" ({input_field.value} not inside {input_field.range})"
                         )
-        # Parse constants
-        for constant in self.config.constants:
-            self.constants[constant.name] = constant
-            if constant.range and not (
-                constant.range[0] <= constant.value <= constant.range[-1]
-            ):
-                raise ValueError(
-                    f"Constant '{constant.name}' in process "
-                    + f"'{self.config.name}' is not inside the valid range"
-                    + f" ({constant.value} not inside {constant.range})"
-                )
-        # Parse outputs
-        for output in self.config.outputs:
-            self.outputs[output.name] = output
-
-        i_logger.debug("setup completed for %s", self.config.name)
-        i_logger.debug("functions_map: \n%r", self.functions_map)
 
     def constants_generator(self) -> str:
         """generator of the constants of the process"""
