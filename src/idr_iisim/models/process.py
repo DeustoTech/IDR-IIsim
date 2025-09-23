@@ -1,118 +1,41 @@
 """Module to parse industry's processes"""
 
-import os
-from functools import partial
-from string import Template  # Use Template for substitution
+from typing import Any
 
-from sympy import parse_expr
-
+from idr_iisim.models.model import Model
+from idr_iisim.templates import load_template
 from idr_iisim.utils.logger import i_logger
-from idr_iisim.utils.types import (
-    ConstantStruct,
-    InputStruct,
-    OutputStruct,
+from idr_iisim.utils.structs import (
+    ItemStruct,
+    ModelStruct,
     json_to_model_struct,
 )
 
 
-class Process:
-    """Model class that represents a model in the system.
+class Process(Model):
+    """Process class that represents a model in the system.
     It contains the model configuration, functions map, results, and external inputs.
     """
 
-    def __init__(self, yaml_data: dict, path: str):
-        self.directory = os.path.dirname(path)
-        self.inputs: dict[str, InputStruct] = {}
-        self.outputs: dict[str, OutputStruct] = {}
-        self.constants: dict[str, ConstantStruct] = {}
+    def __init__(self, yaml_data: dict[str, Any], path: str):
+        super().__init__(path)
 
         # Parse data
         i_logger.debug("parsing %s", yaml_data["name"])
-        self.config = json_to_model_struct(yaml_data)
+        self.config: ModelStruct = json_to_model_struct(yaml_data)
 
-        self.functions_map = {}
+        items: list[ItemStruct] = list(self.config.outputs)
+        self.process_config(items, self.config)
 
-        for item in self.config.outputs:
-            operation = parse_expr(item.operation)
-            f = partial(lambda op, **kwargs: op.subs(kwargs), op=operation)
-            key = item.name
-            self.functions_map[key] = {
-                "function": f,
-                "args": item.args,
-                "expression": operation,
-                "description": item.description,
-            }
+    def get_getter_items(self) -> list[tuple[str, str]]:
+        """Generate items' descriptions to configure as getters"""
+        getter_items = []
 
-        # Parse constants
-        for constant in self.config.constants:
-            self.constants[constant.name] = constant
-            if constant.range and not (
-                constant.range[0] <= constant.value <= constant.range[-1]
-            ):
-                raise ValueError(
-                    f"Constant '{constant.name}' in process "
-                    + f"'{self.config.name}' is not inside the valid range"
-                    + f" ({constant.value} not inside {constant.range})"
-                )
+        # outputs
+        for variable_name, output in self.functions_map.items():
+            getter_items.append((variable_name, output["description"]))
 
-        # Parse outputs
-        for output in self.config.outputs:
-            self.outputs[output.name] = output
-
-        # Parse inputs
-        for input_field in self.config.inputs:
-            self.inputs[input_field.name] = input_field
-            if input_field.range:
-                for value in input_field.value:
-                    if (
-                        value < input_field.range[0]
-                        or value > input_field.range[-1]
-                    ):
-                        raise ValueError(
-                            f"Input '{input_field.name}' in process "
-                            + f"'{self.config.name}' is not inside the valid range"
-                            + f" ({input_field.value} not inside {input_field.range})"
-                        )
-
-    def constants_generator(self) -> str:
-        """generator of the constants of the process"""
-        constants_code = ""
-
-        # Generate constants dynamically from model configuration
-        constants_code = "\n".join(
-            f"{constant.name} = {constant.value}  # {constant.description}"
-            for constant in self.config.constants
-        )
-        if constants_code:
-            constants_code = (
-                f"# {self.config.name}'s constants\n" + constants_code
-            )
-
-        return constants_code
-
-    def getters_generator(self) -> str:
-        """Generate getter methods"""
-        getters = []
-
-        # Load the template content
-        template_path = "templates/template_generated_getter.txt"
-        try:
-            with open(template_path, "r", encoding="utf-8") as template_file:
-                template_content = template_file.read()
-        except FileNotFoundError:
-            i_logger.error("Template file not found: %s", template_path)
-            raise
-        except Exception as e:
-            i_logger.error("Error reading template file: %r", e)
-            raise
-
-        for variable_name, outputs in self.functions_map.items():
-            getter_template = Template(template_content)
-            getter_script = getter_template.substitute(
-                name=variable_name, description=outputs["description"]
-            )
-            getters.append(getter_script)
-        return "\n".join(getters)
+        return getter_items
 
     def operations_generator(self) -> str:
         """Generate operations"""
@@ -132,17 +55,7 @@ class Process:
         """Generate the industry's class' methods"""
         # Load the template content
         template_path = "templates/template_generated_process_method.txt"
-        try:
-            with open(template_path, "r", encoding="utf-8") as template_file:
-                template_content = template_file.read()
-        except FileNotFoundError:
-            i_logger.error("Template file not found: %s", template_path)
-            raise
-        except Exception as e:
-            i_logger.error("Error reading template file: %r", e)
-            raise
-
-        method_template = Template(template_content)
+        method_template = load_template(template_path)
 
         args = []
         for outputs in self.functions_map.values():

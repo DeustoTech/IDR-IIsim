@@ -7,63 +7,54 @@ version: 1.0.0
 debug: false
 constants:
   - name: LIMESTONE_PROPORTION
-    label: limestone proportion
     description: limestone proportion
     citation: text
     source: https://www.google.com
     value: 1.035
     units: kt/p.u.
   - name: CLAY_PROPORTION
-    label: Clay proportion
     description: Clay proportion
     citation: text
     source: https://www.google.com
     value: 0.375
     units: t/p.u.
   - name: MECHANICAL_ENERGY_PRE_PROPORTION
-    label: Mechanical energy proportion in pre process
     description: Mechanical Energy pre proportion
     citation: text
     source: https://www.google.com
     value: 0.11592
     units: MJ/p.u.
   - name: WATER_PROPORTION
-    label: Water proportion
     description: Water proportion
     citation: text
     source: https://www.google.com
     value: 0.222
     units: m3/p.u.
   - name: FUEL_PROPORTION
-    label: fuel proportion
     description: Fuel proportion
     citation: text
     source: https://www.google.com
     value: 0.13
     units: kt/p.u.
   - name: MECHANICAL_ENERGY_OVEN_PROPORTION
-    label: Mechanical energy proportion in oven process
     description: Mechanical Energy oven proportion
     citation: text
     source: https://www.google.com
     value: 0.069552
     units: TJ/p.u.
   - name: GYPSUM_PROPORTION
-    label: gypsum proportion
     description: Gypsum proportion
     citation: text
     source: https://www.google.com
     value: 0.04
     units: percentage/p.u.
   - name: MECHANICAL_ENERGY_MILLING_PROPORTION
-    label: Mechanical energy
     description: Mechanical Energy used by the process
     citation: text
     source: https://www.google.com
     value: 0.135792
     units: MJ
   - name: CO2_EMISSIONS_PROPORTION
-    label: CO2 emissions
     description: CO2
     citation: text
     source: https://www.google.com
@@ -71,32 +62,27 @@ constants:
     units: kt
 inputs:
   - name: clinker_production_oven
-    label: Clinker
     description: Clinker consumption
     units: kt
     value: null
     from: Cemento-process2-Oven
   - name: pm10_emission_pre
-    label: PM10 emsision pre
     description: Particular matter (PM10) emissions
     units: kt
     value: null
     from: Cemento-process1-Pre
   - name: pm10_emission_oven
-    label: PM10 emsision oven
     description: PM10 emission (Limestone + Clay)
     units: kt
     value: null
     from: Cemento-process2-Oven
   - name: cement_emission
-    label: PM10 emsision milling
     description: cement air emissions description
     units: kt
     value: null
     from: Cemento-process3-Milling
 outcome:
   - name: total_cement_production
-    label: Total cement production
     description: Total cement production
     units: kt
     same_result:
@@ -200,7 +186,6 @@ meta:
     units: GJ
 outputs:
   - name: co2_overall_emissions
-    label: CO2 emissions
     operation: total_cement_production * CO2_EMISSIONS_PROPORTION
     args:
       - name: co2_emissions_oven
@@ -208,7 +193,6 @@ outputs:
     description: Total C02 emissions
     units: kt
   - name: heat_overall_losses
-    label: Heat losses
     operation: heat_losses_oven
     args:
       - name: heat_losses_oven
@@ -217,7 +201,6 @@ outputs:
     description: Total Heat losses
     units: GJ
   - name: pm10_overall_emission
-    label: PM10 emissions
     operation: (pm10_emission_pre + pm10_emission_oven + cement_emission)
     args:
       - name: pm10_emission_pre

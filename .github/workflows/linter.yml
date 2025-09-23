@@ -13,6 +13,7 @@ jobs:
       - run: pip install --upgrade pip
       - run: pip install "black<23" pylint mypy isort
       - run: pip install -r requirements.txt
+      - run: mypy --install-types
 
       - name: Test black
         run: black -l79 --diff --check $(git ls-files 'src/*.py')
@@ -21,7 +22,7 @@ jobs:
         run: pylint $(git ls-files 'src/*.py')
 
       - name: Test mypy
-        run: mypy --strict $(git ls-files 'src/*.py')
+        run: mypy --ignore-missing-imports --strict $(git ls-files 'src/*.py')
 
       - name: Test isort
         run: isort -l79 -c --profile black $(git ls-files 'src/*.py')

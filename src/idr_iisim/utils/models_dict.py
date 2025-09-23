@@ -1,14 +1,13 @@
 """Industry"""
 
 import json
-from string import Template  # Use Template for substitution
-from typing import Optional
+from typing import Any, Optional
 
 import yaml
 
 from idr_iisim.models.meta import Meta
 from idr_iisim.models.process import Process
-from idr_iisim.utils.logger import i_logger
+from idr_iisim.templates import load_template
 
 
 class Industry:
@@ -21,7 +20,7 @@ class Industry:
         self.processed_models: dict[str, bool] = {}
         self.meta: Optional[Meta] = meta
 
-    def add_process(self, key: str, process: Process):
+    def add_process(self, key: str, process: Process) -> None:
         """add model to the industry"""
         self.models[key] = process
         self.processed_models[key] = False
@@ -80,7 +79,7 @@ class Industry:
                     + f"'{model_from.config.name}' ({units_from})"
                 )
 
-    def generate_execution_queue(self):
+    def generate_execution_queue(self) -> list[str]:
         """Generate the correct execution queue of the processes"""
         queue: list[str] = []
 
@@ -108,15 +107,7 @@ class Industry:
         assert self.meta is not None
         # Load the template content
         template_path = "templates/template_generated_industrial_class.txt"
-        try:
-            with open(template_path, "r", encoding="utf-8") as template_file:
-                method_template = Template(template_file.read())
-        except FileNotFoundError:
-            i_logger.error("Template file not found: %s", template_path)
-            raise
-        except Exception as e:
-            i_logger.error("Error reading template file: %r", e)
-            raise
+        method_template = load_template(template_path)
 
         args = "self"
         constructor = ""
@@ -157,11 +148,11 @@ class Industry:
         )
 
 
-def load_yaml(path: str) -> dict:
+def load_yaml(path: str) -> dict[str, Any]:
     """load industry's yaml file"""
     try:
         with open(path, encoding="utf-8") as file:
-            data: dict = yaml.safe_load(file)
+            data: dict[str, Any] = yaml.safe_load(file)
             return data
     except Exception as e:
         raise e

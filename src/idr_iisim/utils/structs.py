@@ -5,77 +5,65 @@ from typing import Any, Optional
 
 
 @dataclass
-class ConstantStruct:  # pylint: disable=too-many-instance-attributes
-    """Constant Struct"""
+class BaseStruct:
+    """Base Struct: it aggregates the common attributes"""
 
     name: str
-    label: str
     description: str
+    units: str
+
+
+@dataclass
+class ConstantStruct(BaseStruct):
+    """Constant Struct"""
+
     citation: str
     source: str
     value: float
-    units: str
     range: Optional[list[float]] = None
 
 
 @dataclass
-class OutcomeStruct:
+class OutcomeStruct(BaseStruct):
     """Outcome Struct"""
 
-    name: str
-    label: str
-    description: str
-    units: str
     same_result: str
 
 
 @dataclass
-class DemandStruct:
+class ItemStruct(BaseStruct):
+    """Item Struct: it aggregates the attributes used in Demand, Meta-Demand and Output"""
+
+    args: list[dict[str, Any]]
+    operation: str
+
+
+@dataclass
+class DemandStruct(ItemStruct):
     """Demand Struct"""
 
-    name: str
-    description: str
-    units: str
-    operation: str
-    args: list[dict[str, Any]]
     used: str
     meta: Optional[str] = None
 
 
 @dataclass
-class MetaDemandStruct:
+class MetaDemandStruct(ItemStruct):
     """Meta-Demand Struct"""
-
-    name: str
-    description: str
-    units: str
-    operation: str
-    args: list[dict[str, Any]]
 
 
 @dataclass
-class InputStruct:
+class InputStruct(BaseStruct):
     """Input Struct"""
 
-    name: str
-    label: str
-    description: str
     value: list[float]
     input_from: str = field(metadata={"json_key": "from"})
-    units: str
     range: Optional[list[float]] = None
 
 
 @dataclass
-class OutputStruct:  # pylint: disable=too-many-instance-attributes
+class OutputStruct(ItemStruct):
     """Output Struct"""
 
-    name: str
-    label: str
-    description: str
-    operation: str
-    args: list[dict[str, Any]]
-    units: str
     value: Optional[float] = None
     range: Optional[list[float]] = None
 
@@ -97,25 +85,15 @@ class ModelStruct:  # pylint: disable=too-many-instance-attributes
 
 
 @dataclass
-class MetaStruct:  # pylint: disable=too-many-instance-attributes
+class MetaStruct(ModelStruct):
     """Meta Struct"""
 
-    name: str
-    short_name: str
-    id: str
-    category: str
-    description: str
-    version: str
-    debug: str
-    inputs: list[InputStruct]
     outcome: OutcomeStruct
-    constants: list[ConstantStruct]
-    outputs: list[OutputStruct]
     demands: list[DemandStruct]
     meta: list[MetaDemandStruct]
 
 
-def json_to_model_struct(data: dict) -> ModelStruct:
+def json_to_model_struct(data: dict[str, Any]) -> ModelStruct:
     """Parse the JSON object and transform it to the model struct object"""
     constants = [ConstantStruct(**const) for const in data["constants"]]
     inputs = [
@@ -142,7 +120,7 @@ def json_to_model_struct(data: dict) -> ModelStruct:
     return model
 
 
-def json_to_meta_struct(data: dict) -> MetaStruct:
+def json_to_meta_struct(data: dict[str, Any]) -> MetaStruct:
     """Parse the JSON object and transform it to the Meta struct object"""
     constants = [ConstantStruct(**const) for const in data["constants"]]
     outcome = [OutcomeStruct(**out) for out in data["outcome"]][0]
