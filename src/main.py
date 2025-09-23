@@ -4,6 +4,8 @@ import os
 import traceback
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from idr_iisim.models.meta import Meta
 from idr_iisim.models.process import Process
 from idr_iisim.utils.logger import i_logger
@@ -47,8 +49,7 @@ def main() -> None:
     """main"""
     try:
         i_logger.info("starting iDesignRES tool")
-        # industries_path = os.environ.get("INDUSTRIES_PATH", "")
-        industries_path = "Sources"
+        industries_path = os.environ.get("INDUSTRIES_PATH", "Sources")
         for elem in os.listdir(industries_path):
             elem_path = os.path.join(industries_path, elem)
             if os.path.isdir(elem_path):
@@ -64,4 +65,5 @@ def main() -> None:
 if __name__ == "__main__":
     #
     os.system("cls" if os.name == "nt" else "clear")
+    load_dotenv()
     main()
