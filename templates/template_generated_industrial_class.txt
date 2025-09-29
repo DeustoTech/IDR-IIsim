@@ -1,4 +1,5 @@
 """ $description """
+from math import inf
 
 # Constants
 NAME = $fullname

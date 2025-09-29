@@ -1,4 +1,5 @@
 """ Meta archivo de la industria del cemento """
+from math import inf
 
 # Constants
 NAME = "Cement industry"
@@ -60,9 +61,9 @@ class Cement:
         self.__pm10_overall_emission = (self.__pm10_emission_pre + self.__pm10_emission_oven + self.__cement_emission)
 
     def __validate_total_production(self, total_cement_production) -> None:
-        if total_cement_production < 5 or total_cement_production > 1000:
+        if total_cement_production < -inf or total_cement_production > inf:
             raise ValueError(
-                "The production should be a value between 5 and 1000"
+                "The production should be a value between -inf and inf"
             )
 
     def __pre_homogeneization_and_grinding(self, limestone_demand, clay_demand) -> None:

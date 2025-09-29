@@ -28,6 +28,7 @@ class OutcomeStruct(BaseStruct):
     """Outcome Struct"""
 
     same_result: str
+    range: Optional[list[float]] = None
 
 
 @dataclass

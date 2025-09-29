@@ -1,6 +1,7 @@
 """Industry"""
 
 import json
+import math
 from typing import Any, Optional
 
 import yaml
@@ -113,9 +114,13 @@ class Industry:
         constructor = ""
         constants = []
         process_methods = []
-        min_units = 5
-        max_units = 1000
+        min_units = -math.inf
+        max_units = math.inf
         units = self.meta.get_units()
+        if self.meta.config.outcome.range:
+            min_units = self.meta.config.outcome.range[0]
+            if len(self.meta.config.outcome.range) > 1:
+                max_units = self.meta.config.outcome.range[1]
 
         constants.append(self.meta.constants_generator())
 
