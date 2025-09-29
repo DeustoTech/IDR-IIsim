@@ -1,4 +1,5 @@
 [![Linter](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/linter.yml/badge.svg)]()
+[![Tests](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/unit-tests.yaml/badge.svg)]()
 
 # IDR-IIsim
 
