@@ -1,0 +1,66 @@
+id: Cemento-process1-Pre
+name: Pre-homogenization and grinding
+short_name: pre_homogeneization_and_grinding
+type: process
+description: Pre-homogenization and grinding handling of raw materials
+version: 1.0.0
+debug: false
+constants:
+  - name: LIMESTONE_LOSSES
+    description: Limestone losses
+    citation: text
+    source: https://www.google.com
+    value: 0.01
+    units: p.u.
+  - name: CLAY_LOSSES
+    description: Loss clay
+    citation: text
+    source: https://www.google.com
+    value: 0.01
+    units: p.u.
+inputs:
+  - name: limestone_demand
+    description: Limestone needs by the process
+    value:
+      - 1035
+    units: kt
+    from: null
+  - name: clay_demand
+    description: Clay needs by the process
+    value:
+      - 375
+    units: kt
+    from: null
+  - name: mechanical_energy_pre
+    description: Mechanical Energy used by the process
+    value:
+      - 115.92
+    from: null
+    units: GJ
+outputs:
+  - name: pm10_emission_pre
+    operation: (LIMESTONE_LOSSES * limestone_demand) + (CLAY_LOSSES * clay_demand)
+    args:
+      - name: LIMESTONE_LOSSES
+        type: constants
+      - name: limestone_demand
+        type: inputs
+      - name: CLAY_LOSSES
+        type: constants
+      - name: clay_demand
+        type: inputs
+    description: Particular matter (PM10) emissions
+    value: null
+    units: kt
+  - name: raw_mix
+    operation: limestone_demand + clay_demand - pm10_emission_pre
+    args:
+      - name: limestone_demand
+        type: inputs
+      - name: clay_demand
+        type: inputs
+      - name: pm10_emission_pre
+        type: outputs
+    description: Mix (Clay + Limestone)
+    value: null
+    units: kt

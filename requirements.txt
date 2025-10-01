@@ -9,3 +9,4 @@ PyYAML==6.0.2
 referencing==0.36.2
 rpds-py==0.25.1
 sympy==1.14.0
+types-PyYAML==6.0.12.20250915

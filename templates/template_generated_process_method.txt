@@ -1,0 +1,3 @@
+    def __$name($args) -> None:
+        """ $description """
+        $operation

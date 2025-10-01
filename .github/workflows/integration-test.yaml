@@ -1,0 +1,22 @@
+name: Integration Test
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: Checks
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.10.10"
+      - run: pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - run: pip install nose2
+      - run: rm -rf industries/*
+
+      - name: Unit tests
+        run: PYTHONPATH=.:./src nose2 -s tests/integration

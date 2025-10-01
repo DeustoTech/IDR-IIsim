@@ -1,0 +1,83 @@
+id: Cemento-process2-Oven
+name: Oven
+short_name: oven
+type: process
+description: OVEN - Calcination, clinkerization, combustion, cooling
+version: 1.0.0
+debug: false
+constants:
+  - name: CLINKER_LOSSES
+    description: Loss Clinker
+    citation: text
+    source: https://www.google.com
+    value: 0.38
+    units: p.u.
+  - name: FUEL_HC
+    description: Fuel HC
+    citation: text
+    source: https://www.google.com
+    value: 0.02693
+    units: MJ/kg
+  - name: ENERGY_LOSSES
+    description: Energy losses
+    citation: text
+    source: https://www.google.com
+    value: 0.1871
+    units: p.u.
+inputs:
+  - name: raw_mix
+    description: Mix description m1
+    value: null
+    units: kt
+    from: Cemento-process1-Pre
+  - name: water_demand
+    description: Water consumption
+    value: null
+    units: m3
+    from: null
+  - name: fuel_demand
+    description: Fuel as a Material
+    value: null
+    units: kt
+    from: null
+  - name: mechanical_energy_oven
+    description: Mechanical energy description
+    value: null
+    units: GJ
+    from: null
+  - name: pm10_emission_pre
+    description: patricular matter emissions
+    value: null
+    units: kt
+    from: Cemento-process1-Pre
+outputs:
+  - name: pm10_emission_oven
+    operation: pm10_emission_pre
+    args:
+      - name: pm10_emission_pre
+        type: inputs
+    description: PM10 emission (Limestone + Clay)
+    value: null
+    units: kt
+  - name: heat_losses_oven
+    operation: fuel_demand  * FUEL_HC * ENERGY_LOSSES
+    args:
+      - name: fuel_demand
+        type: inputs
+      - name: FUEL_HC
+        type: constants
+      - name: ENERGY_LOSSES
+        type: constants
+    description: Heat Losses in the process
+    value: null
+    units: GJ
+  - name: clinker_production_oven
+    operation: raw_mix * ( 1 - CLINKER_LOSSES )
+    args:
+      - name: raw_mix
+        type: inputs
+      - name: CLINKER_LOSSES
+        type: constants
+    description: Clinker consumption
+    value: null
+    units: kt

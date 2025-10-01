@@ -1,151 +1,170 @@
+[![Linter](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/linter.yml/badge.svg)]()
+[![Tests](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/unit-tests.yaml/badge.svg)]()
+
 # IDR-IIsim
 
-Repository with industry models tailored to the integration on large scale energy system models and circular economy assessment
-<hr>
+**IDR-IISIM** is an open-source compiler designed to process industrial models described
+in YAML format and generate Python scripts that can be integrated into large-scale
+energy system models and circular economy assessments.
 
-## 1. Data Model
+This repository provides a reproducible and modular framework for describing industrial
+processes as data models, validating them, and generating executable scripts.
 
-This process defines how an industrial process method is represented as a data model (model.yaml), validated for correctness using a schema (schema.py), and then converted into an executable Python script (generated_script.py) that implements the operations described.
+## License
 
-### Components of the Data Modelling
+This project is licensed under the MIT License. You are free to use, modify, and
+distribute this software under the terms of the MIT license.
 
-1. **Folder structure**: The tool is designed to be flexible, enabling users to define their own data models. The folder structure is organized hierarchically: first, the industry is defined, followed by the process, and finally the method. This structure is illustrated in the following figure.
+## Quick Start Guide
 
-            ├── idr_iisim
-                  ├── industry
-                        ├── processA
-                              ├── method1
-                                    ├── model.yaml
-                                    ├── model.png
-                                    ├── generated_model.py
-                              ├── method2
-                                    ├── model.yaml
-                                    ├── model.png
-                                    ├── generated_model.py
-                                    .
-                                    .
-                                    .
+### Installation
 
-2. **Model File (model.yaml)**: A YAML file that describes the industrial method. It contains the following key sections:<br><br>
-     - **Constants**: Predefined values used in the operations.
-     - **Inputs**: External parameters required for the method.
-     - **Outputs**: Results calculated by the method.
-     - **Operations**: Mathematical or logical expressions that define how the outputs are derived from constants and inputs.
-
-      <br>Example Structure of model.yaml:
-
-        name: method2
-        id: industry-process_a-method2
-        description: A description
-        version: 1.0.0
-        debug: false
-
-        constants:
-          - name: alpha
-            label: alpha
-            description: constant1 description
-            citation: test
-            source: https://www.google.com
-            value: 0.25
-            # units: km
-        # more constants can be defined here
-
-        inputs:
-          - name: a0
-            label: a0
-            description: a0 description
-            value: [20, 25]
-            # units: m
-            from: null  # industry-process_name-method_name
-        # more inputs can be defined here
-
-        # Expected number of outputs. In this case: 1
-        # The formula can use other outputs as inputs
-        outputs:
-          - name: Ao
-            label: Ao
-            operation: a0 - b0 # sympify valid expression
-            args:
-              - name: a0
-                type: inputs
-              - name: b0
-                type: inputs
-            description: output1 description
-            value: null
-        # more outputs can be defined here
-
-See the example of the modelling of a method to understand how the data is structured: [model.py](idr_iisim/industry/processA/method1/model.yaml)
-
-3. **Schema File**: The file: [schema.yaml](config/schema.yaml), is a schema that defines the structure or blueprint that describe the expected structure, types, and constraints of the data in the YAML file ).  This schema (.yaml) is used by [schema.py](idr_iisim/utils/schema.py) for validating data to ensure data integrity by verifying its format, types, and values. And to catch errors early by rejecting invalid data. Validation checks that:
-   - All constants have a name, value, and description.
-   - All inputs have a name, type, and description.
-   - All outputs have a valid expression.
-   - No duplicate names exist across constants, inputs, and outputs.
-  
-   <br>A schema in Python is a powerful tool for defining and enforcing data structure rules, making applications more robust and error-resistant.
-   <br>
-
-4. **Generated Method Script**: A Model class is generated when [config.py](idr_iisim/models/model.py)) is executed. This class includes the method: *script_generator()*, which dynamically generates a Python script based on the model constants, inputs, outputs and operations defined in the data model (e.g., [model.yaml](idr_iisim/industry/processA/method1/model.yaml)).
-<br>
-
-5. **Process Workflow**
-  ![Data modeling workflow](docs/YAML_Model_Sequence_Diagram.png)
-
-  This UML sequence diagram illustrates the process of validating a .yaml file and generating a model class in a Python application.
-
-  Key Steps:
-
-- A user provides a .yaml file to setup.py.
-- setup.py interacts with config.py to load the file and uses schema.py to validate it against a predefined schema.
-- The validation process involves verifying the .yaml file’s structure and content through a validator.
-- Once validated, setup.py calls model.py to create an instantiated model class from the validated data.
-- Finally, the model class is returned to setup.py, and the results are displayed to the user.
-
-<hr>
-
-## 2. Execution
-
-In order to execute this tool succesfully, you need to have the application `graphviz` installed in your system.
-
-The tool can be executed by running the following commands:
+Clone this repository and install the required dependencies:
 
 ```bash
-# install dependencies
+git clone https://github.com/your-org/idr-iisim.git
+cd idr-iisim
 pip install -r requirements.txt
-
-# run the tool
-python setup.py
 ```
 
-As a result of the execution, the tool will print the results in the console and will generate the model diagrams in the
-method folders. The diagrams will be saved as `model.png`.
+Ensure you have Graphviz installed in your system for diagram generation.
+On Ubuntu/Debian:
 
-### 2.1 Entry point - workflow
+```bash
+sudo apt install graphviz
+```
 
-This flowchart provides a high-level overview of the execution process of setup.py, highlighting the logical flow, modularity, and sequence of operations. It details the interactions between setup.py and key components, outlining the steps involved in configuring, validating, and running models.
+On macOS (Homebrew):
 
-![Setup - workflow](docs/Setup_Flowchart.png)
+```bash
+brew install graphviz
+```
 
-Key Steps:
+### Configure environment
 
-1. *Star*t: Execution begins with [setup.py](setup.py).
-2. *Call main()*: The main function initializes the setup process.
-3. *Initialization (init())*: Sets up the environment and pre-requisites for execution.
-4. *Load Configuration*: Reads the config.yaml file to fetch configuration data using [config.py](idr_iisim/models/model.py).
-5. *Validate Schema*: Validates the configuration and .yaml files using [schema.py](idr_iisim/utils/schema.py) to ensure correctness.
-6. *Scan Industry Directory*: Scans the industry/ directory for model files.
-7. *Discover and Register Models*: Discovers available models and registers them using [models_dict.py](idr_iisim/utils/models_dict.py).
-8. *Generate Execution Queue*: Creates an execution order for models using execution.py.
-9. *Execute Models*: Runs the model calculations using [model.py](idr_iisim/models/model.py).
-10. *Log Results*: Logs the results or any errors using [logger.py](idr_iisim/utils/logger.py).
-11. *End Execution*: Marks the completion of the execution process.
+Create a `.env` file in the root directory and define the path to your
+industry sources:
 
-## Next steps
+```bash
+INDUSTRIES_PATH=Sources
+```
 
-- [x] Add funtion to dinamiclly generate the model script.
-- [ ] Add support for vectorized outputs. For the moment, the tool only supports scalar values.
-- [ ] Add support for recursive operations.
-- [ ] Improve diagrams visualization.
-- [ ] Add support for debug mode.
-- [ ] Add a results folder where the results of the execution will be saved. It might be necessary to include a new
-      section in the `model.yaml` file to define the values that are considered as results.
+If INDUSTRIES_PATH is not provided, the default value will be `Sources/`.
+
+### Run the Compiler
+
+```bash
+python src/main.py
+
+This will:
+ Scan the specified industry directory for YAML files.
+ Validate them against the schema.
+ Generate Python scripts inside the `industries/` folder.
+```
+
+## Example Usage
+
+Suppose you have the following structure:
+
+```bash
+Sources/
+└── cement/
+├── meta.yaml # Industry-level metadata (type: industry)
+├── kiln.yaml # Process description
+└── grinding.yaml # Process description
+```
+
+Running:
+
+```bash
+python main.py
+```
+
+Will generate a file:
+
+```bash
+industries/cement.py
+```
+
+containing all processes as Python classes, ready to be used in your simulation
+framework.
+
+## Data Model Description
+
+Each process is defined by a `yaml` file describing constants, inputs, outputs, and
+operations:
+
+```yaml
+name: method2
+id: industry-process_a-method2
+description: Example method description
+version: 1.0.0
+constants:
+- name: alpha
+value: 0.25
+inputs:
+- name: a0
+value: [20, 25]
+
+outputs:
+- name: Ao
+operation: a0 - b0
+args:
+- name: a0
+type: inputs
+- name: b0
+type: inputs
+```
+
+The compiler will:
+
+1. Load and validate this YAML file.
+2. Create an internal Process object.
+3. Generate Python code implementing the mathematical operations.
+
+## Mathematical Approach
+
+Each `output` in the YAML file contains an `operation` written as a **SymPy-compatible
+expression**, e.g.:
+
+```python
+Ao = a0 - b0
+```
+
+The compiler uses these expressions to generate reproducible and validated Python code.
+
+This approach ensures:
+
+- **Reproducibility**: Models are declarative, not hard-coded.
+- **Interoperability**: Output scripts can be integrated into other Python workflows.
+- **Traceability**: Each constant, input, and output is documented.
+
+## Methodology &amp; References
+
+This work is based on the concept of **data-driven process modeling**, leveraging:
+
+- **YAML schemas** for robust validation _(Keleshev, 2020)_
+- **SymPy** for symbolic mathematics _(Meurer et al., 2017)_
+- Best practices in software engineering for **industrial energy systems modeling**
+_(see: Connolly et al., 2010, Energy Policy, DOI:10.1016/j.enpol.2009.03.018)_
+
+## Links to Data
+
+Sample industry/process YAML files can be found in the [Sources/](./Sources/) folder of this
+repository.
+
+These files can be freely modified or extended to model different industrial processes.
+
+## Version Control
+
+This repository uses **Git** for version control.
+
+To contribute or track changes:
+
+```bash
+git clone https://github.com/your-org/idr-iisim.git
+git checkout -b feature/new-process
+```
+
+Please submit pull requests following conventional commit messages and ensure new
+models include unit tests and documentation.
