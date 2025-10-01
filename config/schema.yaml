@@ -1,21 +1,19 @@
-$id     : https://example.com/person.schema.json
-$schema : https://json-schema.org/draft/2020-12/schema
+$id: https://example.com/person.schema.json
+$schema: https://json-schema.org/draft/2020-12/schema
 $comment: This schema It defines the structure, rules, and requirements for data related to a method or process in the IDR-Schema context
-title   : IDR-Schema
-type    : object
+title: IDR-Schema
+type: object
 
 required:
   - name
-  - id
-  - description
-  - version
-  - outputs
-  
+
 properties:
-  $comment: Describes the method-n of the x-process of the industry
   name:
     type: string
     description: Name of the method
+  short_name:
+    type: string
+    description: Name of the method to be used in Python
   id:
     type: string
     description: ID of the method
@@ -25,10 +23,13 @@ properties:
   version:
     type: string
     description: Version of the method
+  type:
+    type: string
+    description: whether it is a process or an industry
   debug:
     type: boolean
     description: Debug mode. If true, it will print all the intermedary results
-  
+
   constants:
     $comment: constants are the values that are used in the calculation of the outputs
     type: array
@@ -36,28 +37,27 @@ properties:
       type: object
       required:
         - name
-        - label
         - value
       properties:
         name:
           type: string
           description: Name of the constant
-        label:
-          type: string
-          description: Label of the constant
         description:
           type: string
           description: Description of the constant
         value:
           type: number
           description: Value of the constant
+        citation:
+          type: string
+          description: the type of the source
         source:
           type: string
           description: Source of the constant
         units:
           type: string
           description: Units of the constant
-  
+
   inputs:
     $comment: inputs values of the method-n thta are used in the calculation of the outputs
     type: array
@@ -65,31 +65,31 @@ properties:
       type: object
       required:
         - name
-        - label
         - value
         - from
       properties:
         name:
           type: string
           description: Name of the input
-        label:
-          type: string
-          description: Label of the input
         description:
           type: string
           description: Description of the input
         value:
-          type: array
+          anyOf:
+            - type: array
+              items:
+                type: number
+            - type: "null"
           description: Value of the input
-          items:
-            type: number
         units:
           type: string
           description: Units of the input
         from:
-          type: string
+          anyOf:
+            - type: string
+            - type: "null"
           description: Source of the input
-  
+
   outputs:
     $comment: outputs are the results of the method-n that are calculated using the inputs and constants
     type: array
@@ -97,16 +97,12 @@ properties:
       type: object
       required:
         - name
-        - label
         - operation
         - args
       properties:
         name:
           type: string
           description: Name of the output
-        label:
-          type: string
-          description: Label of the output
         operation:
           type: string
           description: Valid sympy operation to calculate the output
@@ -144,11 +140,14 @@ properties:
                 description: Name of the argument
               type:
                 type: string
-                description: defines whether the argument is a constant, input or
+                description:
+                  defines whether the argument is a constant, input or
                   output
         description:
           type: string
           description: Description of the output
         value:
-          type: number
+          anyOf:
+            - type: number
+            - type: "null"
           description: Value of the output

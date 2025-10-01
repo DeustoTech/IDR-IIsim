@@ -1,16 +1,18 @@
 """Test industries and process"""
 
-import sympy
 import unittest
-from unittest.mock import patch, MagicMock, call
 from functools import partial
 from string import Template
+from unittest.mock import MagicMock, call, patch
 
-# Importar las clases a probar (se hace un mock global de las dependencias clave)
-from idr_iisim.utils.structs import ModelStruct, InputStruct, OutputStruct
+import sympy
+
 from idr_iisim.models.model import Model
 from idr_iisim.models.process import Process
 from idr_iisim.utils.models_dict import Industry
+
+# Importar las clases a probar (se hace un mock global de las dependencias clave)
+from idr_iisim.utils.structs import InputStruct, ModelStruct, OutputStruct
 
 SCRIPT = '''""" A description """
 from math import inf

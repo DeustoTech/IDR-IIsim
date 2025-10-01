@@ -10,16 +10,19 @@ from idr_iisim.models.meta import Meta
 from idr_iisim.models.process import Process
 from idr_iisim.utils.logger import i_logger
 from idr_iisim.utils.models_dict import Industry, load_yaml
+from idr_iisim.utils.schema import Validator
 
 
 def process_industry(name: str, industry_path: str) -> None:
     """process and generate code for industry"""
     i_logger.info("Processing industry: %s", name)
     industry = Industry()
+    yaml_validator = Validator()
 
     for file in Path(industry_path).rglob("*.yaml"):
         yaml_path = str(file)
         yaml_data = load_yaml(yaml_path)
+        yaml_validator.validate(yaml_data)
         if yaml_data["type"] == "industry":
             meta = Meta(yaml_data, yaml_path)
             industry.set_meta(meta)
