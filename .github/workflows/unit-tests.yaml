@@ -21,4 +21,4 @@ jobs:
       - run: pip install nose2
 
       - name: Unit tests
-        run: PYTHONPATH=./src nose2 -s tests
+        run: PYTHONPATH=./src nose2 -s tests/units
