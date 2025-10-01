@@ -2,17 +2,21 @@
 
 import unittest
 from functools import partial
-from string import Template
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, patch
 
 import sympy
 
-from idr_iisim.models.model import Model
-from idr_iisim.models.process import Process
-from idr_iisim.utils.models_dict import Industry
-
-# Importar las clases a probar (se hace un mock global de las dependencias clave)
-from idr_iisim.utils.structs import InputStruct, ModelStruct, OutputStruct
+from idr_iisim.models.process import (  # type:ignore # pylint: disable=import-error
+    Process,
+)
+from idr_iisim.utils.models_dict import (  # type:ignore # pylint: disable=import-error
+    Industry,
+)
+from idr_iisim.utils.structs import (  # type:ignore # pylint: disable=import-error
+    InputStruct,
+    ModelStruct,
+    OutputStruct,
+)
 
 SCRIPT = '''""" A description """
 from math import inf
@@ -207,7 +211,7 @@ class TestModelProcessAndMeta(unittest.TestCase):
 class TestIndustry(unittest.TestCase):
     """Test industry"""
 
-    def test_add_process_dependencies(self, MockProcess, MockMeta) -> None:
+    def test_add_process_dependencies(self, _, __) -> None:
         """Check that add process builds correctly the dependencies"""
 
         # Mock that configuration of a process that depends on another model (M1)
@@ -241,7 +245,7 @@ class TestIndustry(unittest.TestCase):
         self.assertNotIn("P3", industry.dependencies)
 
     def test_script_generator_calls_model_methods(
-        self, MockProcess, MockMeta
+        self, mock_process, mock_meta
     ) -> None:
         """Check that the script_generator calls all the script generation methods"""
 
@@ -253,7 +257,7 @@ class TestIndustry(unittest.TestCase):
         mock_meta_config.outcome.name = "final_output"
         mock_meta_config.outcome.range = [0, 100]
 
-        mock_meta = MockMeta.return_value
+        mock_meta = mock_meta.return_value
         mock_meta.config = mock_meta_config
         mock_meta.get_units.return_value = {"unit_key": "unit_val"}
         # Simulate the genaration scripts
@@ -267,7 +271,7 @@ class TestIndustry(unittest.TestCase):
         # Mocks Process Class
         mock_process_config = MagicMock()
         mock_process_config.id = "P1"
-        mock_process = MockProcess.return_value
+        mock_process = mock_process.return_value
         mock_process.config = mock_process_config
         mock_process.process_methods_generator.return_value = (
             "process_method_P1"
