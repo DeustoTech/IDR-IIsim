@@ -29,6 +29,7 @@ class OutcomeStruct(BaseStruct):
 
     same_result: str
     range: Optional[list[float]] = None
+    tests: Optional[list[float]] = None
 
 
 @dataclass
@@ -37,9 +38,10 @@ class ItemStruct(BaseStruct):
 
     args: list[dict[str, Any]]
     operation: str
+    tests: Optional[list[float]] = None
 
 
-@dataclass
+@dataclass(kw_only=True)
 class DemandStruct(ItemStruct):
     """Demand Struct"""
 
