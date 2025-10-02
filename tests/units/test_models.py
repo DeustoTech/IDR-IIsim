@@ -67,6 +67,7 @@ process_method_P1
             print(separator.join(line))
 
     def csv_header(self) -> list:
+        """ header row with the fields of the CSV """
         attributes = vars(self)
         line = []
         for name in attributes:
@@ -77,6 +78,7 @@ process_method_P1
         return line
 
     def csv_row(self) -> list:
+        """ row with the values of the fields of the CSV """
         attributes = vars(self)
         line = []
         for name, value in attributes.items():
