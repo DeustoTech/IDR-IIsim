@@ -58,7 +58,7 @@ class Cement:
         self.__mechanical_energy = self.__mechanical_energy_pre + self.__mechanical_energy_oven + self.__mechanical_energy_milling
         self.__co2_overall_emissions = total_cement_production * CO2_EMISSIONS_PROPORTION
         self.__heat_overall_losses = self.__heat_losses_oven
-        self.__pm10_overall_emission = (self.__pm10_emission_pre + self.__pm10_emission_oven + self.__cement_emission)
+        self.__pm10_overall_emission = self.__pm10_emission_pre + self.__pm10_emission_oven + self.__cement_emission
 
     def __validate_total_production(self, total_cement_production) -> None:
         if total_cement_production < -inf or total_cement_production > inf:
@@ -138,6 +138,7 @@ class Cement:
             print(separator.join(line))
 
     def csv_header(self) -> list:
+        """ header row with the fields of the CSV """
         attributes = vars(self)
         line = []
         for name in attributes:
@@ -148,6 +149,7 @@ class Cement:
         return line
 
     def csv_row(self) -> list:
+        """ row with the values of the fields of the CSV """
         attributes = vars(self)
         line = []
         for name, value in attributes.items():

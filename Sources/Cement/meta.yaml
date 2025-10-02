@@ -210,7 +210,7 @@ outputs:
     units: GJ
     tests: [0, 0.09]
   - name: pm10_overall_emission
-    operation: (pm10_emission_pre + pm10_emission_oven + cement_emission)
+    operation: pm10_emission_pre + pm10_emission_oven + cement_emission
     args:
       - name: pm10_emission_pre
         type: inputs
