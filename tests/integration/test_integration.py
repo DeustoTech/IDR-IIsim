@@ -37,35 +37,62 @@ class TestIntegration(unittest.TestCase):
                     self.assertIsNotNone(
                         industry_cls, "The industry has not been created"
                     )
-                    instance = industry_cls(10)
-                    self.assertIsNotNone(instance)
-                    # Check demands
-                    for demand in yaml["demands"]:
-                        if "meta" not in demand:
-                            method_name = f"get_{demand['name']}"
+                    tests = yaml["outcome"][0].get("tests", [1])
+                    for i in range(len(tests)):
+                        instance = industry_cls(tests[i])
+                        self.assertIsNotNone(instance)
+                        # Check demands
+                        for demand in yaml["demands"]:
+                            if "meta" not in demand:
+                                method_name = f"get_{demand['name']}"
+                                values = demand.get("tests", [])
+                                with self.subTest(method=method_name):
+                                    method = getattr(
+                                        instance, method_name, None
+                                    )
+                                    self.assertIsNotNone(method)
+                                    value = method()
+                                    self.assertIsInstance(value, float)
+                                    if i < len(values):
+                                        self.assertEqual(
+                                            values[i], round(value, 2)
+                                        )
+                        # Check meta-demands
+                        for meta_demand in yaml["meta"]:
+                            method_name = f"get_{meta_demand['name']}"
+                            values = demand.get("tests", [])
                             with self.subTest(method=method_name):
                                 method = getattr(instance, method_name, None)
                                 self.assertIsNotNone(method)
                                 value = method()
                                 self.assertIsInstance(value, float)
-                    # Check meta-demands
-                    for meta_demand in yaml["meta"]:
-                        method_name = f"get_{meta_demand['name']}"
-                        with self.subTest(method=method_name):
-                            method = getattr(instance, method_name, None)
-                            self.assertIsNotNone(method)
-                            value = method()
-                            self.assertIsInstance(value, float)
-                    # Check other methods
-                    string_repr = str(instance)
-                    self.assertIsInstance(string_repr, str)
-                    self.assertEqual(
-                        string_repr.split("\n", maxsplit=1)[0],
-                        f"{yaml['short_name']} industry",
-                    )
-                    self.assertIsNone(instance.csv())
-                    self.assertIsInstance(instance.csv_header(), list)
-                    self.assertIsInstance(instance.csv_row(), list)
+                                if i < len(values):
+                                    self.assertEqual(
+                                        values[i], round(value, 2)
+                                    )
+                        # Check outputs
+                        for output in yaml["outputs"]:
+                            method_name = f"get_{output['name']}"
+                            values = output.get("tests", [])
+                            with self.subTest(method=method_name):
+                                method = getattr(instance, method_name, None)
+                                self.assertIsNotNone(method)
+                                value = method()
+                                self.assertIsInstance(value, float)
+                                if i < len(values):
+                                    self.assertEqual(
+                                        values[i], round(value, 2)
+                                    )
+                        # Check other methods
+                        string_repr = str(instance)
+                        self.assertIsInstance(string_repr, str)
+                        self.assertEqual(
+                            string_repr.split("\n", maxsplit=1)[0],
+                            f"{yaml['short_name']} industry",
+                        )
+                        self.assertIsNone(instance.csv())
+                        self.assertIsInstance(instance.csv_header(), list)
+                        self.assertIsInstance(instance.csv_row(), list)
                 except Exception:
                     self.fail("Industry not correctly generated")
 

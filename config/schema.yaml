@@ -151,3 +151,7 @@ properties:
             - type: number
             - type: "null"
           description: Value of the output
+        test:
+          type: array
+          itemps:
+            type: number
