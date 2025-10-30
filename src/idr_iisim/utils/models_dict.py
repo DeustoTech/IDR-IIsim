@@ -42,7 +42,11 @@ class Industry:
         self.meta = meta
 
     def check_types(self) -> None:
-        """check types among processes"""
+        """check types among processes
+
+        This method checks if the types of the different inputs and demands
+        are consistent between the different processes.
+        """
         assert self.meta is not None
         inputs_checks = [(self.meta.config.name, self.meta.config.inputs)]
         inputs_checks += [
@@ -81,7 +85,12 @@ class Industry:
                 )
 
     def generate_execution_queue(self) -> list[str]:
-        """Generate the correct execution queue of the processes"""
+        """Generate the correct execution queue of the processes
+
+        This method generate the execution queue in the correct order
+        taking into account the correct flow to based on the dependencies
+        between the different processes of the industry.
+        """
         queue: list[str] = []
 
         # Include processes without dependencies
@@ -104,7 +113,10 @@ class Industry:
         return queue
 
     def script_generator(self) -> str:
-        """Generator of the script"""
+        """Generator of the script
+
+        This method generates the model (the Python class) of the industry
+        """
         assert self.meta is not None
         # Load the template content
         template_path = "templates/template_generated_industrial_class.txt"
@@ -154,7 +166,10 @@ class Industry:
 
 
 def load_yaml(path: str) -> dict[str, Any]:
-    """load industry's yaml file"""
+    """load industry's yaml file
+
+    :param path: path of the YAML file to be loaded.
+    """
     try:
         with open(path, encoding="utf-8") as file:
             data: dict[str, Any] = yaml.safe_load(file)

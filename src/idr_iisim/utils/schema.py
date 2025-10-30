@@ -7,8 +7,13 @@ from jsonschema import validate
 
 
 class Validator:
-    """The Validator class that is responsible for validating data
-    against a schema defined in a config/schema.yaml file"""
+    """The Validator class responsible for validating data
+    against schemas defined in the config schema files.
+
+    Attributes:
+        industry_validator (dict[str, Any]): Schema loaded from config/industry.yaml.
+        process_validator (dict[str, Any]): Schema loaded from config/process.yaml.
+    """
 
     # A dictionary that stores the schema loaded from the industry.yaml file
     industry_validator: dict[str, Any]
@@ -16,8 +21,11 @@ class Validator:
     process_validator: dict[str, Any]
 
     def __init__(self) -> None:
-        """load validator from file: Ensures that data adheres
-        to the structure and constraints defined in the schema.yaml"""
+        """Initialize the Validator by loading schemas from specified YAML files.
+
+        Raises:
+            Exception: If there is an error loading the schema files.
+        """
         path_to_config = "config/industry.yaml"
         try:
             with open(path_to_config, encoding="utf-8") as file:
@@ -36,8 +44,18 @@ class Validator:
             raise e
 
     def validate(self, data: dict[str, Any]) -> None:
-        """validate data, check if a given dictionary (data) conforms
-        to a schema loaded from a schema.yaml file"""
+        """Validate the provided data against the appropriate schema.
+
+        This method checks if the given dictionary data conforms
+        to a schema loaded from the corresponding YAML file.
+
+        Args:
+            data (dict[str, Any]): The dictionary containing data to be validated.
+
+        Raises:
+            ValueError: If the data is missing a type field or has an invalid type.
+            Exception: If the validation process fails.
+        """
         try:
             if "type" not in data:
                 raise ValueError("YAML should have a type field")
