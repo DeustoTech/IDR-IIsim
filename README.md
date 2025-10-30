@@ -1,7 +1,7 @@
 [![Linter](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/linter.yml/badge.svg)]()
 [![Tests](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/unit-tests.yaml/badge.svg)]()
 [![Integration](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/integration-test.yaml/badge.svg)]()
-<img src="<https://raw.githubusercontent.com/DeustoTech/IDR-IIsim/refs/heads/badges/coverage/line.svg"/>
+<img src="https://raw.githubusercontent.com/DeustoTech/IDR-IIsim/refs/heads/badges/coverage/global.svg"/>
 
 # IDR-IIsim
 
