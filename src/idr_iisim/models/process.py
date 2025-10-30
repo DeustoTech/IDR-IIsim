@@ -14,10 +14,23 @@ from idr_iisim.utils.structs import (
 
 class Process(Model):
     """Process class that represents a model in the system.
+
     It contains the model configuration, functions map, results, and external inputs.
+
+    Attributes:
+        config (ModelStruct): Holds the parsed model configuration.
     """
 
     def __init__(self, yaml_data: dict[str, Any], path: str):
+        """Initialize the Process class with YAML data and the path.
+
+        Args:
+            yaml_data (dict[str, Any]): Parsed YAML configuration data.
+            path (str): Path to the configuration file.
+
+        Raises:
+            ValueError: If there are issues in parsing the configuration.
+        """
         super().__init__(path)
 
         # Parse data
@@ -28,7 +41,12 @@ class Process(Model):
         self.process_config(items, self.config)
 
     def get_getter_items(self) -> list[tuple[str, str]]:
-        """Generate items' descriptions to configure as getters"""
+        """Generate items' descriptions to configure as getters.
+
+        Returns:
+            list[tuple[str, str]]: A list of tuples containing variable names
+            and their descriptions.
+        """
         getter_items = []
 
         # outputs
@@ -38,7 +56,11 @@ class Process(Model):
         return getter_items
 
     def operations_generator(self) -> str:
-        """Generate operations"""
+        """Generate operations methods for the model.
+
+        Returns:
+            str: The generated operations as a string.
+        """
         process_methods = []
         for variable_name, outputs in self.functions_map.items():
             expression = str(outputs["expression"])
@@ -52,7 +74,11 @@ class Process(Model):
         return "\n        ".join(process_methods)
 
     def process_methods_generator(self) -> str:
-        """Generate the industry's class' methods"""
+        """Generate the methods for the industry's class.
+
+        Returns:
+            str: The generated methods as a formatted string.
+        """
         # Load the template content
         template_path = "templates/template_generated_process_method.txt"
         method_template = load_template(template_path)
@@ -77,7 +103,11 @@ class Process(Model):
         )
 
     def process_call_method_generator(self) -> str:
-        """Generator for the code to call the different methods"""
+        """Generate the code to call the different methods.
+
+        Returns:
+            str: The generated method call as a string.
+        """
         script = f"self.__{self.config.short_name}("
 
         args = []
@@ -91,6 +121,3 @@ class Process(Model):
         script += ", ".join(args)
         script += ")"
         return "\n        " + script
-
-
-# run = Model()

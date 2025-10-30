@@ -14,7 +14,18 @@ from idr_iisim.utils.schema import Validator
 
 
 def process_industry(name: str, industry_path: str) -> None:
-    """process and generate code for industry"""
+    """Process and generate code for a specified industry.
+
+    This function validates and processes all YAML files in the given industry path,
+    generating a Python script for the industry based on the loaded configurations.
+
+    Args:
+        name (str): The name of the industry to be processed.
+        industry_path (str): The path where the YAML files of the industry are stored.
+
+    Raises:
+        Exception: If there are issues in processing the industry files.
+    """
     i_logger.info("Processing industry: %s", name)
     industry = Industry()
     yaml_validator = Validator()
@@ -49,7 +60,14 @@ def process_industry(name: str, industry_path: str) -> None:
 
 
 def main() -> None:
-    """main"""
+    """Main program entry point.
+
+    The program iterates over all industries found in the specified source folder,
+    processing each industry to generate its corresponding model.
+
+    Raises:
+        Exception: If there is an error during the processing of the industries.
+    """
     try:
         i_logger.info("starting iDesignRES tool")
         industries_path = os.environ.get("INDUSTRIES_PATH", "Sources")
