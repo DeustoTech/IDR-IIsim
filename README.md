@@ -42,6 +42,9 @@ On macOS (Homebrew):
 brew install graphviz
 ```
 
+On Windows, you should go the webpage of the GraphViz (<https://graphviz.org/download/#windows>)
+and download the proper installer for your Windows Version.
+
 ### Configure environment
 
 Create a `.env` file in the root directory and define the path to your
