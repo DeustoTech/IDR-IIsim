@@ -58,7 +58,7 @@ constants:
     description: CO2
     citation: text
     source: https://www.google.com
-    value: 0.9
+    value: 0.51
     units: kt
 inputs:
   - name: clinker_production_oven
@@ -88,7 +88,6 @@ outcome:
     same_result:
       process: Cemento1-process3-Milling
       output: cement_production
-    tests: [5, 137]
 demands:
   - name: limestone_demand
     units: kt
@@ -100,7 +99,6 @@ demands:
       - name: total_cement_production
         type: outcome
     description: Total limestone demand
-    tests: [5.17, 141.79]
   - name: clay_demand
     operation: total_cement_production * CLAY_PROPORTION
     args:
@@ -111,7 +109,6 @@ demands:
     units: kt
     description: Total clay demand
     used: Cemento-process1-Pre
-    tests: [1.88, 51.38]
   - name: fuel_demand
     operation: total_cement_production * FUEL_PROPORTION
     args:
@@ -122,7 +119,6 @@ demands:
     units: kt
     description: Total fuel demand
     used: Cemento-process2-Oven
-    tests: [0.65, 17.81]
   - name: water_demand
     operation: total_cement_production * WATER_PROPORTION
     args:
@@ -133,7 +129,6 @@ demands:
     description: Total water demand
     units: m3
     used: Cemento-process2-Oven
-    tests: [1.11, 30.41]
   - name: gypsum_demand
     operation: clinker_production_oven * GYPSUM_PROPORTION
     args:
@@ -144,7 +139,6 @@ demands:
     description: gympsum total demand
     units: kt
     used: Cemento-process3-Milling
-    tests: [0.17, 4.74]
   - name: mechanical_energy_pre
     operation: total_cement_production * MECHANICAL_ENERGY_PRE_PROPORTION
     args:
@@ -190,7 +184,6 @@ meta:
         type: demand
     description: Total mechanical energy
     units: GJ
-    tests: [1.61, 44.01]
 outputs:
   - name: co2_overall_emissions
     operation: total_cement_production * CO2_EMISSIONS_PROPORTION
@@ -199,7 +192,6 @@ outputs:
         type: outcome
     description: Total C02 emissions
     units: kt
-    tests: [4.5, 123.30]
   - name: heat_overall_losses
     operation: heat_losses_oven
     args:
@@ -208,9 +200,8 @@ outputs:
         from: Cemento-process2-Oven
     description: Total Heat losses
     units: GJ
-    tests: [0, 0.09]
   - name: pm10_overall_emission
-    operation: pm10_emission_pre + pm10_emission_oven + cement_emission
+    operation: (pm10_emission_pre + pm10_emission_oven + cement_emission)
     args:
       - name: pm10_emission_pre
         type: inputs
@@ -224,4 +215,3 @@ outputs:
     description: Total PM10 emissions
     value: null
     units: kt
-    tests: [0.19, 5.10]

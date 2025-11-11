@@ -118,7 +118,7 @@ args:
 - name: a0
 type: inputs
 - name: b0
-type: inputs
+  type: inputs
 ```
 
 The compiler will:
