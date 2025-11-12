@@ -105,20 +105,20 @@ id: industry-process_a-method2
 description: Example method description
 version: 1.0.0
 constants:
-- name: alpha
-value: 0.25
+    - name: alpha
+      value: 0.25
 inputs:
-- name: a0
-value: [20, 25]
+    - name: a0
+      value: [20, 25]
 
 outputs:
-- name: Ao
-operation: a0 - b0
-args:
-- name: a0
-type: inputs
-- name: b0
-  type: inputs
+    - name: Ao
+      operation: a0 - b0
+      args:
+    - name: a0
+      type: inputs
+    - name: b0
+      type: inputs
 ```
 
 The compiler will:
