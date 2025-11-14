@@ -12,7 +12,7 @@ FUEL_PROPORTION = 0.13  # Fuel proportion
 MECHANICAL_ENERGY_OVEN_PROPORTION = 0.069552  # Mechanical Energy oven proportion
 GYPSUM_PROPORTION = 0.04  # Gypsum proportion
 MECHANICAL_ENERGY_MILLING_PROPORTION = 0.135792  # Mechanical Energy used by the process
-CO2_EMISSIONS_PROPORTION = 0.9  # CO2
+CO2_EMISSIONS_PROPORTION = 0.51  # CO2
 # Pre-homogenization and grinding's constants
 LIMESTONE_LOSSES = 0.01  # Limestone losses
 CLAY_LOSSES = 0.01  # Loss clay
@@ -58,7 +58,7 @@ class Cement:
         self.__mechanical_energy = self.__mechanical_energy_pre + self.__mechanical_energy_oven + self.__mechanical_energy_milling
         self.__co2_overall_emissions = total_cement_production * CO2_EMISSIONS_PROPORTION
         self.__heat_overall_losses = self.__heat_losses_oven
-        self.__pm10_overall_emission = self.__pm10_emission_pre + self.__pm10_emission_oven + self.__cement_emission
+        self.__pm10_overall_emission = (self.__pm10_emission_pre + self.__pm10_emission_oven + self.__cement_emission)
 
     def __validate_total_production(self, total_cement_production) -> None:
         if total_cement_production < -inf or total_cement_production > inf:
