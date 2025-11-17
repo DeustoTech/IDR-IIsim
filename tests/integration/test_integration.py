@@ -2,22 +2,28 @@
 
 import importlib
 import os
+import shutil
 import unittest
 from pathlib import Path
 from typing import Any
+from unittest.mock import patch
 
 from idr_iisim.utils.models_dict import (  # type:ignore # pylint: disable=import-error
     load_yaml,
 )
-from main import process_industry  # type:ignore # pylint: disable=import-error
+from main import (  # type:ignore # pylint: disable=import-error
+    main,
+    process_industry,
+)
 
 INDUSTRIES_PATH = "Sources"
+BAD_INDUSTRIES_PATH = "BadSources"
 
 
 class TestIntegration(unittest.TestCase):
     """Loger test class"""
 
-    def test_full_integration(self) -> None:
+    def test_integration(self) -> None:
         """Full test"""
         for elem in os.listdir(INDUSTRIES_PATH):
             elem_path = os.path.join(INDUSTRIES_PATH, elem)
@@ -75,6 +81,42 @@ class TestIntegration(unittest.TestCase):
                 except Exception:  # pylint: disable=broad-exception-caught
                     self.fail("Industry not correctly generated")
 
+    @patch("main.i_logger")
+    def test_full_integration(self, mock_logger) -> None:
+        """Full test (correct execution)"""
+        # Testing
+        main()
+        last_call = mock_logger.info.call_args_list[-1]
+        self.assertEqual(last_call[0][0], "iDesignRES tool finished")
+
+    def test_integration_with_bad_data(self) -> None:
+        """Test with incomplete YAML"""
+        # Prepare tests
+        _prepare_bad_files()
+        # Testing
+        for elem in os.listdir(BAD_INDUSTRIES_PATH):
+            elem_path = os.path.join(BAD_INDUSTRIES_PATH, elem)
+            if os.path.isdir(elem_path):
+                with self.assertRaises((ValueError, KeyError, AssertionError)):
+                    process_industry(elem, elem_path)
+        # Remove bad files folder
+        shutil.rmtree(BAD_INDUSTRIES_PATH)
+
+    @patch("main.i_logger")
+    def test_full_integration_with_bad_data(self, mock_logger) -> None:
+        """Full test with incomplete YAML"""
+        # Prepare tests
+        _prepare_bad_files()
+        # Testing
+        os.environ["INDUSTRIES_PATH"] = BAD_INDUSTRIES_PATH
+        main()
+        last_call = mock_logger.info.call_args_list[-1]
+        self.assertEqual(
+            last_call[0][0], "iDesignRES tool finished UNSUCCESFULLY"
+        )
+        # Remove bad files folder
+        shutil.rmtree(BAD_INDUSTRIES_PATH)
+
 
 def _find_industry(industry_path: str) -> dict[str, Any]:
     for file in Path(industry_path).rglob("*.yaml"):
@@ -94,3 +136,16 @@ def _import_class(name: str) -> Any:
 def _get_industry_class_path(name: str) -> str:
     output_path = os.path.join("industries", f"{name.lower()}.py")
     return output_path
+
+
+def _prepare_bad_files() -> None:
+    shutil.copytree(INDUSTRIES_PATH, BAD_INDUSTRIES_PATH, dirs_exist_ok=True)
+    for elem in os.listdir(BAD_INDUSTRIES_PATH):
+        elem_path = os.path.join(BAD_INDUSTRIES_PATH, elem)
+        yamls = [f for f in os.listdir(elem_path) if f.endswith("yaml")]
+        for i, yaml in enumerate(yamls):
+            new_path = f"{elem_path}_{i}"
+            shutil.copytree(elem_path, new_path, dirs_exist_ok=True)
+            yaml_path = os.path.join(new_path, yaml)
+            os.remove(yaml_path)
+        shutil.rmtree(elem_path)
