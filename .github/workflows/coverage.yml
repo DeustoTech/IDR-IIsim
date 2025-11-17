@@ -32,11 +32,15 @@ jobs:
 
       - name: Run tests with nose2 and collect coverage
         run: |
-          PYTHONPATH=.:./src coverage run -m nose2 -s tests/units -s tests/integration
+          rm -rf .coverage
+          PYTHONPATH=.:./src coverage run --parallel-mode -m nose2 -s tests/units
+          PYTHONPATH=.:./src coverage run --parallel-mode -m nose2 -s tests/integration
+          coverage combine
           coverage report
           coverage xml
           COVERAGE_PERCENTAGE=$(coverage report | tail -n 1 | awk '{print $4}' | sed 's/%//') 
           echo "COVERAGE=$COVERAGE_PERCENTAGE" >> $GITHUB_ENV
+          rm -rf .coverage
       - name: Checkout 'badges'
         uses: actions/checkout@v4
         with:
