@@ -58,13 +58,15 @@ If INDUSTRIES_PATH is not provided, the default value will be `Sources/`.
 
 ### Run the Compiler
 
+When the compiler runs, it will scan the specified industry directory for YAML
+files and validate them against the defined schema. If everything is correct
+and the YAML files are properly formatted, it will generate Python classes in
+the industries/ folder.
+
+In order to run the compiler, just execute:
+
 ```bash
 python src/main.py
-
-This will:
- Scan the specified industry directory for YAML files.
- Validate them against the schema.
- Generate Python scripts inside the `industries/` folder.
 ```
 
 ## Example Usage
@@ -82,7 +84,7 @@ Sources/
 Running:
 
 ```bash
-python main.py
+python src/main.py
 ```
 
 Will generate a file:
@@ -93,6 +95,41 @@ industries/cement.py
 
 containing all processes as Python classes, ready to be used in your simulation
 framework.
+
+### Using the generated model
+
+The models are intended to be integrated with other Python codes that use them
+in other programs (for instance, energy planification at european and nut 3
+levels as well as circular economy models).
+
+However, we can view an example to illustrate how to use the models in a terminal:
+
+```python
+$ python
+Python 3.13.7 (main, Aug 15 2025, 12:34:02) [GCC 15.2.1 20250813] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from industries.cement import Cement
+>>> # We create a production of 5 units of Cement
+>>> # (as stated in the YAML file, a unit of cement is a Kiloton)
+>>> production = Cement(5)
+>>> # Now, we can get the value of clay needed
+>>> production.get_clay_demand()
+1.875
+>>> # Or, we can get a message summarizing all the results of the model
+>>> print(production)
+Cement industry
+---------------
+Total Cement Production: 5.00 kt
+Limestone Demand: 5.17 kt
+Clay Demand: 1.88 kt
+Fuel Demand: 0.65 kt
+Water Demand: 1.11 m3
+Gypsum Demand: 0.17 kt
+Mechanical Energy: 1.61 GJ
+Co2 Overall Emissions: 2.55 kt
+Heat Overall Losses: 0.00 GJ
+Pm10 Overall Emission: 0.19 kt
+```
 
 ## Data Model Description
 
@@ -109,7 +146,7 @@ constants:
       value: 0.25
 inputs:
     - name: a0
-      value: [20, 25]
+      value: 20
 
 outputs:
     - name: Ao
@@ -167,7 +204,7 @@ This repository uses **Git** for version control.
 To contribute or track changes:
 
 ```bash
-git clone https://github.com/your-org/idr-iisim.git
+git clone https://github.com/DeustoTech/IDR-IIsim.git
 git checkout -b feature/new-process
 ```
 
