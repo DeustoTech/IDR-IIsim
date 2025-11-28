@@ -19,7 +19,14 @@ from idr_iisim.utils.structs import (
 
 
 class FunctionsMapType(TypedDict):
-    """Type of FunctionsMap"""
+    """Type definition for FunctionsMap.
+
+    Attributes:
+        function (Callable[..., Any]): The function to be called.
+        args (list[dict[str, Any]]): List of arguments for the function.
+        expression (str): The expression associated with this function.
+        description (str): Description of the function.
+    """
 
     function: Callable[..., Any]
     args: list[dict[str, Any]]
@@ -28,11 +35,25 @@ class FunctionsMapType(TypedDict):
 
 
 class Model(ABC):
-    """Model class that represents a model in the system.
+    """Abstract base class representing a model in the system.
+
     It contains the model configuration, functions map, results, and external inputs.
+
+    Attributes:
+        directory (str): Directory of the model file.
+        inputs (dict[str, InputStruct]): Dictionary holding input structures.
+        outputs (dict[str, OutputStruct]): Dictionary holding output structures.
+        constants (dict[str, ConstantStruct]): Dictionary holding constant structures.
+        functions_map (dict[str, FunctionsMapType]): Map of functions.
+        config (Union[ModelStruct, MetaStruct]): Configuration of the model.
     """
 
     def __init__(self, path: str):
+        """Initialize the Model with the provided path.
+
+        Args:
+            path (str): Path to the model configuration file.
+        """
         self.directory = os.path.dirname(path)
         self.inputs: dict[str, InputStruct] = {}
         self.outputs: dict[str, OutputStruct] = {}
@@ -43,7 +64,15 @@ class Model(ABC):
     def process_config(
         self, items: list[ItemStruct], config: ModelStruct
     ) -> None:
-        """Process configuration"""
+        """Process configuration elements and initialize model attributes.
+
+        Args:
+            items (list[ItemStruct]): Items to process for configuration.
+            config (ModelStruct): The model configuration structure.
+
+        Raises:
+            ValueError: If any constant or input value is out of its valid range.
+        """
         for item in items:
             operation = parse_expr(item.operation)
             f = partial(lambda op, **kwargs: op.subs(kwargs), op=operation)
@@ -87,7 +116,11 @@ class Model(ABC):
                         )
 
     def constants_generator(self) -> str:
-        """generator of the constants of the process"""
+        """Generate code for constants defined in the model configuration.
+
+        Returns:
+            str: The generated code for constants, or an empty string if none are defined.
+        """
         constants_code = ""
 
         # Generate constants dynamically from model configuration
@@ -104,10 +137,19 @@ class Model(ABC):
 
     @abstractmethod
     def get_getter_items(self) -> list[tuple[str, str]]:
-        """Generate items' descriptions to configure as getters"""
+        """Generate items' descriptions to configure as getters.
+
+        Returns:
+            list[tuple[str, str]]: A list of tuples containing variable names
+            and their descriptions.
+        """
 
     def getters_generator(self) -> str:
-        """Generate getter methods"""
+        """Generate getter methods for the model.
+
+        Returns:
+            str: The generated getter methods as string.
+        """
         getters = []
 
         # Load the template content

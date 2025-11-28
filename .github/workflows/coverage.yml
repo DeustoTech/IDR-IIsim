@@ -1,0 +1,66 @@
+name: Coverage
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop"
+      - "coverage"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10.10"
+      - run: pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - run: pip install nose2
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install nose2 coverage
+
+      - name: Run tests with nose2 and collect coverage
+        run: |
+          rm -rf .coverage
+          PYTHONPATH=.:./src coverage run --parallel-mode -m nose2 -s tests/units
+          PYTHONPATH=.:./src coverage run --parallel-mode -m nose2 -s tests/integration
+          coverage combine
+      - name: Coverage report
+        run: |
+          coverage report
+          coverage xml
+          COVERAGE_PERCENTAGE=$(coverage report | tail -n 1 | awk '{print $4}' | sed 's/%//') 
+          echo "COVERAGE=$COVERAGE_PERCENTAGE" >> $GITHUB_ENV
+          rm -rf .coverage
+      - name: Checkout 'badges'
+        uses: actions/checkout@v4
+        with:
+          ref: badges
+      - name: Generate badges
+        run: |
+          cp -r _templates/coverage/. coverage/
+          cd coverage/
+          sed -i -e "s/__VAL__/$(echo $COVERAGE)%/g" global.svg
+          sed -i -e "s/__VAL__/$(echo $COVERAGE)%/g" line.svg
+          sed -i -e "s/__VAL__/$(echo $COVERAGE)%/g" branch.svg
+          echo $COVERAGE > coverage.json
+      - name: Commit and Push
+        run: |
+          git config --global user.email "xabier.cantero@github.io"
+          git config --global user.name "GitHub Actions"
+          git add coverage/*.svg
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Coverage badges"
+            git push
+          fi

@@ -58,7 +58,7 @@ constants:
     description: CO2
     citation: text
     source: https://www.google.com
-    value: 0.9
+    value: 0.51
     units: kt
 inputs:
   - name: clinker_production_oven
@@ -199,7 +199,7 @@ outputs:
         type: outcome
     description: Total C02 emissions
     units: kt
-    tests: [4.5, 123.30]
+    tests: [2.55, 69.87]
   - name: heat_overall_losses
     operation: heat_losses_oven
     args:
@@ -210,7 +210,7 @@ outputs:
     units: GJ
     tests: [0, 0.09]
   - name: pm10_overall_emission
-    operation: pm10_emission_pre + pm10_emission_oven + cement_emission
+    operation: (pm10_emission_pre + pm10_emission_oven + cement_emission)
     args:
       - name: pm10_emission_pre
         type: inputs

@@ -15,9 +15,22 @@ from idr_iisim.utils.structs import (
 
 
 class Meta(Model):
-    """Meta class"""
+    """Meta class to handle parsing and managing meta data configurations.
+
+    Attributes:
+        outcome (dict[str, OutcomeStruct]): A dictionary holding outcomes.
+        demands (dict[str, DemandStruct]): A dictionary holding demands.
+        meta_demands (dict[str, MetaDemandStruct]): A dictionary holding meta-demands.
+        config (MetaStruct): Parsed configuration data.
+    """
 
     def __init__(self, yaml_data: dict[str, Any], path: str):
+        """Initialize Meta class with YAML data and the path.
+
+        Args:
+            yaml_data (dict[str, Any]): Parsed YAML configuration data.
+            path (str): Path to the configuration file.
+        """
         super().__init__(path)
         self.outcome: dict[str, OutcomeStruct] = {}
         self.demands: dict[str, DemandStruct] = {}
@@ -44,7 +57,12 @@ class Meta(Model):
         self.outcome[self.config.outcome.name] = self.config.outcome
 
     def get_getter_items(self) -> list[tuple[str, str]]:
-        """Generate items' descriptions to configure as getters"""
+        """Generate a list of item descriptions for getter configuration.
+
+        Returns:
+            list[tuple[str, str]]: A list of tuples containing variable
+            names and their descriptions.
+        """
         getter_items = []
         # Outcome
         for variable_name, output in self.outcome.items():
@@ -57,7 +75,14 @@ class Meta(Model):
         return getter_items
 
     def constructor_pre_generator(self, process: str) -> str:
-        """Generate demand initializations"""
+        """Generate initialization code for demands used in a specified process.
+
+        Args:
+            process (str): The name of the process for which initializations are generated.
+
+        Returns:
+            str: The generated initialization code as a string.
+        """
         items: list[tuple[str, ItemStruct]] = []
         for variable_name, values in self.demands.items():
             if values.used == process:
@@ -67,7 +92,11 @@ class Meta(Model):
         return "\n        ".join(process_methods)
 
     def constructor_post_generator(self) -> str:
-        """Generate demand initializations"""
+        """Generate initialization code for meta-demands and outputs.
+
+        Returns:
+            str: The generated initialization code as a string.
+        """
 
         # Meta demands
         items: list[tuple[str, ItemStruct]] = list(self.meta_demands.items())
@@ -79,7 +108,11 @@ class Meta(Model):
         return "\n        ".join(process_methods)
 
     def get_units(self) -> dict[str, str]:
-        """Get the units of the demands and outputs"""
+        """Get the units of demands and outputs.
+
+        Returns:
+            dict[str, str]: A dictionary mapping variable names to their units.
+        """
         units = {}
 
         # Outcome
