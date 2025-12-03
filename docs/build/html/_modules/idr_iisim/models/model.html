@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>idr_iisim.models.model &#8212; IDR-IIsim 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for idr_iisim.models.model</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module to parse industry&#39;s processes&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_expr</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">idr_iisim.templates</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_template</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">idr_iisim.utils.structs</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ConstantStruct</span><span class="p">,</span>
+    <span class="n">InputStruct</span><span class="p">,</span>
+    <span class="n">ItemStruct</span><span class="p">,</span>
+    <span class="n">MetaStruct</span><span class="p">,</span>
+    <span class="n">ModelStruct</span><span class="p">,</span>
+    <span class="n">OutputStruct</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="FunctionsMapType">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.model.FunctionsMapType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FunctionsMapType</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Type definition for FunctionsMap.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        function (Callable[..., Any]): The function to be called.</span>
+<span class="sd">        args (list[dict[str, Any]]): List of arguments for the function.</span>
+<span class="sd">        expression (str): The expression associated with this function.</span>
+<span class="sd">        description (str): Description of the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">args</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">expression</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="Model">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.model.Model">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract base class representing a model in the system.</span>
+
+<span class="sd">    It contains the model configuration, functions map, results, and external inputs.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        directory (str): Directory of the model file.</span>
+<span class="sd">        inputs (dict[str, InputStruct]): Dictionary holding input structures.</span>
+<span class="sd">        outputs (dict[str, OutputStruct]): Dictionary holding output structures.</span>
+<span class="sd">        constants (dict[str, ConstantStruct]): Dictionary holding constant structures.</span>
+<span class="sd">        functions_map (dict[str, FunctionsMapType]): Map of functions.</span>
+<span class="sd">        config (Union[ModelStruct, MetaStruct]): Configuration of the model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the Model with the provided path.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (str): Path to the model configuration file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">InputStruct</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">OutputStruct</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ConstantStruct</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">functions_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FunctionsMapType</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ModelStruct</span><span class="p">,</span> <span class="n">MetaStruct</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Model.process_config">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.model.Model.process_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_config</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ItemStruct</span><span class="p">],</span> <span class="n">config</span><span class="p">:</span> <span class="n">ModelStruct</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process configuration elements and initialize model attributes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            items (list[ItemStruct]): Items to process for configuration.</span>
+<span class="sd">            config (ModelStruct): The model configuration structure.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If any constant or input value is out of its valid range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="n">operation</span> <span class="o">=</span> <span class="n">parse_expr</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">operation</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="k">lambda</span> <span class="n">op</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">op</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">op</span><span class="o">=</span><span class="n">operation</span><span class="p">)</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">functions_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">f</span><span class="p">,</span>
+                <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+                <span class="s2">&quot;expression&quot;</span><span class="p">:</span> <span class="n">operation</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="c1"># Parse constants</span>
+        <span class="k">for</span> <span class="n">constant</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">constants</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="p">[</span><span class="n">constant</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">constant</span>
+            <span class="k">if</span> <span class="n">constant</span><span class="o">.</span><span class="n">range</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span>
+                <span class="n">constant</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">constant</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;=</span> <span class="n">constant</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Constant &#39;</span><span class="si">{</span><span class="n">constant</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; in process &quot;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; is not inside the valid range&quot;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="n">constant</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> not inside </span><span class="si">{</span><span class="n">constant</span><span class="o">.</span><span class="n">range</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Parse outputs</span>
+        <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span>
+
+        <span class="c1"># Parse inputs</span>
+        <span class="k">for</span> <span class="n">input_field</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">input_field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_field</span>
+            <span class="k">if</span> <span class="n">input_field</span><span class="o">.</span><span class="n">range</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">input_field</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">value</span> <span class="o">&lt;</span> <span class="n">input_field</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="ow">or</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">input_field</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Input &#39;</span><span class="si">{</span><span class="n">input_field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; in process &quot;</span>
+                            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; is not inside the valid range&quot;</span>
+                            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="n">input_field</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> not inside </span><span class="si">{</span><span class="n">input_field</span><span class="o">.</span><span class="n">range</span><span class="si">}</span><span class="s2">)&quot;</span>
+                        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Model.constants_generator">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.model.Model.constants_generator">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">constants_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate code for constants defined in the model configuration.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The generated code for constants, or an empty string if none are defined.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">constants_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Generate constants dynamically from model configuration</span>
+        <span class="n">constants_code</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">constant</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">constant</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">  # </span><span class="si">{</span><span class="n">constant</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">constant</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">constants</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">constants_code</span><span class="p">:</span>
+            <span class="n">constants_code</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;s constants</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">constants_code</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">constants_code</span></div>
+
+
+<div class="viewcode-block" id="Model.get_getter_items">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.model.Model.get_getter_items">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_getter_items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate items&#39; descriptions to configure as getters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[tuple[str, str]]: A list of tuples containing variable names</span>
+<span class="sd">            and their descriptions.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Model.getters_generator">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.model.Model.getters_generator">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getters_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate getter methods for the model.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The generated getter methods as string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">getters</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Load the template content</span>
+        <span class="n">template_path</span> <span class="o">=</span> <span class="s2">&quot;templates/template_generated_getter.txt&quot;</span>
+        <span class="n">getter_template</span> <span class="o">=</span> <span class="n">load_template</span><span class="p">(</span><span class="n">template_path</span><span class="p">)</span>
+
+        <span class="c1"># outputs</span>
+        <span class="k">for</span> <span class="n">variable_name</span><span class="p">,</span> <span class="n">description</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_getter_items</span><span class="p">():</span>
+            <span class="n">getter_script</span> <span class="o">=</span> <span class="n">getter_template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">variable_name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span>
+            <span class="p">)</span>
+            <span class="n">getters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">getter_script</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">getters</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IDR-IIsim</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Model Aim and Value Proposition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../approach.html">Mathematical Approach and Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../input_specification.html">Input Data Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Testing and versioning</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../project_code.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Xabier Cantero, Alejo Silvarrey, Armando Aguayo, Iván González, Cruz Borges.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

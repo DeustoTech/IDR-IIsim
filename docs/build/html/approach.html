@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Mathematical Approach and Workflow &#8212; IDR-IIsim 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quick Start Guide" href="quick_start.html" />
+    <link rel="prev" title="Model Aim and Value Proposition" href="overview.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="mathematical-approach-and-workflow">
+<h1>Mathematical Approach and Workflow<a class="headerlink" href="#mathematical-approach-and-workflow" title="Link to this heading">¶</a></h1>
+<section id="mathematical-formulation">
+<h2>Mathematical Formulation<a class="headerlink" href="#mathematical-formulation" title="Link to this heading">¶</a></h2>
+<p>Each industrial sub-process (e.g., grinder) is defined by its inputs, outputs, and an operation field. This operation is written as a SymPy-compatible symbolic expression (e.g., Output_A = Input_B + Constant_C * f(x)).</p>
+<p>The compiler utilizes the SymPy library for symbolic mathematics to parse and validate these equations before generating the final Python class method. This design allows the modeler to define non-linearities for individual subprocesses while maintaining a final aggregated object that is well-suited for integration into large-scale energy system models.</p>
+</section>
+<section id="general-work-flow-diagram">
+<h2>General Work-Flow Diagram<a class="headerlink" href="#general-work-flow-diagram" title="Link to this heading">¶</a></h2>
+<p>The framework relies on a distinct flow of data validation and code generation:</p>
+<ul class="simple">
+<li><p>YAML Input: Declarative process and industry files are read from the Sources/ directory.</p></li>
+<li><p>Validation: The Validator() class checks the YAML data against the schema for correct structure and unit consistency.</p></li>
+<li><p>Object Creation: Core classes like Process() and Industry() translate the validated data into internal Python objects.</p></li>
+<li><p>Code Generation: The script_generator() method creates the final, executable Python class inside the industries/ folder.</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">IDR-IIsim</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Model Aim and Value Proposition</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Mathematical Approach and Workflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mathematical-formulation">Mathematical Formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#general-work-flow-diagram">General Work-Flow Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input_specification.html">Input Data Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing and versioning</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_code.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="overview.html" title="previous chapter">Model Aim and Value Proposition</a></li>
+      <li>Next: <a href="quick_start.html" title="next chapter">Quick Start Guide</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Xabier Cantero, Alejo Silvarrey, Armando Aguayo, Iván González, Cruz Borges.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/approach.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
