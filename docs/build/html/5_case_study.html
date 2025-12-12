@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Case Study: Cement Production &#8212; IDR-IIsim 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage Guide" href="6_usage_guide.html" />
+    <link rel="prev" title="Input Data Specification" href="4_input_specification.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="case-study-cement-production">
+<h1>Case Study: Cement Production<a class="headerlink" href="#case-study-cement-production" title="Link to this heading">¶</a></h1>
+<p>To illustrate the capabilities of IDR-IIsim, a complete model for the Cement Industry is
+included in the <code class="docutils literal notranslate"><span class="pre">Sources/cement/</span> <span class="pre">directory.</span></code></p>
+<section id="process-overview">
+<h2>Process Overview<a class="headerlink" href="#process-overview" title="Link to this heading">¶</a></h2>
+<p>The model follows a standard generic cement production process, divided into three
+main stages (Sub-processes):</p>
+<ol class="arabic simple">
+<li><p><strong>Pre-homogenization and Grinding (Process 1)</strong>: Handling of raw materials
+like Limestone and Clay.</p>
+<ul class="simple">
+<li><p><em>Key Physics</em>: Mass balance of limestone/clay and electrical consumption
+for crushing.</p></li>
+<li><p><em>Emissions</em>: PM10 dust from crushing.</p></li>
+</ul>
+</li>
+<li><p><strong>Oven / Clinkerization (Process 2)</strong>: The core chemical reaction.</p>
+<ul class="simple">
+<li><p><em>Key Physics</em>: Calcination at 1,500°C. High thermal energy demand
+(fuels) and water consumption for cooling.</p></li>
+<li><p><em>Emissions</em>: Significant CO2 emissions from chemical reactions and
+combustion.</p></li>
+</ul>
+</li>
+<li><p><strong>Milling (Process 3)</strong>: Final grinding of Clinker with Gypsum.
+o Key Physics: Electrical energy for fine grinding.</p></li>
+</ol>
+</section>
+<section id="implementation-in-idr-iisim">
+<h2>Implementation in IDR-IIsim<a class="headerlink" href="#implementation-in-idr-iisim" title="Link to this heading">¶</a></h2>
+<p>The theoretical model is mapped to files as follows:</p>
+<ul class="simple">
+<li><p><strong>Sources/cement/process2-oven.yaml</strong>: Corresponds to Stage 2. It defines
+constants like <code class="docutils literal notranslate"><span class="pre">CLINKER_LOSSES</span></code> (0.38) and <code class="docutils literal notranslate"><span class="pre">FUEL_HC</span></code> (0.02693 MJ/kg). It
+calculates <code class="docutils literal notranslate"><span class="pre">clinker_production</span></code> and <code class="docutils literal notranslate"><span class="pre">heat_losses</span></code> based on the input mix.</p></li>
+<li><p><strong>Sources/cement/meta.yaml</strong>: Represents the entire plant. It defines the
+<code class="docutils literal notranslate"><span class="pre">outcome</span></code> (Total Cement Production) and aggregates the energy demands from
+the oven and milling stages into a total <code class="docutils literal notranslate"><span class="pre">mechanical_energy</span></code> variable (approx.
+115 MJ/ton for pre-processing, 69.5 MJ/ton for the oven, etc.).</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">IDR-IIsim</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="1_overview.html">Model Aim and Value Proposition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_approach.html">Mathematical Approach and Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_input_specification.html">Input Data Specification</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Case Study: Cement Production</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#process-overview">Process Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-in-idr-iisim">Implementation in IDR-IIsim</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_usage_guide.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_standard_and_testing.html">Standards and Quality Assurance</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_code.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="4_input_specification.html" title="previous chapter">Input Data Specification</a></li>
+      <li>Next: <a href="6_usage_guide.html" title="next chapter">Usage Guide</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Xabier Cantero, Alejo Silvarrey, Armando Aguayo, Iván González, Cruz Borges.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/5_case_study.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -13,11 +13,13 @@ This project is licensed under the MIT License. You are free to use, modify, and
 ```{toctree}
 :maxdepth: 2
 
-overview
-approach
-quick_start
-input_specification
-testing
+1_overview
+2_quick_start
+3_approach
+4_input_specification
+5_case_study
+6_usage_guide
+7_standard_and_testing
 ```
 
 ## API Reference
