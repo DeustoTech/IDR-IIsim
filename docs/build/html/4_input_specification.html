@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Input Data Specification &#8212; IDR-IIsim 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Case Study: Cement Production" href="5_case_study.html" />
+    <link rel="prev" title="Mathematical Approach and Workflow" href="3_approach.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="input-data-specification">
+<h1>Input Data Specification<a class="headerlink" href="#input-data-specification" title="Link to this heading">¶</a></h1>
+<p><em>(YAML Schema)</em></p>
+<p>The model is built entirely from YAML files. To define a complete industry (e.g.,
+Cement), you need a hierarchical structure consisting of Process Files (sub-units) and a
+Meta File (the industry aggregator). In this chapter the cement industry is used as an
+example.</p>
+<section id="common-structure-process-industry">
+<h2>Common Structure (Process &amp; Industry)<a class="headerlink" href="#common-structure-process-industry" title="Link to this heading">¶</a></h2>
+<p>All files share a common header for identification and versioning.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cemento-process2-Oven</span><span class="w"> </span><span class="c1"># Unique ID</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Oven</span><span class="w"> </span><span class="c1"># Human-readable name</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">process</span><span class="w"> </span><span class="c1"># &#39;process&#39; or &#39;industry&#39;</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+</pre></div>
+</div>
+</section>
+<section id="the-process-model">
+<h2>The <em>Process</em> Model<a class="headerlink" href="#the-process-model" title="Link to this heading">¶</a></h2>
+<p>A Process file describes a single physical unit (e.g., a Oven, a Grinder).
+It transforms inputs into outputs.</p>
+<section id="constants-constants">
+<h3>Constants <em>(constants)</em><a class="headerlink" href="#constants-constants" title="Link to this heading">¶</a></h3>
+<p>Fixed parameters of the physics or chemistry (e.g., loss factors, heating values).</p>
+<ul class="simple">
+<li><p><strong>name</strong>: A name of the constant is necessary. A strategy to name the constant is
+recommended.</p></li>
+<li><p><strong>description</strong>: A brief description of the constant is optional.</p></li>
+<li><p><strong>value</strong>: Must be a number.</p></li>
+<li><p><strong>units</strong>: Must be a streamlined.</p></li>
+<li><p><strong>source</strong>: Required for traceability (URL or text citation).</p></li>
+</ul>
+<p>YAML example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">constants</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FUEL_HC</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Heat Capacity of the fuel</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.02693</span>
+<span class="w">    </span><span class="nt">units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MJ/kg</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.google.com</span>
+</pre></div>
+</div>
+</section>
+<section id="inputs-inputs">
+<h3>Inputs <em>(inputs)</em><a class="headerlink" href="#inputs-inputs" title="Link to this heading">¶</a></h3>
+<p>External variables needed to run the process.</p>
+<ul class="simple">
+<li><p>value:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">null</span></code>: Indicates this is a variable provided by the user at runtime (e.g.,
+the amount of production).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[Array]</span></code>: A list of numbers. This allows the model to handle vectors
+(e.g., time-series data or sensitivity analysis scenarios).</p></li>
+</ul>
+</li>
+<li><p>from: Indicates where this input comes from (e.g., the output of a previous
+process).</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">raw_mix</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w"> </span><span class="c1"># Calculated from previous step</span>
+<span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cemento-process1-Pre</span>
+<span class="w">    </span><span class="nt">units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kt</span>
+</pre></div>
+</div>
+</section>
+<section id="outputs-outputs">
+<h3>Outputs <em>(outputs)</em><a class="headerlink" href="#outputs-outputs" title="Link to this heading">¶</a></h3>
+<p>The results calculated by this process.</p>
+<ul class="simple">
+<li><p><strong>operation</strong>: A SymPy-compatible mathematical string.</p></li>
+<li><p><strong>args</strong>: A critical list that maps the variables used in the operation to their type
+(inputs or constants). This ensures no undefined variables are used.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">outputs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">heat_losses_oven</span>
+<span class="w">    </span><span class="c1"># The mathematical logic:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fuel_demand * FUEL_HC * ENERGY_LOSSES</span>
+<span class="w">    </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fuel_demand</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inputs</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FUEL_HC</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">constants</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENERGY_LOSSES</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">constants</span>
+<span class="w">    </span><span class="nt">units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GJ</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="the-industry-model-meta-file">
+<h2>The <em>Industry</em> Model <em>(Meta-file)</em><a class="headerlink" href="#the-industry-model-meta-file" title="Link to this heading">¶</a></h2>
+<p>The Industry file (type: industry) aggregates multiple processes. It contains specific
+sections to define system-level results.</p>
+<section id="outcome-outcome">
+<h3>Outcome <em>(outcome)</em><a class="headerlink" href="#outcome-outcome" title="Link to this heading">¶</a></h3>
+<p>The main product of the industry (e.g., “Total Cement Production”). This is the “driver”
+variable that initiates the calculation chain.</p>
+</section>
+<section id="demands-demands">
+<h3>Demands <em>(demands)</em><a class="headerlink" href="#demands-demands" title="Link to this heading">¶</a></h3>
+<p>Aggregates resources required by specific sub-processes.</p>
+<ul class="simple">
+<li><p><strong>used</strong>: Specifies which sub-process consumes this resource.</p></li>
+<li><p><strong>meta</strong>: (Optional) A tag used to group similar demands (e.g., tagging electricity
+usage in the kiln and the grinder both as mechanical_energy).</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">demands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mechanical_energy_oven</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">total_cement_production * MECHANICAL_ENERGY_OVEN_PROPORTION</span>
+<span class="w">    </span><span class="nt">used</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cemento-process2-Oven</span>
+<span class="w">    </span><span class="nt">meta</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mechanical_energy</span><span class="w"> </span><span class="c1"># Groups this into total energy</span>
+<span class="w">    </span><span class="nt">units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GJ</span>
+</pre></div>
+</div>
+</section>
+<section id="meta-demands-meta">
+<h3>Meta-Demands <em>(meta)</em><a class="headerlink" href="#meta-demands-meta" title="Link to this heading">¶</a></h3>
+<p>Calculates totals based on the meta tags defined in demands.</p>
+<ul class="simple">
+<li><p>Example: Summing up mechanical energy from the Pre-processor, Oven, and
+Grinder.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">meta</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mechanical_energy</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mechanical_energy_pre + mechanical_energy_oven + mechanical_energy_milling</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Total mechanical energy consumption of the plant</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">IDR-IIsim</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="1_overview.html">Model Aim and Value Proposition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_approach.html">Mathematical Approach and Workflow</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Input Data Specification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#common-structure-process-industry">Common Structure (Process &amp; Industry)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-process-model">The <em>Process</em> Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-industry-model-meta-file">The <em>Industry</em> Model <em>(Meta-file)</em></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_case_study.html">Case Study: Cement Production</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_usage_guide.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_standard_and_testing.html">Standards and Quality Assurance</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_code.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="3_approach.html" title="previous chapter">Mathematical Approach and Workflow</a></li>
+      <li>Next: <a href="5_case_study.html" title="next chapter">Case Study: Cement Production</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Xabier Cantero, Alejo Silvarrey, Armando Aguayo, Iván González, Cruz Borges.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/4_input_specification.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
