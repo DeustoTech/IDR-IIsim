@@ -6,6 +6,12 @@ type: object
 
 required:
   - name
+  - short_name
+  - id
+  - inputs
+  - outputs
+  - demands
+  - outcome
 
 properties:
   name:
@@ -38,6 +44,7 @@ properties:
       required:
         - name
         - value
+        - units
       properties:
         name:
           type: string
@@ -67,6 +74,7 @@ properties:
         - name
         - value
         - from
+        - units
       properties:
         name:
           type: string
