@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>API Reference &#8212; IDR-IIsim 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Standards and Quality Assurance" href="7_standard_and_testing.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h1>
+<section id="module-main">
+<span id="module-main"></span><h2>Module main<a class="headerlink" href="#module-main" title="Link to this heading">¶</a></h2>
+<p>IDR-IISIM Compiler main</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="main.main">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.main" title="Link to this definition">¶</a></dt>
+<dd><p>Main program entry point.</p>
+<p>The program iterates over all industries found in the specified source folder,
+processing each industry to generate its corresponding model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Raises:</dt><dd><p>Exception: If there is an error during the processing of the industries.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="main.process_industry">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">process_industry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">industry_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#process_industry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.process_industry" title="Link to this definition">¶</a></dt>
+<dd><p>Process and generate code for a specified industry.</p>
+<p>This function validates and processes all YAML files in the given industry path,
+generating a Python script for the industry based on the loaded configurations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Args:</dt><dd><p>name (str): The name of the industry to be processed.
+industry_path (str): The path where the YAML files of the industry are stored.</p>
+</dd>
+<dt>Raises:</dt><dd><p>Exception: If there are issues in processing the industry files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-idr_iisim">
+<span id="package-idr-iisim"></span><h2>Package idr_iisim<a class="headerlink" href="#module-idr_iisim" title="Link to this heading">¶</a></h2>
+<p>This package provides the functionalities to load and validate the YAML files,
+load the templates that define the script code format and compile the loaded
+models into these templates.</p>
+<section id="module-idr-iisim-models">
+<h3>Module idr_iisim.models<a class="headerlink" href="#module-idr-iisim-models" title="Link to this heading">¶</a></h3>
+<section id="module-idr_iisim.models.model">
+<span id="models-model"></span><h4>models.model<a class="headerlink" href="#module-idr_iisim.models.model" title="Link to this heading">¶</a></h4>
+<p>Module to parse industry’s processes</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.models.model.FunctionsMapType">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.models.model.</span></span><span class="sig-name descname"><span class="pre">FunctionsMapType</span></span><a class="reference internal" href="_modules/idr_iisim/models/model.html#FunctionsMapType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.model.FunctionsMapType" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Type definition for FunctionsMap.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>function (Callable[…, Any]): The function to be called.
+args (list[dict[str, Any]]): List of arguments for the function.
+expression (str): The expression associated with this function.
+description (str): Description of the function.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.models.model.FunctionsMapType.args">
+<span class="sig-name descname"><span class="pre">args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">,</span> <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code><span class="pre">]]</span></em><a class="headerlink" href="#idr_iisim.models.model.FunctionsMapType.args" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.models.model.FunctionsMapType.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.models.model.FunctionsMapType.description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.models.model.FunctionsMapType.expression">
+<span class="sig-name descname"><span class="pre">expression</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.models.model.FunctionsMapType.expression" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.models.model.FunctionsMapType.function">
+<span class="sig-name descname"><span class="pre">function</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code><span class="pre">[</span><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code><span class="pre">,</span> <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code><span class="pre">]</span></em><a class="headerlink" href="#idr_iisim.models.model.FunctionsMapType.function" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.models.model.Model">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.models.model.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/model.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.model.Model" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class representing a model in the system.</p>
+<p>It contains the model configuration, functions map, results, and external inputs.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>directory (str): Directory of the model file.
+inputs (dict[str, InputStruct]): Dictionary holding input structures.
+outputs (dict[str, OutputStruct]): Dictionary holding output structures.
+constants (dict[str, ConstantStruct]): Dictionary holding constant structures.
+functions_map (dict[str, FunctionsMapType]): Map of functions.
+config (Union[ModelStruct, MetaStruct]): Configuration of the model.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.model.Model.constants_generator">
+<span class="sig-name descname"><span class="pre">constants_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/model.html#Model.constants_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.model.Model.constants_generator" title="Link to this definition">¶</a></dt>
+<dd><p>Generate code for constants defined in the model configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: The generated code for constants, or an empty string if none are defined.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.model.Model.get_getter_items">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_getter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/model.html#Model.get_getter_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.model.Model.get_getter_items" title="Link to this definition">¶</a></dt>
+<dd><p>Generate items’ descriptions to configure as getters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[tuple[str, str]]: A list of tuples containing variable names
+and their descriptions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.model.Model.getters_generator">
+<span class="sig-name descname"><span class="pre">getters_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/model.html#Model.getters_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.model.Model.getters_generator" title="Link to this definition">¶</a></dt>
+<dd><p>Generate getter methods for the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: The generated getter methods as string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.model.Model.process_config">
+<span class="sig-name descname"><span class="pre">process_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/model.html#Model.process_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.model.Model.process_config" title="Link to this definition">¶</a></dt>
+<dd><p>Process configuration elements and initialize model attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Args:</dt><dd><p>items (list[ItemStruct]): Items to process for configuration.
+config (ModelStruct): The model configuration structure.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If any constant or input value is out of its valid range.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-idr_iisim.models.meta">
+<span id="models-meta"></span><h4>models.meta<a class="headerlink" href="#module-idr_iisim.models.meta" title="Link to this heading">¶</a></h4>
+<p>Module to process the meta.yaml, the industry’s configuration</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.models.meta.Meta">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.models.meta.</span></span><span class="sig-name descname"><span class="pre">Meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yaml_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/meta.html#Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.meta.Meta" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.models.model.Model" title="idr_iisim.models.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a></p>
+<p>Meta class to handle parsing and managing meta data configurations.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>outcome (dict[str, OutcomeStruct]): A dictionary holding outcomes.
+demands (dict[str, DemandStruct]): A dictionary holding demands.
+meta_demands (dict[str, MetaDemandStruct]): A dictionary holding meta-demands.
+config (MetaStruct): Parsed configuration data.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.meta.Meta.constructor_post_generator">
+<span class="sig-name descname"><span class="pre">constructor_post_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/meta.html#Meta.constructor_post_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.meta.Meta.constructor_post_generator" title="Link to this definition">¶</a></dt>
+<dd><p>Generate initialization code for meta-demands and outputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: The generated initialization code as a string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.meta.Meta.constructor_pre_generator">
+<span class="sig-name descname"><span class="pre">constructor_pre_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">process</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/meta.html#Meta.constructor_pre_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.meta.Meta.constructor_pre_generator" title="Link to this definition">¶</a></dt>
+<dd><p>Generate initialization code for demands used in a specified process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Args:</dt><dd><p>process (str): The name of the process for which initializations are generated.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: The generated initialization code as a string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.meta.Meta.get_getter_items">
+<span class="sig-name descname"><span class="pre">get_getter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/meta.html#Meta.get_getter_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.meta.Meta.get_getter_items" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a list of item descriptions for getter configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[tuple[str, str]]: A list of tuples containing variable
+names and their descriptions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.meta.Meta.get_units">
+<span class="sig-name descname"><span class="pre">get_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/meta.html#Meta.get_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.meta.Meta.get_units" title="Link to this definition">¶</a></dt>
+<dd><p>Get the units of demands and outputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>dict[str, str]: A dictionary mapping variable names to their units.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="id1">
+<h4>models.meta<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<p id="module-idr_iisim.models.process">Module to parse industry’s processes</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.models.process.Process">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.models.process.</span></span><span class="sig-name descname"><span class="pre">Process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yaml_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/process.html#Process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.process.Process" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.models.model.Model" title="idr_iisim.models.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a></p>
+<p>Process class that represents a model in the system.</p>
+<p>It contains the model configuration, functions map, results, and external inputs.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>config (ModelStruct): Holds the parsed model configuration.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.process.Process.get_getter_items">
+<span class="sig-name descname"><span class="pre">get_getter_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/process.html#Process.get_getter_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.process.Process.get_getter_items" title="Link to this definition">¶</a></dt>
+<dd><p>Generate items’ descriptions to configure as getters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[tuple[str, str]]: A list of tuples containing variable names
+and their descriptions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.process.Process.operations_generator">
+<span class="sig-name descname"><span class="pre">operations_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/process.html#Process.operations_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.process.Process.operations_generator" title="Link to this definition">¶</a></dt>
+<dd><p>Generate operations methods for the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: The generated operations as a string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.process.Process.process_call_method_generator">
+<span class="sig-name descname"><span class="pre">process_call_method_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/process.html#Process.process_call_method_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.process.Process.process_call_method_generator" title="Link to this definition">¶</a></dt>
+<dd><p>Generate the code to call the different methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: The generated method call as a string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.models.process.Process.process_methods_generator">
+<span class="sig-name descname"><span class="pre">process_methods_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/models/process.html#Process.process_methods_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.models.process.Process.process_methods_generator" title="Link to this definition">¶</a></dt>
+<dd><p>Generate the methods for the industry’s class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: The generated methods as a formatted string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="idr-iisim-utils">
+<h3>idr_iisim.utils<a class="headerlink" href="#idr-iisim-utils" title="Link to this heading">¶</a></h3>
+<section id="module-idr_iisim.utils.models_dict">
+<span id="utils-models-dict"></span><h4>utils.models_dict<a class="headerlink" href="#module-idr_iisim.utils.models_dict" title="Link to this heading">¶</a></h4>
+<p>Industry</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.models_dict.Industry">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.models_dict.</span></span><span class="sig-name descname"><span class="pre">Industry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/models_dict.html#Industry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.models_dict.Industry" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Industry class</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.utils.models_dict.Industry.add_process">
+<span class="sig-name descname"><span class="pre">add_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/models_dict.html#Industry.add_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.models_dict.Industry.add_process" title="Link to this definition">¶</a></dt>
+<dd><p>add model to the industry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.utils.models_dict.Industry.check_types">
+<span class="sig-name descname"><span class="pre">check_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/models_dict.html#Industry.check_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.models_dict.Industry.check_types" title="Link to this definition">¶</a></dt>
+<dd><p>check types among processes</p>
+<p>This method checks if the types of the different inputs and demands
+are consistent between the different processes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.utils.models_dict.Industry.generate_execution_queue">
+<span class="sig-name descname"><span class="pre">generate_execution_queue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/models_dict.html#Industry.generate_execution_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.models_dict.Industry.generate_execution_queue" title="Link to this definition">¶</a></dt>
+<dd><p>Generate the correct execution queue of the processes</p>
+<p>This method generate the execution queue in the correct order
+taking into account the correct flow to based on the dependencies
+between the different processes of the industry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.utils.models_dict.Industry.script_generator">
+<span class="sig-name descname"><span class="pre">script_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/models_dict.html#Industry.script_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.models_dict.Industry.script_generator" title="Link to this definition">¶</a></dt>
+<dd><p>Generator of the script</p>
+<p>This method generates the model (the Python class) of the industry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.utils.models_dict.Industry.set_meta">
+<span class="sig-name descname"><span class="pre">set_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/models_dict.html#Industry.set_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.models_dict.Industry.set_meta" title="Link to this definition">¶</a></dt>
+<dd><p>set or update the meta of this industry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="idr_iisim.utils.models_dict.load_yaml">
+<span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.models_dict.</span></span><span class="sig-name descname"><span class="pre">load_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/models_dict.html#load_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.models_dict.load_yaml" title="Link to this definition">¶</a></dt>
+<dd><p>load industry’s yaml file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – path of the YAML file to be loaded.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-idr_iisim.utils.schema">
+<span id="utils-schema"></span><h4>utils.schema<a class="headerlink" href="#module-idr_iisim.utils.schema" title="Link to this heading">¶</a></h4>
+<p>Schema Validator</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.schema.Validator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.schema.</span></span><span class="sig-name descname"><span class="pre">Validator</span></span><a class="reference internal" href="_modules/idr_iisim/utils/schema.html#Validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.schema.Validator" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The Validator class responsible for validating data
+against schemas defined in the config schema files.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>industry_validator (dict[str, Any]): Schema loaded from config/industry.yaml.
+process_validator (dict[str, Any]): Schema loaded from config/process.yaml.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.schema.Validator.industry_validator">
+<span class="sig-name descname"><span class="pre">industry_validator</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">,</span> <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code><span class="pre">]</span></em><a class="headerlink" href="#idr_iisim.utils.schema.Validator.industry_validator" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.utils.schema.Validator.print_industry_schema">
+<span class="sig-name descname"><span class="pre">print_industry_schema</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/schema.html#Validator.print_industry_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.schema.Validator.print_industry_schema" title="Link to this definition">¶</a></dt>
+<dd><p>print current validation schema</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.utils.schema.Validator.print_process_schema">
+<span class="sig-name descname"><span class="pre">print_process_schema</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/schema.html#Validator.print_process_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.schema.Validator.print_process_schema" title="Link to this definition">¶</a></dt>
+<dd><p>print current validation schema</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.schema.Validator.process_validator">
+<span class="sig-name descname"><span class="pre">process_validator</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">,</span> <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code><span class="pre">]</span></em><a class="headerlink" href="#idr_iisim.utils.schema.Validator.process_validator" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="idr_iisim.utils.schema.Validator.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/schema.html#Validator.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.schema.Validator.validate" title="Link to this definition">¶</a></dt>
+<dd><p>Validate the provided data against the appropriate schema.</p>
+<p>This method checks if the given dictionary data conforms
+to a schema loaded from the corresponding YAML file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data (dict[str, Any]): The dictionary containing data to be validated.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If the data is missing a type field or has an invalid type.
+Exception: If the validation process fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-idr_iisim.utils.structs">
+<span id="utils-structs"></span><h4>utils.structs<a class="headerlink" href="#module-idr_iisim.utils.structs" title="Link to this heading">¶</a></h4>
+<p>types definition</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.BaseStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">BaseStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#BaseStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.BaseStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base structure that aggregates common attributes.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>name (str): The name of the item
+description (str): A description of the item.
+units (str): Measurement units associated with the item.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.BaseStruct.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.BaseStruct.description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.BaseStruct.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.BaseStruct.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.BaseStruct.units">
+<span class="sig-name descname"><span class="pre">units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.BaseStruct.units" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ConstantStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">ConstantStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">citation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#ConstantStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.ConstantStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.utils.structs.BaseStruct" title="idr_iisim.utils.structs.BaseStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseStruct</span></code></a></p>
+<p>Structure for constants used in the model.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>citation (str): Citation
+source (str): Source from which the constant is derived.
+value (float): The constant value.
+range (Optional[list[float]]): Optional range of valid values for the constant.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ConstantStruct.citation">
+<span class="sig-name descname"><span class="pre">citation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ConstantStruct.citation" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ConstantStruct.range">
+<span class="sig-name descname"><span class="pre">range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code><span class="pre">]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#idr_iisim.utils.structs.ConstantStruct.range" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ConstantStruct.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ConstantStruct.source" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ConstantStruct.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ConstantStruct.value" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.DemandStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">DemandStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">used</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#DemandStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.DemandStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.utils.structs.ItemStruct" title="idr_iisim.utils.structs.ItemStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">ItemStruct</span></code></a></p>
+<p>Structure for demands in the model.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>used (str): The process that is using the demand.
+meta (Optional[str]): Optional metadata associated with the demand.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.DemandStruct.meta">
+<span class="sig-name descname"><span class="pre">meta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#idr_iisim.utils.structs.DemandStruct.meta" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.DemandStruct.used">
+<span class="sig-name descname"><span class="pre">used</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.DemandStruct.used" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.InputStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">InputStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#InputStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.InputStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.utils.structs.BaseStruct" title="idr_iisim.utils.structs.BaseStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseStruct</span></code></a></p>
+<p>Structure for inputs in the model.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>value (list[float]): List of input values.
+input_from (str): The source of the input, using ‘from’ as a JSON key.
+range (Optional[list[float]]): Optional range of valid values for the input.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.InputStruct.input_from">
+<span class="sig-name descname"><span class="pre">input_from</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.InputStruct.input_from" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.InputStruct.range">
+<span class="sig-name descname"><span class="pre">range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code><span class="pre">]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#idr_iisim.utils.structs.InputStruct.range" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.InputStruct.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code><span class="pre">]</span></em><a class="headerlink" href="#idr_iisim.utils.structs.InputStruct.value" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ItemStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">ItemStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#ItemStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.ItemStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.utils.structs.BaseStruct" title="idr_iisim.utils.structs.BaseStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseStruct</span></code></a></p>
+<p>Structure for items used in demand, meta-demand, and output.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>args (list[dict[str, Any]]): Arguments associated with the item.
+operation (str): The operation to be performed on the item.
+tests (Optional[list[float]]): Optional tests associated with the item.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ItemStruct.args">
+<span class="sig-name descname"><span class="pre">args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">,</span> <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code><span class="pre">]]</span></em><a class="headerlink" href="#idr_iisim.utils.structs.ItemStruct.args" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ItemStruct.operation">
+<span class="sig-name descname"><span class="pre">operation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ItemStruct.operation" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ItemStruct.tests">
+<span class="sig-name descname"><span class="pre">tests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code><span class="pre">]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#idr_iisim.utils.structs.ItemStruct.tests" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.MetaDemandStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">MetaDemandStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#MetaDemandStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.MetaDemandStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.utils.structs.ItemStruct" title="idr_iisim.utils.structs.ItemStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">ItemStruct</span></code></a></p>
+<p>Structure for meta-demands in the model.</p>
+<p>This inherits from ItemStruct.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.MetaStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">MetaStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outcome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#MetaStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.MetaStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.utils.structs.ModelStruct" title="idr_iisim.utils.structs.ModelStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelStruct</span></code></a></p>
+<p>Structure for meta models.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>outcome (OutcomeStruct): The expected outcome of the model.
+demands (list[DemandStruct]): List of demands associated with the model.
+meta (list[MetaDemandStruct]): List of meta-demands associated with the model.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.MetaStruct.demands">
+<span class="sig-name descname"><span class="pre">demands</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="#idr_iisim.utils.structs.DemandStruct" title="idr_iisim.utils.structs.DemandStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">DemandStruct</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#idr_iisim.utils.structs.MetaStruct.demands" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.MetaStruct.meta">
+<span class="sig-name descname"><span class="pre">meta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="#idr_iisim.utils.structs.MetaDemandStruct" title="idr_iisim.utils.structs.MetaDemandStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaDemandStruct</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#idr_iisim.utils.structs.MetaStruct.meta" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.MetaStruct.outcome">
+<span class="sig-name descname"><span class="pre">outcome</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#idr_iisim.utils.structs.OutcomeStruct" title="idr_iisim.utils.structs.OutcomeStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutcomeStruct</span></code></a></em><a class="headerlink" href="#idr_iisim.utils.structs.MetaStruct.outcome" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">ModelStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#ModelStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Structure for the model configuration.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>name (str): The name of the model.
+short_name (str): A short name for the model.
+id (str): Unique identifier for the model.
+category (str): The category of the model.
+description (str): A description of the model.
+version (str): Version information for the model.
+debug (str): Debugging information.
+constants (list[ConstantStruct]): List of constants used in the model.
+inputs (list[InputStruct]): List of inputs for the model.
+outputs (list[OutputStruct]): List of outputs for the model.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.category">
+<span class="sig-name descname"><span class="pre">category</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.category" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.constants">
+<span class="sig-name descname"><span class="pre">constants</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="#idr_iisim.utils.structs.ConstantStruct" title="idr_iisim.utils.structs.ConstantStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConstantStruct</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.constants" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.debug" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.inputs">
+<span class="sig-name descname"><span class="pre">inputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="#idr_iisim.utils.structs.InputStruct" title="idr_iisim.utils.structs.InputStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputStruct</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.inputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.outputs">
+<span class="sig-name descname"><span class="pre">outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="#idr_iisim.utils.structs.OutputStruct" title="idr_iisim.utils.structs.OutputStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputStruct</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.outputs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.short_name">
+<span class="sig-name descname"><span class="pre">short_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.short_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.ModelStruct.version">
+<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.ModelStruct.version" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.OutcomeStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">OutcomeStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">same_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#OutcomeStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.OutcomeStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.utils.structs.BaseStruct" title="idr_iisim.utils.structs.BaseStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseStruct</span></code></a></p>
+<p>Structure for outcomes in the model.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>same_result (str): The expected outcome description.
+range (Optional[list[float]]): Optional range of values for the outcome.
+tests (Optional[list[float]]): Optional tests associated with the outcome.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.OutcomeStruct.range">
+<span class="sig-name descname"><span class="pre">range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code><span class="pre">]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#idr_iisim.utils.structs.OutcomeStruct.range" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.OutcomeStruct.same_result">
+<span class="sig-name descname"><span class="pre">same_result</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#idr_iisim.utils.structs.OutcomeStruct.same_result" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.OutcomeStruct.tests">
+<span class="sig-name descname"><span class="pre">tests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code><span class="pre">]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#idr_iisim.utils.structs.OutcomeStruct.tests" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.OutputStruct">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">OutputStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#OutputStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.OutputStruct" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#idr_iisim.utils.structs.ItemStruct" title="idr_iisim.utils.structs.ItemStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">ItemStruct</span></code></a></p>
+<p>Structure for outputs in the model.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>value (Optional[float]): Optional output value.
+range (Optional[list[float]]): Optional range of valid values for the output.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.OutputStruct.range">
+<span class="sig-name descname"><span class="pre">range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code><span class="pre">]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#idr_iisim.utils.structs.OutputStruct.range" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.OutputStruct.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#idr_iisim.utils.structs.OutputStruct.value" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.json_to_meta_struct">
+<span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">json_to_meta_struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#json_to_meta_struct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.json_to_meta_struct" title="Link to this definition">¶</a></dt>
+<dd><p>Parse the JSON object and transform it into a MetaStruct object.</p>
+<p>This function takes a JSON dictionary representation of a meta model and
+constructs a MetaStruct object, extracting all necessary fields, including
+constants, inputs, and outputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#idr_iisim.utils.structs.MetaStruct" title="idr_iisim.utils.structs.MetaStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaStruct</span></code></a></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>data (dict[str, Any]): JSON data representing the meta model. Must include</dt><dd><p>‘constants’, ‘outcome’, ‘inputs’, ‘outputs’, ‘demands’, and other required attributes.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>MetaStruct: An instance of MetaStruct filled with the parsed data.</p>
+</dd>
+<dt>Example:</dt><dd><p>meta_struct = json_to_meta_struct(json_meta_data)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="idr_iisim.utils.structs.json_to_model_struct">
+<span class="sig-prename descclassname"><span class="pre">idr_iisim.utils.structs.</span></span><span class="sig-name descname"><span class="pre">json_to_model_struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/utils/structs.html#json_to_model_struct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.utils.structs.json_to_model_struct" title="Link to this definition">¶</a></dt>
+<dd><p>Parse the JSON object and transform it into a ModelStruct object.</p>
+<p>This function takes a JSON dictionary representation of a model and
+constructs a ModelStruct object, extracting the necessary fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#idr_iisim.utils.structs.ModelStruct" title="idr_iisim.utils.structs.ModelStruct"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelStruct</span></code></a></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>data (dict[str, Any]): JSON data representing the model. Must include</dt><dd><p>‘constants’, ‘inputs’, ‘outputs’, and other required attributes.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>ModelStruct: An instance of ModelStruct filled with the parsed data.</p>
+</dd>
+<dt>Example:</dt><dd><p>model_struct = json_to_model_struct(json_data)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-idr_iisim.templates">
+<span id="templates"></span><h3>templates<a class="headerlink" href="#module-idr_iisim.templates" title="Link to this heading">¶</a></h3>
+<p>module to load templates</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="idr_iisim.templates.load_template">
+<span class="sig-prename descclassname"><span class="pre">idr_iisim.templates.</span></span><span class="sig-name descname"><span class="pre">load_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/idr_iisim/templates.html#load_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#idr_iisim.templates.load_template" title="Link to this definition">¶</a></dt>
+<dd><p>Load a template from the specified file path.</p>
+<p>This function reads the content of the given template file and returns a Template object
+that can be used for string substitution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Args:</dt><dd><p>template_path (str): Path to the template file to be loaded.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Template: A Template object containing the loaded template content.</p>
+</dd>
+<dt>Raises:</dt><dd><p>FileNotFoundError: If the specified template file does not exist.
+Exception: If there is an error reading the template file (e.g., encoding issues).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">IDR-IIsim</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_overview.html">Model Aim and Value Proposition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_approach.html">Mathematical Approach and Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_input_specification.html">Input Data Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_case_study.html">Case Study: Cement Production</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_usage_guide.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_standard_and_testing.html">Standards and Quality Assurance</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-main">Module main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-idr_iisim">Package idr_iisim</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="7_standard_and_testing.html" title="previous chapter">Standards and Quality Assurance</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Xabier Cantero, Alejo Silvarrey, Armando Aguayo, Iván González, Cruz Borges.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/project_code.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

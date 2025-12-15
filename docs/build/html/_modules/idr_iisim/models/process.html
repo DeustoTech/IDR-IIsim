@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>idr_iisim.models.process &#8212; IDR-IIsim 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for idr_iisim.models.process</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module to parse industry&#39;s processes&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">idr_iisim.models.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">idr_iisim.templates</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_template</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">idr_iisim.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">i_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">idr_iisim.utils.structs</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ItemStruct</span><span class="p">,</span>
+    <span class="n">ModelStruct</span><span class="p">,</span>
+    <span class="n">json_to_model_struct</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="Process">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.process.Process">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Process</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process class that represents a model in the system.</span>
+
+<span class="sd">    It contains the model configuration, functions map, results, and external inputs.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        config (ModelStruct): Holds the parsed model configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yaml_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the Process class with YAML data and the path.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            yaml_data (dict[str, Any]): Parsed YAML configuration data.</span>
+<span class="sd">            path (str): Path to the configuration file.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If there are issues in parsing the configuration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># Parse data</span>
+        <span class="n">i_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;parsing </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">yaml_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span> <span class="n">ModelStruct</span> <span class="o">=</span> <span class="n">json_to_model_struct</span><span class="p">(</span><span class="n">yaml_data</span><span class="p">)</span>
+
+        <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ItemStruct</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">outputs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_config</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Process.get_getter_items">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.process.Process.get_getter_items">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_getter_items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate items&#39; descriptions to configure as getters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[tuple[str, str]]: A list of tuples containing variable names</span>
+<span class="sd">            and their descriptions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">getter_items</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># outputs</span>
+        <span class="k">for</span> <span class="n">variable_name</span><span class="p">,</span> <span class="n">output</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">functions_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">getter_items</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">variable_name</span><span class="p">,</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">getter_items</span></div>
+
+
+<div class="viewcode-block" id="Process.operations_generator">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.process.Process.operations_generator">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">operations_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate operations methods for the model.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The generated operations as a string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">process_methods</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">variable_name</span><span class="p">,</span> <span class="n">outputs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">functions_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">expression</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;expression&quot;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">arg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;outputs&quot;</span><span class="p">:</span>
+                    <span class="n">expression</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                        <span class="n">arg</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;self.__</span><span class="si">{</span><span class="n">arg</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+            <span class="n">method_script</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;self.__</span><span class="si">{</span><span class="n">variable_name</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">expression</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">process_methods</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">method_script</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">        &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">process_methods</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Process.process_methods_generator">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.process.Process.process_methods_generator">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_methods_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the methods for the industry&#39;s class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The generated methods as a formatted string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Load the template content</span>
+        <span class="n">template_path</span> <span class="o">=</span> <span class="s2">&quot;templates/template_generated_process_method.txt&quot;</span>
+        <span class="n">method_template</span> <span class="o">=</span> <span class="n">load_template</span><span class="p">(</span><span class="n">template_path</span><span class="p">)</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">outputs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">functions_map</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">arg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;inputs&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">arg</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+
+        <span class="n">args_script</span> <span class="o">=</span> <span class="s2">&quot;self&quot;</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">args_script</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span>
+            <span class="n">args_script</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">method_template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="n">args_script</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="n">operation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">operations_generator</span><span class="p">(),</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Process.process_call_method_generator">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.models.process.Process.process_call_method_generator">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_call_method_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the code to call the different methods.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The generated method call as a string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;self.__</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">short_name</span><span class="si">}</span><span class="s2">(&quot;</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">outputs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">functions_map</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">arg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;inputs&quot;</span><span class="p">:</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;self.__</span><span class="si">{</span><span class="n">arg</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">script</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">script</span> <span class="o">+=</span> <span class="s2">&quot;)&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">        &quot;</span> <span class="o">+</span> <span class="n">script</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IDR-IIsim</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../1_overview.html">Model Aim and Value Proposition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../2_quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../3_approach.html">Mathematical Approach and Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../4_input_specification.html">Input Data Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../5_case_study.html">Case Study: Cement Production</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../6_usage_guide.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../7_standard_and_testing.html">Standards and Quality Assurance</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../project_code.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Xabier Cantero, Alejo Silvarrey, Armando Aguayo, Iván González, Cruz Borges.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

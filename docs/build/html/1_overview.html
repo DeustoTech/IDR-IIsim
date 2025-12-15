@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Model Aim and Value Proposition &#8212; IDR-IIsim 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quick Start Guide" href="2_quick_start.html" />
+    <link rel="prev" title="IDR-IIsim: Software Documentation" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="model-aim-and-value-proposition">
+<h1>Model Aim and Value Proposition<a class="headerlink" href="#model-aim-and-value-proposition" title="Link to this heading">¶</a></h1>
+<p>IDR-IIsim is an open-source compiler designed to bridge the gap between process-level industrial data and large-scale energy system or circular economy models. Its primary aim is to process declarative, data-driven industrial models described in YAML format and automatically generate validated, executable Python classes.</p>
+<p>This development facilitates the flow of information among industry experts, programmers, and public policy makers. The industrial process is described declaratively in a structured YAML format and translated into production-ready Python code. This resulting class can process production data to accurately estimate energy and material demands and emissions. This capability aids in quantifying material requirements, identifying circular economy initiatives, and evaluating future policy scenarios.</p>
+<section id="why-use-idr-iisim">
+<h2>Why use IDR-IIsim?<a class="headerlink" href="#why-use-idr-iisim" title="Link to this heading">¶</a></h2>
+<p>The core advantage of this framework, compared to ad-hoc solutions like custom scripts or spreadsheets, is the guarantee of reproducibility and traceability.</p>
+<ul class="simple">
+<li><p><strong>Reproducibility</strong>: Models are defined entirely by structured YAML data, not hard-coded logic. Any model instance can be instantly recreated or validated by processing its source YAML files.</p></li>
+<li><p><strong>Interoperability</strong>: The compiler’s output is a standard Python object, allowing for seamless integration into large-scale energy and economic simulation frameworks (such as potential EMX modules).</p></li>
+<li><p><strong>Traceability</strong>: Every constant, input, and material flow are explicitly documented within the YAML structure, including its source, units, and citation where applicable, ensuring transparent data processing.</p></li>
+</ul>
+</section>
+<section id="scope-and-future-dynamics">
+<h2>Scope and Future Dynamics<a class="headerlink" href="#scope-and-future-dynamics" title="Link to this heading">¶</a></h2>
+<p>Currently, a fully validated model for Cement production is included. We are actively working on expanding the model library to include other high-impact industries, such as steel and the food industry.</p>
+<p>The framework is structurally capable of modelling both material and energy flows. While the current implementation is static, the goal is to assess the potential for demand response mechanisms. To this end, the implementation of dynamics (time-series) is planned for a near-future release, leveraging the structure of the generated Python objects. The current version can successfully process CSV files with production data at various geographical levels and years and output a CSV containing all calculated demands and emissions.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">IDR-IIsim</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model Aim and Value Proposition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-use-idr-iisim">Why use IDR-IIsim?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scope-and-future-dynamics">Scope and Future Dynamics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_approach.html">Mathematical Approach and Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_input_specification.html">Input Data Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_case_study.html">Case Study: Cement Production</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_usage_guide.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_standard_and_testing.html">Standards and Quality Assurance</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_code.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">IDR-IIsim: Software Documentation</a></li>
+      <li>Next: <a href="2_quick_start.html" title="next chapter">Quick Start Guide</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Xabier Cantero, Alejo Silvarrey, Armando Aguayo, Iván González, Cruz Borges.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/1_overview.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

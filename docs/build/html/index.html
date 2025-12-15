@@ -14,6 +14,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Model Aim and Value Proposition" href="1_overview.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -33,128 +34,69 @@
             
   <section id="idr-iisim-software-documentation">
 <h1>IDR-IIsim: Software Documentation<a class="headerlink" href="#idr-iisim-software-documentation" title="Link to this heading">¶</a></h1>
-<section id="model-aim-and-value-proposition">
-<h2><strong>1. Model Aim and Value Proposition</strong><a class="headerlink" href="#model-aim-and-value-proposition" title="Link to this heading">¶</a></h2>
-<p>IDR-IIsim is an open-source compiler designed to bridge the gap between process-level industrial data and large-scale energy system or circular economy models. Its primary aim is to process declarative, data-driven industrial models described in YAML format and automatically generate validated, executable Python classes.</p>
-<p>This development facilitates the flow of information among industry experts, programmers, and public policy makers. The industrial process is described declaratively in a structured YAML format and translated into production-ready Python code. This resulting class can process production data to accurately estimate energy and material demands and emissions. This capability aids in quantifying material requirements, identifying circular economy initiatives, and evaluating future policy scenarios.</p>
-<section id="why-use-idr-iisim">
-<h3><strong>Why use IDR-IIsim?</strong><a class="headerlink" href="#why-use-idr-iisim" title="Link to this heading">¶</a></h3>
-<p>The core advantage of this framework, compared to ad-hoc solutions like custom scripts or spreadsheets, is the guarantee of reproducibility and traceability.</p>
-<ul class="simple">
-<li><p>Reproducibility: Models are defined entirely by structured YAML data, not hard-coded logic. Any model instance can be instantly recreated or validated by processing its source YAML files.</p></li>
-<li><p>Interoperability: The compiler’s output is a standard Python object, allowing for seamless integration into large-scale energy and economic simulation frameworks (such as potential EMX modules).</p></li>
-<li><p>Traceability: Every constant, input, and material flow are explicitly documented within the YAML structure, including its source, units, and citation where applicable, ensuring transparent data processing.</p></li>
-</ul>
+<p>IDR-IISIM is an open-source compiler designed to process industrial models described in YAML format and generate Python scripts that can be integrated into large-scale energy system models and circular economy assessments.</p>
+<p>This repository provides a reproducible and modular framework for describing industrial processes as data models, validating them, and generating executable scripts.</p>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading">¶</a></h2>
+<p>This project is licensed under the MIT License. You are free to use, modify, and distribute this software under the terms of the MIT license.</p>
 </section>
-<section id="scope-and-future-dynamics">
-<h3><strong>Scope and Future Dynamics</strong><a class="headerlink" href="#scope-and-future-dynamics" title="Link to this heading">¶</a></h3>
-<p>Currently, a fully validated model for Cement production is included. We are actively working on expanding the model library to include other high-impact industries, such as steel and the food industry.</p>
-<p>The framework is structurally capable of modelling both material and energy flows. While the current implementation is static, the goal is to assess the potential for demand response mechanisms. To this end, the implementation of dynamics (time-series) is planned for a near-future release, leveraging the structure of the generated Python objects. The current version can successfully process CSV files with production data at various geographical levels and years and output a CSV containing all calculated demands and emissions.</p>
-</section>
-</section>
-<section id="mathematical-approach-and-workflow">
-<h2><strong>2. Mathematical Approach and Workflow</strong><a class="headerlink" href="#mathematical-approach-and-workflow" title="Link to this heading">¶</a></h2>
-<section id="mathematical-formulation">
-<h3><strong>Mathematical Formulation</strong><a class="headerlink" href="#mathematical-formulation" title="Link to this heading">¶</a></h3>
-<p>Each industrial sub-process (e.g., grinder) is defined by its inputs, outputs, and an operation field. This operation is written as a SymPy-compatible symbolic expression (e.g., Output_A = Input_B + Constant_C * f(x)).</p>
-<p>The compiler utilizes the SymPy library for symbolic mathematics to parse and validate these equations before generating the final Python class method. This design allows the modeler to define non-linearities for individual subprocesses while maintaining a final aggregated object that is well-suited for integration into large-scale energy system models.</p>
-</section>
-<section id="general-work-flow-diagram">
-<h3><strong>General Work-Flow Diagram</strong><a class="headerlink" href="#general-work-flow-diagram" title="Link to this heading">¶</a></h3>
-<p>The framework relies on a distinct flow of data validation and code generation:</p>
-<ul class="simple">
-<li><p>YAML Input: Declarative process and industry files are read from the Sources/ directory.</p></li>
-<li><p>Validation: The Validator() class checks the YAML data against the schema for correct structure and unit consistency.</p></li>
-<li><p>Object Creation: Core classes like Process() and Industry() translate the validated data into internal Python objects.</p></li>
-<li><p>Code Generation: The script_generator() method creates the final, executable Python class inside the industries/ folder.</p></li>
-</ul>
-</section>
-</section>
-<section id="input-data-specification-yaml-schema">
-<h2><strong>3. Input Data Specification (YAML Schema)</strong><a class="headerlink" href="#input-data-specification-yaml-schema" title="Link to this heading">¶</a></h2>
-<p>The input data for any industrial model is provided via YAML files that adhere to the established IISim-Schema. The system implements a modular, two-tiered structure to separate process logic from system aggregation:</p>
-<ol class="arabic simple">
-<li><p>Process Model (Sub-unit): YAML files (e.g., grinding.yaml) define a single sub-unit’s physics and logic. They focus purely on constants, inputs, and outputs.</p></li>
-<li><p>Industry Model (Aggregation): The main meta.yaml file defines the entire industry, aggregates the sub-processes, and is responsible for defining the system-level outcome and calculating total demands and meta demands.</p></li>
-</ol>
-<section id="core-data-fields-common-to-both-process-and-industry">
-<h3><strong>Core Data Fields (Common to both Process and Industry)</strong><a class="headerlink" href="#core-data-fields-common-to-both-process-and-industry" title="Link to this heading">¶</a></h3>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head text-center"><p>Section</p></th>
-<th class="head text-center"><p>Purpose</p></th>
-<th class="head text-center"><p>Key Fields</p></th>
-<th class="head text-center"><p>Data Type Notes</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td class="text-center"><p><strong>constants</strong></p></td>
-<td class="text-center"><p>Fixed parameters (e.g., efficiency, ratios, material fractions).</p></td>
-<td class="text-center"><p>name, value (number), units, source</p></td>
-<td class="text-center"><p>Static numerical values, providing traceability.</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p><strong>inputs</strong></p></td>
-<td class="text-center"><p>External variables required to run the process, such as production targets or boundary conditions.</p></td>
-<td class="text-center"><p>name, value (array or null), units, from (source)</p></td>
-<td class="text-center"><p>value can be null (if it’s the target production) or an <strong>array</strong> to define a range for sampling or a list of values.</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p><strong>outputs</strong></p></td>
-<td class="text-center"><p>Internal process results or intermediate material/energy flows.</p></td>
-<td class="text-center"><p>name, operation (SymPy string), args, range</p></td>
-<td class="text-center"><p>Calculated results, which can be used as inputs for subsequent process steps.</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="industry-specific-sections-aggregation-and-system-outputs">
-<h3><strong>Industry-Specific Sections (Aggregation and System Outputs)</strong><a class="headerlink" href="#industry-specific-sections-aggregation-and-system-outputs" title="Link to this heading">¶</a></h3>
-<p>These sections are only present in the Industry-level (e.g., meta.yaml) file:</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head text-center"><p>Section</p></th>
-<th class="head text-center"><p>Purpose</p></th>
-<th class="head text-center"><p>Key Fields</p></th>
-<th class="head text-center"><p>Notes</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td class="text-center"><p><strong>demands</strong></p></td>
-<td class="text-center"><p>External elements required by the aggregated industry (e.g., total energy, total raw materials).</p></td>
-<td class="text-center"><p>name, operation, args, meta</p></td>
-<td class="text-center"><p>Energy and material streams calculated for the entire technology.</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p><strong>meta</strong></p></td>
-<td class="text-center"><p>Meta-demands, which are aggregated values of several demands (e.g., “Total Energy Demand”).</p></td>
-<td class="text-center"><p>name, operation, args</p></td>
-<td class="text-center"><p>Allows for high-level variable aggregation.</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p><strong>outcome</strong></p></td>
-<td class="text-center"><p>The final product of the industry (i.e., the target for which the demand is calculated).</p></td>
-<td class="text-center"><p>name, test</p></td>
-<td class="text-center"><p>The variable the final class is built to produce.</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="input-robustness-and-checks">
-<h3><strong>Input Robustness and Checks</strong><a class="headerlink" href="#input-robustness-and-checks" title="Link to this heading">¶</a></h3>
-<p>The model includes automatic input checks to catch errors such as unit inconsistency. However, due to the flexibility of the SymPy-based approach, it is possible for users to define models that result in physically infeasible values (e.g., process loss values above 100%).</p>
-<p>Warning: We will add explicit print warnings to notify the user immediately when calculated outputs are negative or otherwise questionable. We advise users to complement these warnings by adding input boundary checks within their YAML files or external scripts.</p>
-</section>
-</section>
-<section id="testing-and-versioning">
-<h2><strong>4. Testing and versioning</strong><a class="headerlink" href="#testing-and-versioning" title="Link to this heading">¶</a></h2>
-<p><strong>Automated Testing</strong></p>
-<p>The model utilizes Continuous Integration (CI) with tests for units and integration using unittest, and it includes a minimum viable test case based on the cement example.</p>
-<p>To improve robustness and transparency, we commit to the following:</p>
-<ul class="simple">
-<li><p>Code Coverage: A code coverage report will be generated and published with the CI results to clearly show the percentage of tested code.</p></li>
-<li><p>Weird Input: The test suite will be expanded to include testing with “weird input” (e.g., boundary, zero, or highly improbable values) to ensure proper input checks are guaranteed.</p></li>
-<li><p>Exception Handling: Tests for all ValueError exception handlings will be implemented to ensure that error paths are also correctly checked.</p></li>
-</ul>
-<p><strong>Versioning</strong></p>
-<p>The model uses versioning, and we commit to following Semantic Versioning (SemVer) for future releases to clearly denote breaking (major), feature (minor), and patch (patch) changes. Dependency compatibility is explicitly handled via requirements.txt.</p>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_overview.html">Model Aim and Value Proposition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1_overview.html#why-use-idr-iisim">Why use IDR-IIsim?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1_overview.html#scope-and-future-dynamics">Scope and Future Dynamics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_quick_start.html">Quick Start Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2_quick_start.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_quick_start.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_quick_start.html#configure-environment">Configure environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_quick_start.html#run-the-compiler">Run the Compiler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_approach.html">Mathematical Approach and Workflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3_approach.html#general-work-flow-overview">General Work-Flow Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_approach.html#mathematical-formulation">Mathematical Formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_input_specification.html">Input Data Specification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4_input_specification.html#common-structure-process-industry">Common Structure (Process &amp; Industry)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4_input_specification.html#the-process-model">The <em>Process</em> Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4_input_specification.html#the-industry-model-meta-file">The <em>Industry</em> Model <em>(Meta-file)</em></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_case_study.html">Case Study: Cement Production</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5_case_study.html#process-overview">Process Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_case_study.html#implementation-in-idr-iisim">Implementation in IDR-IIsim</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_usage_guide.html">Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6_usage_guide.html#running-the-compiler">Running the Compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_usage_guide.html#using-the-generated-model-in-python">Using the Generated Model in Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_standard_and_testing.html">Standards and Quality Assurance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7_standard_and_testing.html#input-robustness">Input Robustness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7_standard_and_testing.html#automated-testing">Automated Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7_standard_and_testing.html#versioning">Versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7_standard_and_testing.html#coding-standards">Coding standards</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_code.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project_code.html#module-main">Module main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_code.html#module-idr_iisim">Package idr_iisim</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </section>
 </section>
@@ -185,11 +127,24 @@
     </div>
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_overview.html">Model Aim and Value Proposition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_approach.html">Mathematical Approach and Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_input_specification.html">Input Data Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_case_study.html">Case Study: Cement Production</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_usage_guide.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_standard_and_testing.html">Standards and Quality Assurance</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_code.html">API Reference</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="1_overview.html" title="next chapter">Model Aim and Value Proposition</a></li>
   </ul></li>
 </ul>
 </div>

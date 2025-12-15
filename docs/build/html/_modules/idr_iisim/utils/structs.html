@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>idr_iisim.utils.structs &#8212; IDR-IIsim 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for idr_iisim.utils.structs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;types definition&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+
+<div class="viewcode-block" id="BaseStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.BaseStruct">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseStruct</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base structure that aggregates common attributes.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): The name of the item</span>
+<span class="sd">        description (str): A description of the item.</span>
+<span class="sd">        units (str): Measurement units associated with the item.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">units</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="ConstantStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.ConstantStruct">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConstantStruct</span><span class="p">(</span><span class="n">BaseStruct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure for constants used in the model.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        citation (str): Citation</span>
+<span class="sd">        source (str): Source from which the constant is derived.</span>
+<span class="sd">        value (float): The constant value.</span>
+<span class="sd">        range (Optional[list[float]]): Optional range of valid values for the constant.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">citation</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="OutcomeStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.OutcomeStruct">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OutcomeStruct</span><span class="p">(</span><span class="n">BaseStruct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure for outcomes in the model.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        same_result (str): The expected outcome description.</span>
+<span class="sd">        range (Optional[list[float]]): Optional range of values for the outcome.</span>
+<span class="sd">        tests (Optional[list[float]]): Optional tests associated with the outcome.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">same_result</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">tests</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="ItemStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.ItemStruct">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ItemStruct</span><span class="p">(</span><span class="n">BaseStruct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure for items used in demand, meta-demand, and output.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        args (list[dict[str, Any]]): Arguments associated with the item.</span>
+<span class="sd">        operation (str): The operation to be performed on the item.</span>
+<span class="sd">        tests (Optional[list[float]]): Optional tests associated with the item.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">args</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tests</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="DemandStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.DemandStruct">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DemandStruct</span><span class="p">(</span><span class="n">ItemStruct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure for demands in the model.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        used (str): The process that is using the demand.</span>
+<span class="sd">        meta (Optional[str]): Optional metadata associated with the demand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">used</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="MetaDemandStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.MetaDemandStruct">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MetaDemandStruct</span><span class="p">(</span><span class="n">ItemStruct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure for meta-demands in the model.</span>
+
+<span class="sd">    This inherits from ItemStruct.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="InputStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.InputStruct">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InputStruct</span><span class="p">(</span><span class="n">BaseStruct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure for inputs in the model.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        value (list[float]): List of input values.</span>
+<span class="sd">        input_from (str): The source of the input, using &#39;from&#39; as a JSON key.</span>
+<span class="sd">        range (Optional[list[float]]): Optional range of valid values for the input.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">value</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">input_from</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;json_key&quot;</span><span class="p">:</span> <span class="s2">&quot;from&quot;</span><span class="p">})</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="OutputStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.OutputStruct">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OutputStruct</span><span class="p">(</span><span class="n">ItemStruct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure for outputs in the model.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        value (Optional[float]): Optional output value.</span>
+<span class="sd">        range (Optional[list[float]]): Optional range of valid values for the output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="ModelStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.ModelStruct">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModelStruct</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-instance-attributes</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure for the model configuration.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): The name of the model.</span>
+<span class="sd">        short_name (str): A short name for the model.</span>
+<span class="sd">        id (str): Unique identifier for the model.</span>
+<span class="sd">        category (str): The category of the model.</span>
+<span class="sd">        description (str): A description of the model.</span>
+<span class="sd">        version (str): Version information for the model.</span>
+<span class="sd">        debug (str): Debugging information.</span>
+<span class="sd">        constants (list[ConstantStruct]): List of constants used in the model.</span>
+<span class="sd">        inputs (list[InputStruct]): List of inputs for the model.</span>
+<span class="sd">        outputs (list[OutputStruct]): List of outputs for the model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">short_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">category</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">debug</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">constants</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ConstantStruct</span><span class="p">]</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">InputStruct</span><span class="p">]</span>
+    <span class="n">outputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">OutputStruct</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="MetaStruct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.MetaStruct">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MetaStruct</span><span class="p">(</span><span class="n">ModelStruct</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure for meta models.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        outcome (OutcomeStruct): The expected outcome of the model.</span>
+<span class="sd">        demands (list[DemandStruct]): List of demands associated with the model.</span>
+<span class="sd">        meta (list[MetaDemandStruct]): List of meta-demands associated with the model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">outcome</span><span class="p">:</span> <span class="n">OutcomeStruct</span>
+    <span class="n">demands</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DemandStruct</span><span class="p">]</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">MetaDemandStruct</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="json_to_model_struct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.json_to_model_struct">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">json_to_model_struct</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ModelStruct</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the JSON object and transform it into a ModelStruct object.</span>
+
+<span class="sd">    This function takes a JSON dictionary representation of a model and</span>
+<span class="sd">    constructs a ModelStruct object, extracting the necessary fields.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (dict[str, Any]): JSON data representing the model. Must include</span>
+<span class="sd">            &#39;constants&#39;, &#39;inputs&#39;, &#39;outputs&#39;, and other required attributes.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ModelStruct: An instance of ModelStruct filled with the parsed data.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        model_struct = json_to_model_struct(json_data)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">constants</span> <span class="o">=</span> <span class="p">[</span><span class="n">ConstantStruct</span><span class="p">(</span><span class="o">**</span><span class="n">const</span><span class="p">)</span> <span class="k">for</span> <span class="n">const</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;constants&quot;</span><span class="p">]]</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">InputStruct</span><span class="p">(</span>
+            <span class="o">**</span><span class="p">{</span><span class="n">k</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;from&quot;</span> <span class="k">else</span> <span class="s2">&quot;input_from&quot;</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">inp</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">inp</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;inputs&quot;</span><span class="p">]</span>
+    <span class="p">]</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">OutputStruct</span><span class="p">(</span><span class="o">**</span><span class="n">out</span><span class="p">)</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]]</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">ModelStruct</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+        <span class="n">short_name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;short_name&quot;</span><span class="p">],</span>
+        <span class="n">category</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+        <span class="n">version</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+        <span class="n">debug</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">],</span>
+        <span class="n">constants</span><span class="o">=</span><span class="n">constants</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
+        <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+
+<div class="viewcode-block" id="json_to_meta_struct">
+<a class="viewcode-back" href="../../../project_code.html#idr_iisim.utils.structs.json_to_meta_struct">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">json_to_meta_struct</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">MetaStruct</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the JSON object and transform it into a MetaStruct object.</span>
+
+<span class="sd">    This function takes a JSON dictionary representation of a meta model and</span>
+<span class="sd">    constructs a MetaStruct object, extracting all necessary fields, including</span>
+<span class="sd">    constants, inputs, and outputs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (dict[str, Any]): JSON data representing the meta model. Must include</span>
+<span class="sd">            &#39;constants&#39;, &#39;outcome&#39;, &#39;inputs&#39;, &#39;outputs&#39;, &#39;demands&#39;, and other required attributes.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        MetaStruct: An instance of MetaStruct filled with the parsed data.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        meta_struct = json_to_meta_struct(json_meta_data)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">constants</span> <span class="o">=</span> <span class="p">[</span><span class="n">ConstantStruct</span><span class="p">(</span><span class="o">**</span><span class="n">const</span><span class="p">)</span> <span class="k">for</span> <span class="n">const</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;constants&quot;</span><span class="p">]]</span>
+    <span class="n">outcome</span> <span class="o">=</span> <span class="p">[</span><span class="n">OutcomeStruct</span><span class="p">(</span><span class="o">**</span><span class="n">out</span><span class="p">)</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;outcome&quot;</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">OutputStruct</span><span class="p">(</span><span class="o">**</span><span class="n">out</span><span class="p">)</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]]</span>
+    <span class="n">demands</span> <span class="o">=</span> <span class="p">[</span><span class="n">DemandStruct</span><span class="p">(</span><span class="o">**</span><span class="n">out</span><span class="p">)</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;demands&quot;</span><span class="p">]]</span>
+    <span class="n">meta_demands</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="s2">&quot;meta&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">meta_demands</span> <span class="o">=</span> <span class="p">[</span><span class="n">MetaDemandStruct</span><span class="p">(</span><span class="o">**</span><span class="n">out</span><span class="p">)</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]]</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">InputStruct</span><span class="p">(</span>
+            <span class="o">**</span><span class="p">{</span><span class="n">k</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;from&quot;</span> <span class="k">else</span> <span class="s2">&quot;input_from&quot;</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">inp</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">inp</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;inputs&quot;</span><span class="p">]</span>
+    <span class="p">]</span>
+
+    <span class="n">meta_model</span> <span class="o">=</span> <span class="n">MetaStruct</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+        <span class="n">short_name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;short_name&quot;</span><span class="p">],</span>
+        <span class="n">category</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+        <span class="n">version</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+        <span class="n">debug</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">],</span>
+        <span class="n">constants</span><span class="o">=</span><span class="n">constants</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
+        <span class="n">outcome</span><span class="o">=</span><span class="n">outcome</span><span class="p">,</span>
+        <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span>
+        <span class="n">demands</span><span class="o">=</span><span class="n">demands</span><span class="p">,</span>
+        <span class="n">meta</span><span class="o">=</span><span class="n">meta_demands</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">meta_model</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IDR-IIsim</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../1_overview.html">Model Aim and Value Proposition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../2_quick_start.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../3_approach.html">Mathematical Approach and Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../4_input_specification.html">Input Data Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../5_case_study.html">Case Study: Cement Production</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../6_usage_guide.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../7_standard_and_testing.html">Standards and Quality Assurance</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../project_code.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Xabier Cantero, Alejo Silvarrey, Armando Aguayo, Iván González, Cruz Borges.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
