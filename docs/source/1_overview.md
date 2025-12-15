@@ -17,12 +17,3 @@ The core advantage of this framework, compared to ad-hoc solutions like custom s
 Currently, a fully validated model for Cement production is included. We are actively working on expanding the model library to include other high-impact industries, such as steel and the food industry.
 
 The framework is structurally capable of modelling both material and energy flows. While the current implementation is static, the goal is to assess the potential for demand response mechanisms. To this end, the implementation of dynamics (time-series) is planned for a near-future release, leveraging the structure of the generated Python objects. The current version can successfully process CSV files with production data at various geographical levels and years and output a CSV containing all calculated demands and emissions.
-
-Key Advantages:
-
-1. **Reproducibility**: The model is not defined by the Python code itself, but by the input
-data. Any model instance can be recreated instantly from its source YAML files.
-2. **Traceability**: Every constant, input, and material flow are explicitly documented within
-the file structure, including its source, units, and citation.
-3. **Interoperability**: The compiler produces standard Python objects that are easy to
-import and use in other scientific workflows (e.g., NumPy, Pandas, or custom modules).

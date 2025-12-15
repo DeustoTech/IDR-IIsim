@@ -1,7 +1,7 @@
 ## Case Study: Cement Production
 
 To illustrate the capabilities of IDR-IIsim, a complete model for the Cement Industry is
-included in the `Sources/cement/ directory.`
+included in the `Sources/cement/` directory.
 
 ### Process Overview
 
