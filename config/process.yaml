@@ -42,7 +42,7 @@ properties:
       required:
         - name
         - value
-        - unit
+        - units
       properties:
         name:
           type: string
