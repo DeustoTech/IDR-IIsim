@@ -2,6 +2,7 @@
 [![Tests](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/unit-tests.yaml/badge.svg)]()
 [![Integration](https://github.com/DeustoTech/IDR-IIsim/actions/workflows/integration-test.yaml/badge.svg)]()
 <img src="https://raw.githubusercontent.com/DeustoTech/IDR-IIsim/refs/heads/badges/coverage/global.svg"/>
+[![Documentation](https://img.shields.io/badge/Documentation-GitHub_Pages-blue?logoColor=white&labelColor=333a41)](https://deustotech.github.io/IDR-IIsim/)
 
 # IDR-IIsim
 
