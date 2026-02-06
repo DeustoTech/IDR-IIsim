@@ -1,0 +1,114 @@
+# OVERVIEW OF THE PROCESS: ROLLING
+# This is the plastic deformation of steel ingots or semi-finished products. It is carried out in the so-called rolling mills.
+# Two rollers rotating at the same speed and in opposite directions, exert a pressure that reduces the cross-section of the material.
+# Two processes can be distinguished: hot rolling and cold rolling
+#
+# UNITS
+# Process output (p.u.): Mt (millions of tons of rolled steel)
+# (kt) kilotons, (GJ) gigajoules, (Gl) gigalitres, (NGl) normal gigalitres, (p.u.) per unit
+#
+# ABBREVIATIONS
+# (in) input, (out) output, (mat) material, (ene) energy, (emi), emission, (cast) casting process, (gen) generation
+id: Steel-SP3-Rolling
+name: Rolling
+short_name: rolling
+type: process
+description: Steel process; Rolling (hot and cold)
+version: 1.0.0
+debug: false
+#
+# CONSTANTS
+# No.   Name                    Value    Units     Description
+# ---------------------------------------------------------
+# (1)   CO2_EMI_SP3             p.u.     0.0293    CO2 emissions subprocess 3
+# (2)   HEAT_LOSS_SP3           p.u.     0.1500    Heat losses subprocess 3
+constants:
+  - name: CO2_EMI_SP3
+    description: CO2 emissions subprocess 3
+    citation: text
+    source: https://www.google.com
+    value: 0.0293
+    units: p.u.
+  - name: HEAT_LOSS_SP3
+    description: Heat losses subprocess 3
+    citation: text
+    source: https://www.google.com
+    value: 0.1500
+    units: p.u.
+#
+# INPUTS
+# No.   Name                   Value            Units   Description
+# -------------------------------------------------------------------------------------------
+# (1)   reh_steel_out                           kt      High temperature steel semiproduct from reheating SP2 (materials-product process input)
+# (2)   elec_ene_roll          212400           GJ      Electrical energy - rolling process (energy process input)
+# (3)   ther_ene_roll          17784000         GJ      Thermal energy - rolling process (energy process input)
+# (4)   compair_in_roll        190              NGl     Compressed air demand - rolling process (materials-product process input)
+# (5)   mech_ene_roll          4222800          GJ      Mechanical energy - rolling process (energy process input)
+# (6)   water_in_roll          3.532            Gl      Water demand - rolling process (materials-product process input)
+inputs:
+  - name: reh_steel_out
+    description: High temperature steel semiproduct from reheating SP2 (materials-product process input)
+    value: null
+    units: kt
+    from: Steel-SP2-Reheating
+  - name: elec_ene_roll
+    description: Electrical energy - rolling process (energy process input)
+    value:
+      - 212400
+    from: null
+    units: GJ
+  - name: ther_ene_roll
+    description: Thermal energy - rolling process (energy process input)
+    value:
+      - 17784000
+    units: GJ
+    from: null
+  - name: compair_in_roll
+    description: Compressed air demand - rolling process (materials-product process input)
+    value:
+      - 190
+    units: NGl
+    from: null
+  - name: mech_ene_roll
+    description: Mechanical energy - rolling process (energy process input)
+    value:
+      - 4222800
+    from: null
+    units: GJ
+  - name: water_in_roll
+    description: Water demand - rolling process (materials-product process input)
+    value:
+      - 3.532
+    from: null
+    units: Gl
+#
+# OUTPUTS
+# No.   Name                Formula                                                               Units   Description
+# ---------------------------------------------------------------------------------------------------------------------
+# (1)   roll_co2_emi       (reh_steel_out * CO2_EMI_SP3)                                          kt      Rolling process CO2 emissions
+# (2)   roll_heat_loss     (ther_ene_roll + elec_ene_roll + mech_ene_roll) * HEAT_LOSS_SP3))      GJ      Rolling process heat loss
+outputs:
+  - name: roll_emi_co2
+    operation: (reh_steel_out * CO2_EMI_SP3)
+    args:
+      - name: reh_steel_out
+        type: inputs
+      - name: CO2_EMI_SP3
+        type: constants
+    description: Rolling process CO2 emissions
+    value: null
+    units: kt
+  - name: roll_heat_loss
+    operation: (ther_ene_roll + elec_ene_roll + mech_ene_roll) * HEAT_LOSS_SP3
+    args:
+      - name: ther_ene_roll
+        type: inputs
+      - name: elec_ene_roll
+        type: inputs
+      - name: mech_ene_roll
+        type: inputs
+      - name: HEAT_LOSS_SP3
+        type: constants
+    description: Rolling process heat loss
+    value: null
+    units: GJ

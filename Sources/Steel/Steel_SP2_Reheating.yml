@@ -1,0 +1,99 @@
+# OVERVIEW OF THE PROCESS: REHEATING
+# Rolling is the last step in steelmaking. This process requires the incoming products to be at a high temperature, as this increases the ductility of the steel.
+# The first step is to introduce the steel semi-finished products into the reheating furnaces.
+# Reheating furnaces will raise the product temperature.
+#
+# UNITS
+# Process output (p.u.): Mt (millions of tons of rolled steel)
+# (kt) kilotons, (GJ) gigajoules, (Gl) gigalitres, (NGl) normal gigalitres, (p.u.) per unit
+#
+# ABBREVIATIONS
+# (in) input, (out) output, (mat) material, (ene) energy, (emi), emission, (cast) casting process, (gen) generation
+id: Steel-SP2-Reheating
+name: Reheating
+short_name: reheating
+type: process
+description: Steel process; Reheating furnaces
+version: 1.0.0
+debug: false
+#
+# CONSTANTS
+# No.   Name                    Value    Units     Description
+# ---------------------------------------------------------
+# (1)   CO2_EMI_SP2             p.u.     0.0907    CO2 emissions subprocess 2
+# (2)   HEAT_LOSS_SP2           p.u.     0.2000    Heat losses subprocess 2
+constants:
+  - name: CO2_EMI_SP2
+    description: CO2 emissions subprocess 2
+    citation: text
+    source: https://www.google.com
+    value: 0.0907
+    units: p.u.
+  - name: HEAT_LOSS_SP2
+    description: Heat losses subprocess 2
+    citation: text
+    source: https://www.google.com
+    value: 0.2000
+    units: p.u.
+#
+# INPUTS
+# No.   Name                   Value            Units   Description
+# -------------------------------------------------------------------------------------------
+# (1)   cast_steel_out                          kt      Semi-finished products from steel casting SP1 (materials-product process input)
+# (2)   ther_ene_reh           1973160          GJ      Thermal energy - reheating process (energy process input)
+# (3)   water_in_reh           0.165            Gl      Water demand - reheating process (materials-product process input)
+inputs:
+  - name: cast_steel_out
+    description: Semi-finished products from steel casting SP1 (materials-product process input)
+    value: null
+    units: kt
+    from: Steel-SP1-Casting
+  - name: ther_ene_reh
+    description: Thermal energy - reheating process (energy process input)
+    value:
+      - 1973160
+    units: GJ
+    from: null
+  - name: water_in_reh
+    description: Water demand - reheating process (materials-product process input)
+    value:
+      - 0.165
+    from: null
+    units: Gl
+#
+# OUTPUTS
+# No.   Name               Formula                              Units   Description
+# ---------------------------------------------------------------------------------------------------------------------
+# (1)   reh_co2_emi        (cast_steel_out * CO2_EMI_SP2)       kt      Reheating process CO2 emissions
+# (2)   reh_heat_loss      (ther_ene_reh * HEAT_LOSS_SP2)       GJ      Reheating process heat loss
+# (3)   reh_steel_out      (cast_steel_out)                     kt      Reheating process high temperature steel semiproduct
+outputs:
+  - name: reh_co2_emi
+    operation: (cast_steel_out * CO2_EMI_SP2)
+    args:
+      - name: cast_steel_out
+        type: inputs
+      - name: CO2_EMI_SP2
+        type: constants
+    description: Casting process CO2 emissions
+    value: null
+    units: kt
+  - name: reh_heat_loss
+    operation: (ther_ene_reh * HEAT_LOSS_SP2)
+    args:
+      - name: ther_ene_reh
+        type: inputs
+      - name: HEAT_LOSS_SP2
+        type: constants
+    description: Casting process heat loss
+    value: null
+    units: GJ
+  - name: reh_steel_out
+    operation: (cast_steel_out)
+    args:
+      - name: cast_steel_out
+        type: inputs
+    description: Reheating process high temperature steel semiproduct
+    value: null
+    units: kt
+

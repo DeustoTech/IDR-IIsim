@@ -1,0 +1,176 @@
+# OVERVIEW OF THE PROCESS: CASTING (ELECTRICAL FURNACES)
+# Steelmaking through the electrical route is carried out in two stages.
+# Process 1. Scrap smelting (Electrical arc furnace).
+# Process 2. Crude steel refining and addition of ferro-alloys (secondary metallurgy).
+#
+# UNITS
+# Process output (p.u.): Mt (millions of tons of rolled steel)
+# (kt) kilotons, (GJ) gigajoules, (Gl) gigalitres, (NGl) normal gigalitres, (p.u.) per unit
+#
+# ABBREVIATIONS
+# (in) input, (out) output, (mat) material, (ene) energy, (emi), emission, (cast) casting process, (gen) generation
+id: Steel-SP1-Casting
+name: Casting (electrical furnace)
+short_name: casting
+type: process
+description: Steel process; Casting (electrical arc furnace and secondary metallurgy)
+version: 1.0.0
+debug: false
+#
+# CONSTANTS
+# No.   Name                    Value    Units     Description
+# ---------------------------------------------------------
+# (1)   CO2_EMI_SP1             p.u.     0.0768    CO2 emissions subprocess 1
+# (2)   HEAT_LOSS_SP1           p.u.     0.2000    Heat losses subprocess 1
+# (3)   SLAG_GEN                p.u.     0.1635    White and black slag generation
+constants:
+  - name: CO2_EMI_SP1
+    description: CO2 emissions subprocess 1
+    citation: text
+    source: https://www.google.com
+    value: 0.0768
+    units: p.u.
+  - name: HEAT_LOSS_SP1
+    description: Heat losses subprocess 1
+    citation: text
+    source: https://www.google.com
+    value: 0.2000
+    units: p.u.
+  - name: SLAG_GEN
+    description: White and black slag generation
+    citation: text
+    source: https://www.google.com
+    value: 0.1635
+    units: p.u.
+#
+# INPUTS
+# No.   Name                    Value      Units  Description
+# ---------------------------------------------------------
+# (1)   steel_scrapt_in         1145       kt     Steel Scrapt (materials-product process input)
+# (2)   ther_ene_cast           362880     GJ     Thermal energy - casting process (energy process input)
+# (3)   elec_ene_cast           1568700    GJ     Electrical energy - casting process (energy process input)
+# (4)   oxi_in_cast             35.262     NGl    Oxygen (materials-product process input)
+# (5)   compair_in_cast         60         NGl    Compressed air demand - casting process (materials-product process input)
+# (6)   alloy_mat_cast          47.042     kt     Alloying elements (materials-product process input)
+# (7)   inertgas_in_cast        19.077     NGl    Inert Gases(nitrogen and argon) (materials-product process input)
+# (8)   ferro_mat_cast          32.505     kt     Ferroaloys (materials-product process input)
+# (9)   mech_ene_cast           729351     GJ     Mechanical energy - casting process (energy process input)
+# (10)  water_in_cast           4.128      Gl     Water demand - casting process (materials-product process input)
+inputs:
+  - name: steel_scrapt_in
+    description: Steel Scrapt (materials-product process input)
+    value:
+      - 1145
+    units: kt
+    from: null
+  - name: ther_ene_cast
+    description: Thermal energy - casting process (energy process input)
+    value:
+      - 362880
+    units: GJ
+    from: null
+  - name: elec_ene_cast
+    description: Electrical energy - casting process (energy process input)
+    value:
+      - 11568700
+    from: null
+    units: GJ
+  - name: oxi_in_cast
+    description: Oxygen (materials-product process input)
+    value:
+      - 35.262
+    units: NGl
+    from: null
+  - name: compair_in_cast
+    description: Compressed air demand - casting process (materials-product process input)
+    value:
+      - 60
+    units: NGl
+    from: null
+  - name: alloy_mat_cast
+    description: Alloying elements (materials-product process input)
+    value:
+      - 47.042
+    units: kt
+    from: null
+  - name: inertgas_in_cast
+    description: Inert Gases (nitrogen and argon) (materials-product process input)
+    value:
+      - 19.077
+    units: NGl
+    from: null
+  - name: ferro_mat_cast
+    description: Ferroaloys (materials-product process input)
+    value:
+      - 32.505
+    units: kt
+    from: null
+  - name: mech_ene_cast
+    description: Mechanical energy - casting process (energy process input)
+    value:
+      - 729351
+    from: null
+    units: GJ
+  - name: water_in_cast
+    description: Water demand - casting process (materials-product process input)
+    value:
+      - 4.128
+    from: null
+    units: Gl
+#
+# OUTPUTS
+# No.   Name                Formula                                                             Units   Description
+# ---------------------------------------------------------------------------------------------------------------------
+# (1)   cast_slag           (steel_scrapt_in * SLAG_GEN)                                         kt      Casting process slag (white + black)
+# (2)   cast_co2_emi        (steel_scrapt_in * CO2_EMI_SP1)                                      kt      Casting process CO2 emissions
+# (3)   cast_heat_loss      (ther_ene_cast + elec_ene_cast + mech_ene_cast) * HEAT_LOSS_SP1))    GJ      Casting process heat loss
+# (4)   cast_steel_out      (steel_scrapt_in + alloy_mat_cast + ferro_mat_cast - cast_slag)      kt      Casting process steel casting
+outputs:
+  - name: cast_slag
+    operation: (steel_scrapt_in * SLAG_GEN)
+    args:
+      - name: steel_scrapt_in
+        type: inputs
+      - name: SLAG_GEN
+        type: constants
+    description: Casting process slag (white + black)
+    value: null
+    units: kt
+  - name: cast_co2_emi
+    operation: (steel_scrapt_in * CO2_EMI_SP1)
+    args:
+      - name: steel_scrapt_in
+        type: inputs
+      - name: CO2_EMI_SP1
+        type: constants
+    description: Casting process CO2 emissions
+    value: null
+    units: kt
+  - name: cast_heat_loss
+    operation: (ther_ene_cast + elec_ene_cast + mech_ene_cast) * HEAT_LOSS_SP1
+    args:
+      - name: ther_ene_cast
+        type: inputs
+      - name: elec_ene_cast
+        type: inputs
+      - name: mech_ene_cast
+        type: inputs
+      - name: HEAT_LOSS_SP1
+        type: constants
+    description: Casting process heat loss
+    value: null
+    units: GJ
+  - name: cast_steel_out
+    operation: (steel_scrapt_in + alloy_mat_cast + ferro_mat_cast - cast_slag)
+    args:
+      - name: steel_scrapt_in
+        type: inputs
+      - name: alloy_mat_cast
+        type: inputs
+      - name: ferro_mat_cast
+        type: inputs
+      - name: cast_slag
+        type: outputs
+    description: Casting process steel casting
+    value: null
+    units: kt

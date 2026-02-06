@@ -1,0 +1,274 @@
+id: Steel-process4-Meta
+name: Steel industry
+short_name: Steel
+type: industry
+description: Meta file for steel industry - Consolidated version for IISim
+version: 1.1.0
+debug: false
+
+constants:
+  # Proporciones de Materiales
+  - name: SCRAP_PROPORTION
+    value: 1145.046
+    units: kt/p.u.
+    description: Proportion of scrap per unit of production
+    citation: "Internal report"
+    source: "Steel Data Sheet 2024"
+  - name: ALLOY_MAT_PROPORTION
+    value: 14.128
+    units: kt/p.u.
+    description: Proportion of alloy materials for casting
+    citation: "Internal report"
+    source: "Steel Data Sheet 2024"
+  - name: FERRO_MAT_PROPORTION
+    value: 35.320
+    units: kt/p.u.
+    description: Proportion of ferro-alloys for casting
+    citation: "Internal report"
+    source: "Steel Data Sheet 2024"
+
+  # Proporciones de Agua
+  - name: WATER_CAST_PROPORTION
+    value: 4.128
+    units: Gl/p.u.
+    description: Water proportion for casting
+    citation: "Environmental registry"
+    source: "PRTR Spain"
+  - name: WATER_REH_PROPORTION
+    value: 0.165
+    units: Gl/p.u.
+    description: Water proportion for reheating
+    citation: "Environmental registry"
+    source: "PRTR Spain"
+  - name: WATER_ROLL_PROPORTION
+    value: 3.532
+    units: Gl/p.u.
+    description: Water proportion for rolling
+    citation: "Environmental registry"
+    source: "PRTR Spain"
+
+  # Proporciones de Energía (Térmica, Eléctrica, Mecánica)
+  - name: THER_ENE_CAST_PROPORTION
+    value: 398188
+    units: GJ/p.u.
+    description: Thermal energy proportion for casting
+    citation: "Energy audit"
+    source: "Plant Monitoring"
+  - name: ELEC_ENE_CAST_PROPORTION
+    value: 1445940
+    units: GJ/p.u.
+    description: Electrical energy proportion for casting
+    citation: "Energy audit"
+    source: "Grid consumption"
+  - name: MECH_CAST_PROPORTION
+    value: 729351
+    units: GJ/p.u.
+    description: Mechanical energy proportion for casting
+    citation: "Internal calculation"
+    source: "Maintenance logs"
+  - name: THER_ENE_REH_PROPORTION
+    value: 1910793
+    units: GJ/p.u.
+    description: Thermal energy proportion for reheating
+    citation: "Energy audit"
+    source: "Plant Monitoring"
+  - name: THER_ENE_ROLL_PROPORTION
+    value: 32364
+    units: GJ/p.u.
+    description: Thermal energy proportion for rolling
+    citation: "Energy audit"
+    source: "Plant Monitoring"
+  - name: ELEC_ENE_ROLL_PROPORTION
+    value: 382392
+    units: GJ/p.u.
+    description: Electrical energy proportion for rolling
+    citation: "Energy audit"
+    source: "Grid consumption"
+  - name: MECH_ROLL_PROPORTION
+    value: 4222800
+    units: GJ/p.u.
+    description: Mechanical energy proportion for rolling
+    citation: "Internal calculation"
+    source: "Maintenance logs"
+
+outcome:
+  - name: total_steel_production
+    description: Producción total de acero laminado (p.u. = Mt)
+    units: kt
+    same_result:
+      process: Steel-SP3-Rolling
+      output: roll_steel_out
+
+inputs:
+  - name: cast_co2_emi
+    from: Steel-SP1-Casting
+    units: kt
+    description: CO2 emissions casting
+    value: null
+  - name: reh_co2_emi
+    from: Steel-SP2-Reheating
+    units: kt
+    description: CO2 emissions reheating
+    value: null
+  - name: roll_emi_co2
+    from: Steel-SP3-Rolling
+    units: kt
+    description: CO2 emissions rolling
+    value: null
+  - name: cast_heat_loss
+    from: Steel-SP1-Casting
+    units: GJ
+    description: Heat loss casting
+    value: null
+  - name: reh_heat_loss
+    from: Steel-SP2-Reheating
+    units: GJ
+    description: Heat loss reheating
+    value: null
+  - name: roll_heat_loss
+    from: Steel-SP3-Rolling
+    units: GJ
+    description: Heat loss rolling
+    value: null
+
+demands:
+  - name: steel_scrapt_in
+    operation: total_steel_production * SCRAP_PROPORTION
+    description: Steel Scrapt (materials-product process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: SCRAP_PROPORTION
+        type: constants
+    used: Steel-SP1-Casting
+    units: kt
+  - name: ther_ene_cast
+    operation: total_steel_production * THER_ENE_CAST_PROPORTION
+    description: Thermal energy - casting process (energy process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: THER_ENE_CAST_PROPORTION
+        type: constants
+    used: Steel-SP1-Casting
+    units: GJ
+  - name: elec_ene_cast
+    operation: total_steel_production * ELEC_ENE_CAST_PROPORTION
+    description: Electrical energy - casting process (energy process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: ELEC_ENE_CAST_PROPORTION
+        type: constants
+    used: Steel-SP1-Casting
+    units: GJ
+
+  - name: alloy_mat_cast
+    operation: total_steel_production * ALLOY_MAT_PROPORTION
+    description: Alloying elements (materials-product process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: ALLOY_MAT_PROPORTION
+        type: constants
+    used: Steel-SP1-Casting
+    units: kt
+  - name: ferro_mat_cast
+    operation: total_steel_production * FERRO_MAT_PROPORTION
+    description: Ferroaloys (materials-product process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: FERRO_MAT_PROPORTION
+        type: constants
+    used: Steel-SP1-Casting
+    units: kt
+  - name: mech_ene_cast
+    operation: total_steel_production * MECH_CAST_PROPORTION
+    description: Mechanical energy - casting process (energy process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: MECH_CAST_PROPORTION
+        type: constants
+    used: Steel-SP1-Casting
+    units: GJ
+    meta: mechanical_energy
+  # Demandas enviadas a SP2 (Reheating)
+  - name: ther_ene_reh
+    operation: total_steel_production * THER_ENE_REH_PROPORTION
+    description: Thermal energy - reheating process (energy process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: THER_ENE_REH_PROPORTION
+        type: constants
+    used: Steel-SP2-Reheating
+    units: GJ
+  # Demandas enviadas a SP3 (Rolling)
+  - name: ther_ene_roll
+    operation: total_steel_production * THER_ENE_ROLL_PROPORTION
+    description: Thermal energy - rolling process (energy process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: THER_ENE_ROLL_PROPORTION
+        type: constants
+    used: Steel-SP3-Rolling
+    units: GJ
+  - name: elec_ene_roll
+    operation: total_steel_production * ELEC_ENE_ROLL_PROPORTION
+    description: Electrical energy - rolling process (energy process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: ELEC_ENE_ROLL_PROPORTION
+        type: constants
+    used: Steel-SP3-Rolling
+    units: GJ
+  - name: mech_ene_roll
+    operation: total_steel_production * MECH_ROLL_PROPORTION
+    description: Mechanical energy - rolling process (energy process input)
+    args:
+      - name: total_steel_production
+        type: outcome
+      - name: MECH_ROLL_PROPORTION
+        type: constants
+    used: Steel-SP3-Rolling
+    units: GJ
+    meta: mechanical_energy
+
+meta:
+  - name: mechanical_energy
+    operation: mech_ene_cast + mech_ene_roll
+    args:
+      - name: mech_ene_cast
+        type: demand
+      - name: mech_ene_roll
+        type: demand
+    description: Energía mecánica agregada de la planta
+    units: GJ
+
+outputs:
+  - name: co2_overall_emissions
+    operation: cast_co2_emi + reh_co2_emi + roll_emi_co2
+    args:
+      - name: cast_co2_emi
+        type: inputs
+      - name: reh_co2_emi
+        type: inputs
+      - name: roll_emi_co2
+        type: inputs
+    description: Balance total de emisiones de CO2 de la industria
+    units: kt
+  - name: heat_overall_losses
+    operation: cast_heat_loss + reh_heat_loss + roll_heat_loss
+    args:
+      - name: cast_heat_loss
+        type: inputs
+      - name: reh_heat_loss
+        type: inputs
+      - name: roll_heat_loss
+        type: inputs
+    description: Balance total de pérdidas térmicas
+    units: GJ
