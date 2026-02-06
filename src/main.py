@@ -30,18 +30,19 @@ def process_industry(name: str, industry_path: str) -> None:
     industry = Industry()
     yaml_validator = Validator()
 
-    for file in Path(industry_path).rglob("*.yaml"):
-        yaml_path = str(file)
-        yaml_data = load_yaml(yaml_path)
-        yaml_validator.validate(yaml_data)
-        if yaml_data["type"] == "industry":
-            meta = Meta(yaml_data, yaml_path)
-            industry.set_meta(meta)
-        else:
-            process = Process(yaml_data, yaml_path)
-            # save instance in ModelDict class
-            key = process.config.id
-            industry.add_process(key=key, process=process)
+    for ext in ["*.yaml", "*.yml"]:
+        for file in Path(industry_path).rglob(ext):
+            yaml_path = str(file)
+            yaml_data = load_yaml(yaml_path)
+            yaml_validator.validate(yaml_data)
+            if yaml_data["type"] == "industry":
+                meta = Meta(yaml_data, yaml_path)
+                industry.set_meta(meta)
+            else:
+                process = Process(yaml_data, yaml_path)
+                # save instance in ModelDict class
+                key = process.config.id
+                industry.add_process(key=key, process=process)
 
     # Check types
     industry.check_types()

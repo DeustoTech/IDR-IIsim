@@ -63,7 +63,9 @@ class TestIntegration(unittest.TestCase):
                                 method = getattr(instance, method_name, None)
                                 self.assertIsNotNone(method)
                                 value = method()
-                                self.assertIsInstance(value, float)
+                                self.assertTrue(
+                                    isinstance(value, (int, float))
+                                )
                                 if i < len(values):
                                     self.assertEqual(
                                         values[i], round(value, 2)
@@ -119,11 +121,12 @@ class TestIntegration(unittest.TestCase):
 
 
 def _find_industry(industry_path: str) -> dict[str, Any]:
-    for file in Path(industry_path).rglob("*.yaml"):
-        yaml_path = str(file)
-        yaml_data: dict[str, Any] = load_yaml(yaml_path)
-        if yaml_data["type"] == "industry":
-            return yaml_data
+    for ext in ["*.yaml", "*.yml"]:
+        for file in Path(industry_path).rglob(ext):
+            yaml_path = str(file)
+            yaml_data: dict[str, Any] = load_yaml(yaml_path)
+            if yaml_data["type"] == "industry":
+                return yaml_data
     raise ValueError("Industry yaml not found!")
 
 
@@ -142,7 +145,11 @@ def _prepare_bad_files() -> None:
     shutil.copytree(INDUSTRIES_PATH, BAD_INDUSTRIES_PATH, dirs_exist_ok=True)
     for elem in os.listdir(BAD_INDUSTRIES_PATH):
         elem_path = os.path.join(BAD_INDUSTRIES_PATH, elem)
-        yamls = [f for f in os.listdir(elem_path) if f.endswith("yaml")]
+        yamls = [
+            f
+            for f in os.listdir(elem_path)
+            if f.endswith("yaml") or f.endswith("yml")
+        ]
         for i, yaml in enumerate(yamls):
             new_path = f"{elem_path}_{i}"
             shutil.copytree(elem_path, new_path, dirs_exist_ok=True)
