@@ -15,47 +15,27 @@ constants:
     citation: "Internal report"
     source: "Steel Data Sheet 2024"
   - name: ALLOY_MAT_PROPORTION
-    value: 14.128
+    value: 47.042
     units: kt/p.u.
     description: Proportion of alloy materials for casting
     citation: "Internal report"
     source: "Steel Data Sheet 2024"
   - name: FERRO_MAT_PROPORTION
-    value: 35.320
+    value: 32.505
     units: kt/p.u.
     description: Proportion of ferro-alloys for casting
     citation: "Internal report"
     source: "Steel Data Sheet 2024"
 
-  # Proporciones de Agua
-  - name: WATER_CAST_PROPORTION
-    value: 4.128
-    units: Gl/p.u.
-    description: Water proportion for casting
-    citation: "Environmental registry"
-    source: "PRTR Spain"
-  - name: WATER_REH_PROPORTION
-    value: 0.165
-    units: Gl/p.u.
-    description: Water proportion for reheating
-    citation: "Environmental registry"
-    source: "PRTR Spain"
-  - name: WATER_ROLL_PROPORTION
-    value: 3.532
-    units: Gl/p.u.
-    description: Water proportion for rolling
-    citation: "Environmental registry"
-    source: "PRTR Spain"
-
   # Proporciones de Energía (Térmica, Eléctrica, Mecánica)
   - name: THER_ENE_CAST_PROPORTION
-    value: 398188
+    value: 362880.00
     units: GJ/p.u.
     description: Thermal energy proportion for casting
     citation: "Energy audit"
     source: "Plant Monitoring"
   - name: ELEC_ENE_CAST_PROPORTION
-    value: 1445940
+    value: 1568700
     units: GJ/p.u.
     description: Electrical energy proportion for casting
     citation: "Energy audit"
@@ -67,19 +47,19 @@ constants:
     citation: "Internal calculation"
     source: "Maintenance logs"
   - name: THER_ENE_REH_PROPORTION
-    value: 1910793
+    value: 1973160
     units: GJ/p.u.
     description: Thermal energy proportion for reheating
     citation: "Energy audit"
     source: "Plant Monitoring"
   - name: THER_ENE_ROLL_PROPORTION
-    value: 32364
+    value: 17784000
     units: GJ/p.u.
     description: Thermal energy proportion for rolling
     citation: "Energy audit"
     source: "Plant Monitoring"
   - name: ELEC_ENE_ROLL_PROPORTION
-    value: 382392
+    value: 212400
     units: GJ/p.u.
     description: Electrical energy proportion for rolling
     citation: "Energy audit"
