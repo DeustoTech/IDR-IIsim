@@ -5,10 +5,10 @@ import unittest
 from string import Template
 from unittest.mock import MagicMock, mock_open, patch
 
-from idr_iisim.templates import (  # type:ignore # pylint: disable=import-error
+from idr_iisim.templates import (  # type: ignore # pylint: disable=import-error
     load_template,
 )
-from idr_iisim.utils.logger import (  # type:ignore # pylint: disable=import-error
+from idr_iisim.utils.logger import (  # type: ignore # pylint: disable=import-error
     setup_logger,
 )
 

@@ -2,7 +2,7 @@
 
 import unittest
 
-from idr_iisim.utils.structs import (  # type:ignore  # pylint: disable=import-error
+from idr_iisim.utils.structs import (  # type: ignore  # pylint: disable=import-error
     ConstantStruct,
     DemandStruct,
     InputStruct,

@@ -6,13 +6,13 @@ from unittest.mock import MagicMock, patch
 
 import sympy
 
-from idr_iisim.models.process import (  # type:ignore # pylint: disable=import-error
+from idr_iisim.models.process import (  # type: ignore # pylint: disable=import-error
     Process,
 )
-from idr_iisim.utils.models_dict import (  # type:ignore # pylint: disable=import-error
+from idr_iisim.utils.models_dict import (  # type: ignore # pylint: disable=import-error
     Industry,
 )
-from idr_iisim.utils.structs import (  # type:ignore # pylint: disable=import-error
+from idr_iisim.utils.structs import (  # type: ignore # pylint: disable=import-error
     InputStruct,
     ModelStruct,
     OutputStruct,
