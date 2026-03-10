@@ -8,10 +8,10 @@ from pathlib import Path
 from typing import Any
 from unittest.mock import patch
 
-from idr_iisim.utils.models_dict import (  # type:ignore # pylint: disable=import-error
+from idr_iisim.utils.models_dict import (  # type: ignore # pylint: disable=import-error
     load_yaml,
 )
-from main import (  # type:ignore # pylint: disable=import-error
+from main import (  # type: ignore # pylint: disable=import-error
     main,
     process_industry,
 )
@@ -72,10 +72,15 @@ class TestIntegration(unittest.TestCase):
                                     )
                         # Check other methods
                         string_repr = str(instance)
+                        short_name = (
+                            _get_short_name(yaml["short_name"])
+                            .replace("_", " ")
+                            .capitalize()
+                        )
                         self.assertIsInstance(string_repr, str)
                         self.assertEqual(
                             string_repr.split("\n", maxsplit=1)[0],
-                            f"{yaml['short_name']} industry",
+                            f"{short_name} industry",
                         )
                         self.assertIsNone(instance.csv())
                         self.assertIsInstance(instance.csv_header(), list)
@@ -130,14 +135,25 @@ def _find_industry(industry_path: str) -> dict[str, Any]:
     raise ValueError("Industry yaml not found!")
 
 
+def _get_short_name(name: str):
+    short_name = name[0]
+    for c in name[1:]:
+        if c.isupper():
+            short_name += "_"
+        short_name += c
+    return short_name.lower()
+
+
 def _import_class(name: str) -> Any:
-    module = importlib.import_module(f"industries.{name.lower()}")
+    short_name = _get_short_name(name)
+    module = importlib.import_module(f"industries.{short_name}")
     industry_cls = getattr(module, name, None)
     return industry_cls
 
 
 def _get_industry_class_path(name: str) -> str:
-    output_path = os.path.join("industries", f"{name.lower()}.py")
+    short_name = _get_short_name(name)
+    output_path = os.path.join("industries", f"{short_name}.py")
     return output_path
 
 

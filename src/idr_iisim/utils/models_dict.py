@@ -37,6 +37,17 @@ class Industry:
         if len(from_list) > 0:
             self.dependencies[key] = from_list
 
+    def get_module_name(self) -> str:
+        """Returns a Python the module's file name"""
+        assert self.meta is not None
+        name = self.meta.config.short_name
+        module_name = name[0]
+        for c in name[1:]:
+            if c.isupper():
+                module_name += "_"
+            module_name += c
+        return module_name.lower()
+
     def set_meta(self, meta: Meta) -> None:
         """set or update the meta of this industry"""
         self.meta = meta

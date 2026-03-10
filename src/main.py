@@ -33,7 +33,9 @@ def process_industry(name: str, industry_path: str) -> None:
     for ext in ["*.yaml", "*.yml"]:
         for file in Path(industry_path).rglob(ext):
             yaml_path = str(file)
+            i_logger.debug("Reading %s...", yaml_path)
             yaml_data = load_yaml(yaml_path)
+            i_logger.debug("Validating %s...", yaml_path)
             yaml_validator.validate(yaml_data)
             if yaml_data["type"] == "industry":
                 meta = Meta(yaml_data, yaml_path)
@@ -51,7 +53,7 @@ def process_industry(name: str, industry_path: str) -> None:
     industries_final_path = "industries"
     result_path = os.path.join(
         industries_final_path,
-        f"{industry.meta.config.short_name.lower()}.py",
+        f"{industry.get_module_name()}.py",
     )
 
     with open(result_path, "w", encoding="utf-8") as f:
