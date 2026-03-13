@@ -5,6 +5,7 @@ idr_iisim/*/*/*/model.png
 idr_iisim/*/*/*/generated*.py
 Industries/*/*/*/*.png
 Industries/*/*/*/generated*.py
+nuts_csvs/outputs
 tmp
 .venv/
 *.zip
