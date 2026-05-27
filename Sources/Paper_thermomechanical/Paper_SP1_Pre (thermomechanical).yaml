@@ -1,0 +1,106 @@
+id: Paper-SP1-Pre
+name: Pre pulp preparation
+short_name: prepulpprep
+type: process
+description: Paper and cardboard production; Pulp preparation (thermo mechanical)
+version: 1.0.0
+debug: false
+constants:
+  - name: PERF_SP1
+    description: Performance for subprocess 1
+    citation: text
+    source: https://www.google.com
+    value: 0.9001
+    units: p.u.
+  - name: WASTE_SP1
+    description: Waste ratio for subprocess 1
+    citation: text
+    source: https://www.google.com
+    value: 0.0143
+    units: p.u.
+  - name: WATERRED_SP1
+    description: Water wasted ratio for subprocess 1
+    citation: text
+    source: https://www.google.com
+    value: 0.571
+    units: p.u.
+  - name: EMISSION_SP1
+    description: Emission ratio for subprocess 1
+    citation: text
+    source: https://www.google.com
+    value: 1.036
+    units: p.u.
+inputs:
+  - name: debarked_logs_SP1
+    description: Debarked logs
+    value:
+      - 1.22
+    units: kt
+    from: null
+  - name: chemicals_SP1
+    description: Chemicals needed in subprocess 1
+    value:
+      - 0.058
+    units: kt
+    from: null
+  - name: water_SP1
+    description: Water needed in subprocess 1
+    value:
+      - 0.007
+    units: Gl
+    from: null
+  - name: electrical_energy_SP1
+    description: Electrical energy needed in subprocess 1
+    value:
+      - 23901.48
+    units: GJ
+    from: null
+  - name: therm_energy_SP1
+    description: Thermal energy needed in subprocess 1
+    value:
+      - 1000
+    units: GJ
+    from: null
+outputs:
+  - name: prepulp_SP1
+    operation: (debarked_logs_SP1 * PERF_SP1)
+    args:
+      - name: debarked_logs_SP1
+        type: inputs
+      - name: PERF_SP1
+        type: constants
+    description: Prepulp generated in subprocess 1
+    value: null
+    units: kt
+  - name: pre_waste
+    operation: (debarked_logs_SP1 * WASTE_SP1)
+    args:
+      - name: debarked_logs_SP1
+        type: inputs
+      - name: WASTE_SP1
+        type: constants
+    description: Waste generated in subprocess 1
+    value: null
+    units: kt
+  - name: pre_water
+    operation: (water_SP1 * WATERRED_SP1)
+    args:
+      - name: water_SP1
+        type: inputs
+      - name: WATERRED_SP1
+        type: constants
+    description: Waste water generated in subprocess 1
+    value: null
+    units: Gl
+  - name: pre_emi
+    operation: (debarked_logs_SP1 + chemicals_SP1) * EMISSION_SP1
+    args:
+      - name: debarked_logs_SP1
+        type: inputs
+      - name: chemicals_SP1
+        type: inputs
+      - name: EMISSION_SP1
+        type: constants
+    description: Emissions generated in subprocess 1
+    value: null
+    units: kt

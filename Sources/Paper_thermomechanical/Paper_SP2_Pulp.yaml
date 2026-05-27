@@ -1,0 +1,83 @@
+id: Paper-SP2-Pulp
+name: Pulp preparation
+short_name: pulp
+type: process
+description: Paper process; Paper and cardboard production; Pulp preparation
+version: 1.0.0
+debug: false
+constants:
+  - name: PERF_SP2
+    description: Performance for subprocess 2
+    citation: text
+    source: https://www.google.com
+    value: 1
+    units: p.u.
+  - name: WATERRED_SP2
+    description: Water wasted ratio for subprocess 2
+    citation: text
+    source: https://www.google.com
+    value: 1.32
+    units: p.u.
+  - name: EMISSION_SP2
+    description: Emission ratio for subprocess 2
+    citation: text
+    source: https://www.google.com
+    value: 0.034
+    units: p.u.
+inputs:
+  - name: prepulp_SP1
+    description: Prepulp generated in process 1
+    value: null
+    units: kt
+    from: Paper-SP1-Pre
+  - name: chemicals_SP2
+    description: Chemicals needed in subprocess 2
+    value:
+      - 0.12
+    units: kt
+    from: null
+  - name: water_SP2
+    description: Water needed in subprocess 2
+    value:
+      - 0.0057
+    units: Gl
+    from: null
+  - name: electrical_energy_SP2
+    description: Electrical energy needed in subprocess 2
+    value:
+      - 1403.10
+    units: GJ
+    from: null
+outputs:
+  - name: pulp_SP2
+    operation: (prepulp_SP1 * PERF_SP2)
+    args:
+      - name: prepulp_SP1
+        type: inputs
+      - name: PERF_SP2
+        type: constants
+    description: Prepulp generated in subprocess 2
+    value: null
+    units: kt
+  - name: pulp_water
+    operation: (water_SP2 * WATERRED_SP2)
+    args:
+      - name: water_SP2
+        type: inputs
+      - name: WATERRED_SP2
+        type: constants
+    description: Waste water generated in subprocess 2
+    value: null
+    units: Gl
+  - name: pulp_emi
+    operation: (prepulp_SP1 + chemicals_SP2) * EMISSION_SP2
+    args:
+      - name: prepulp_SP1
+        type: inputs
+      - name: chemicals_SP2
+        type: inputs
+      - name: EMISSION_SP2
+        type: constants
+    description: Emissions generated in subprocess 2
+    value: null
+    units: kt

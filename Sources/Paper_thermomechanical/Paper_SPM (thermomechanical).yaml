@@ -1,0 +1,287 @@
+id: Paper-process4b-Meta
+name: Paper thermomechanical industry
+short_name: PaperThermomechanical
+type: industry
+description: Paper industry (thermomechanical); Paper and cardboard (using thermo mechanical process for creating pulp)
+version: 1.1.0
+debug: false
+constants:
+  # Proporciones de Materiales
+  - name: DEBARKED_LOGS_PROPORTION
+    value: 2.5
+    units: kt/p.u.
+    description: Proportion of debarked logs per unit of production
+    citation: ""
+    source: ""
+  - name: CHEMICALS_PRE_PROPORTION
+    value: 0.132
+    units: kt/p.u.
+    description: Proportion of chemicals for pre_pulp
+    citation: ""
+    source: ""
+  - name: WATER_PRE_PROPORTION
+    value: 0.0425
+    units: Gl/p.u.
+    description: Proportion of water for pre_pulp
+    citation: ""
+    source: ""
+  - name: CHEMICALS_PULP_PROPORTION
+    value: 0.12
+    units: kt/p.u.
+    description: Proportion of chemicals for pulp
+    citation: ""
+    source: ""
+  - name: WATER_PULP_PROPORTION
+    value: 0.0057
+    units: Gl/p.u.
+    description: Proportion of water for pulp
+    citation: ""
+    source: ""
+  - name: CHEMICALS_PAPER_PROPORTION
+    value: 0.03
+    units: kt/p.u.
+    description: Proportion of chemicals for paper
+    citation: ""
+    source: ""
+
+  # Proporciones de Energía (Térmica, Eléctrica, Mecánica)
+  - name: ELEC_ENE_PRE_PROPORTION
+    value: 3035.34
+    units: GJ/p.u.
+    description: Electrical energy proportion for pre_pulp
+    citation: ""
+    source: ""
+  - name: THER_ENE_PRE_PROPORTION
+    value: 17160
+    units: GJ/p.u.
+    description: Thermal energy proportion for pre_pulp
+    citation: ""
+    source: ""
+  - name: ELEC_ENE_PULP_PROPORTION
+    value: 1403.10
+    units: GJ/p.u.
+    description: Electrical energy proportion for pulp
+    citation: ""
+    source: ""
+  - name: ELEC_ENE_PAPER_PROPORTION
+    value: 3273.90
+    units: GJ/p.u.
+    description: Electrical energy proportion for paper
+    citation: ""
+    source: ""
+  - name: THER_ENE_PAPER_PROPORTION
+    value: 5480
+    units: GJ/p.u.
+    description: Thermal energy proportion for paper
+    citation: ""
+    source: ""
+
+outcome:
+  - name: total_paper_production
+    description: Producción total de papel
+    units: kt
+    same_result:
+      process: Paper-SP3-PaperMach
+      output: paper_out
+
+inputs:
+  - name: pre_waste
+    from: Paper-SP1-Pre
+    units: kt
+    description: CO2 emissions casting
+    value: null
+  - name: pre_water
+    from: Paper-SP1-Pre
+    units: Gl
+    description: CO2 emissions reheating
+    value: null
+  - name: pre_emi
+    from: Paper-SP1-Pre
+    units: kt
+    description: CO2 emissions rolling
+    value: null
+  - name: pulp_water
+    from: Paper-SP2-Pulp
+    units: Gl
+    description: Heat loss casting
+    value: null
+  - name: pulp_emi
+    from: Paper-SP2-Pulp
+    units: kt
+    description: Heat loss reheating
+    value: null
+  - name: paper_waste
+    from: Paper-SP3-PaperMach
+    units: kt
+    description: Heat loss rolling
+    value: null
+  - name: paper_emi
+    from: Paper-SP3-PaperMach
+    units: kt
+    description: Heat loss rolling
+    value: null
+
+demands:
+  - name: debarked_logs_SP1
+    operation: total_paper_production * DEBARKED_LOGS_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: DEBARKED_LOGS_PROPORTION
+        type: constants
+    used: Paper-SP1-Pre
+    units: kt
+  - name: chemicals_SP1
+    operation: total_paper_production * CHEMICALS_PRE_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: CHEMICALS_PRE_PROPORTION
+        type: constants
+    used: Paper-SP1-Pre
+    units: kt
+  - name: water_SP1
+    operation: total_paper_production * WATER_PRE_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: WATER_PRE_PROPORTION
+        type: constants
+    used: Paper-SP1-Pre
+    units: Gl
+  - name: electrical_energy_SP1
+    operation: total_paper_production * ELEC_ENE_PRE_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: ELEC_ENE_PRE_PROPORTION
+        type: constants
+    used: Paper-SP1-Pre
+    units: GJ
+  - name: therm_energy_SP1
+    operation: total_paper_production * THER_ENE_PRE_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: THER_ENE_PRE_PROPORTION
+        type: constants
+    used: Paper-SP1-Pre
+    units: GJ
+  - name: chemicals_SP2
+    operation: total_paper_production * CHEMICALS_PULP_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: CHEMICALS_PULP_PROPORTION
+        type: constants
+    used: Paper-SP2-Pulp
+    units: kt
+  - name: water_SP2
+    operation: total_paper_production * WATER_PULP_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: WATER_PULP_PROPORTION
+        type: constants
+    used: Paper-SP2-Pulp
+    units: Gl
+  - name: electrical_energy_SP2
+    operation: total_paper_production * ELEC_ENE_PULP_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: ELEC_ENE_PULP_PROPORTION
+        type: constants
+    used: Paper-SP2-Pulp
+    units: GJ
+  - name: chemicals_SP3
+    operation: total_paper_production * CHEMICALS_PAPER_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: CHEMICALS_PAPER_PROPORTION
+        type: constants
+    used: Paper-SP3-PaperMach
+    units: kt
+  - name: electrical_energy_SP3
+    operation: total_paper_production * ELEC_ENE_PAPER_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: ELEC_ENE_PAPER_PROPORTION
+        type: constants
+    used: Paper-SP3-PaperMach
+    units: GJ
+  - name: therm_energy_SP3
+    operation: total_paper_production * THER_ENE_PAPER_PROPORTION
+    description: x
+    args:
+      - name: total_paper_production
+        type: outcome
+      - name: THER_ENE_PAPER_PROPORTION
+        type: constants
+    used: Paper-SP3-PaperMach
+    units: GJ
+
+meta:
+  - name: electrical_energy
+    operation: electrical_energy_SP1 + electrical_energy_SP2 + electrical_energy_SP3
+    args:
+      - name: electrical_energy_SP1
+        type: demand
+      - name: electrical_energy_SP2
+        type: demand
+      - name: electrical_energy_SP3
+        type: demand
+    description: Energía eléctrica agregada de la planta
+    units: GJ
+  - name: thermal_energy
+    operation: therm_energy_SP1 + therm_energy_SP3
+    args:
+      - name: therm_energy_SP1
+        type: demand
+      - name: therm_energy_SP3
+        type: demand
+    description: Energía térmica agregada de la planta
+    units: GJ
+
+outputs:
+  - name: wastemat_overall
+    operation: pre_waste + paper_waste
+    args:
+      - name: pre_waste
+        type: inputs
+      - name: paper_waste
+        type: inputs
+    description: Balance total de residuos de la industria
+    units: kt
+  - name: wastewater_overall
+    operation: pre_water + pulp_water
+    args:
+      - name: pre_water
+        type: inputs
+      - name: pulp_water
+        type: inputs
+    description: Balance total de aguas residuales de la industria
+    units: Gl
+  - name: co2emissions_overall
+    operation: pre_emi + pulp_emi + paper_emi
+    args:
+      - name: pre_emi
+        type: inputs
+      - name: pulp_emi
+        type: inputs
+      - name: paper_emi
+        type: inputs
+    description: Balance total de emisiones de CO2 de la industria
+    units: kt
