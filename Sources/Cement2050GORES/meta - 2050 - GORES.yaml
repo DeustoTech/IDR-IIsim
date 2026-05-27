@@ -1,0 +1,266 @@
+id: Cemento-process4-Meta
+name: Cement industry (GORES 2050)
+short_name: Cement2050Gores
+type: industry
+description: Meta archivo de la industria del cemento
+version: 1.0.0
+debug: false
+constants:
+  - name: LIMESTONE_PROPORTION
+    description: limestone proportion
+    citation: text
+    source: https://www.google.com
+    value: 0.805
+    units: kt/p.u.
+  - name: CLAY_PROPORTION
+    description: Clay proportion
+    citation: text
+    source: https://www.google.com
+    value: 0.292
+    units: kt/p.u.
+  - name: MECHANICAL_ENERGY_PRE_PROPORTION
+    description: Mechanical Energy pre proportion
+    citation: text
+    source: https://www.google.com
+    value: 0.03
+    units: MJ/p.u.
+  - name: WATER_PROPORTION
+    description: Water proportion
+    citation: text
+    source: https://www.google.com
+    value: 0.122
+    units: m3/p.u.
+  - name: FOSSIL_FUEL_PROPORTION
+    description: Fuel proportion
+    citation: The amount of fossil fuel used by the process
+    source: https://www.google.com
+    value: 0.00
+    units: KT/p.u.
+  - name: MECHANICAL_ENERGY_OVEN_PROPORTION
+    description: Mechanical Energy oven proportion
+    citation: text
+    source: https://www.google.com
+    value: 0.035
+    units: TJ/p.u.
+  - name: GYPSUM_PROPORTION
+    description: Gypsum proportion
+    citation: text
+    source: https://www.google.com
+    value: 0.01
+    units: percentage/p.u.
+  - name: MECHANICAL_ENERGY_MILLING_PROPORTION
+    description: Mechanical Energy used by the process
+    citation: text
+    source: https://www.google.com
+    value: 0.014
+    units: TJ
+  - name: CO2_EMISSIONS_PROPORTION
+    description: CO2
+    citation: text
+    source: https://www.google.com
+    value: 0.001
+    units: kt
+  - name: ALTERNATIVE_MATERIALS
+    description: Replacing materilas to reduce CO2 emissions
+    citation: text
+    source: https://www.google.com
+    value: 0.6
+    units: kt
+  - name: THERMAL_ENERGY_OVEN_DEMANDS
+    description: The heat required to produce one kilotonne of cement is 3.5 TJ
+    citation: text
+    source: https://www.google.com
+    value: 3.5
+    units: TJ
+  - name: FUEL_HC
+    description: Fuel HC
+    citation: text
+    source: https://www.google.com
+    value: 7.6923
+    units: TJ/kg
+inputs:
+  - name: clinker_production_oven
+    description: Clinker consumption
+    units: kt
+    value: null
+    from: Cemento-process2-Oven
+  - name: pm10_emission_pre
+    description: Particular matter (PM10) emissions
+    units: kt
+    value: null
+    from: Cemento-process1-Pre
+  - name: pm10_emission_oven
+    description: PM10 emission (Limestone + Clay)
+    units: kt
+    value: null
+    from: Cemento-process2-Oven
+  - name: cement_emission
+    description: cement air emissions description
+    units: kt
+    value: null
+    from: Cemento-process3-Milling
+outcome:
+  - name: total_cement_production
+    description: Total cement production
+    units: kt
+    same_result:
+      process: Cemento1-process3-Milling
+      output: cement_production
+demands:
+  - name: limestone_demand
+    units: kt
+    operation: total_cement_production * LIMESTONE_PROPORTION
+    used: Cemento-process1-Pre
+    args:
+      - name: LIMESTONE_PROPORTION
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total limestone demand
+  - name: clay_demand
+    operation: total_cement_production * CLAY_PROPORTION
+    args:
+      - name: CLAY_PROPORTION
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    units: kt
+    description: Total clay demand
+    used: Cemento-process1-Pre
+  - name: thermal_energy_demand
+    operation: total_cement_production * THERMAL_ENERGY_OVEN_DEMANDS
+    args:
+      - name: THERMAL_ENERGY_OVEN_DEMANDS
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    units: TJ
+    description: Total fossil fuel demand
+    used: Cemento-process2-Oven
+  - name: water_demand
+    operation: total_cement_production * WATER_PROPORTION
+    args:
+      - name: WATER_PROPORTION
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total water demand
+    units: m3
+    used: Cemento-process2-Oven
+  - name: gypsum_demand
+    operation: clinker_production_oven * GYPSUM_PROPORTION
+    args:
+      - name: clinker_production_oven
+        type: inputs
+      - name: GYPSUM_PROPORTION
+        type: constants
+    description: gympsum total demand
+    units: kt
+    used: Cemento-process3-Milling
+  - name: mechanical_energy_pre
+    operation: total_cement_production * MECHANICAL_ENERGY_PRE_PROPORTION
+    args:
+      - name: MECHANICAL_ENERGY_PRE
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total mechanical energy pre
+    units: TJ
+    used: Cemento-process1-Pre
+    meta: mechanical_energy
+  - name: mechanical_energy_oven
+    operation: total_cement_production * MECHANICAL_ENERGY_OVEN_PROPORTION
+    args:
+      - name: MECHANICAL_ENERGY_OVEN
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total mechanical energy oven
+    units: TJ
+    used: Cemento-process2-Oven
+    meta: mechanical_energy
+  - name: mechanical_energy_milling
+    operation: total_cement_production * MECHANICAL_ENERGY_MILLING_PROPORTION
+    args:
+      - name: MECHANICAL_ENERGY_MILLING
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total mechanical energy milling
+    units: TJ
+    used: Cemento-process3-Milling
+    meta: mechanical_energy
+meta:
+  - name: mechanical_energy
+    operation: mechanical_energy_pre + mechanical_energy_oven + mechanical_energy_milling
+    args:
+      - name: mechanical_energy_pre
+        type: demand
+      - name: mechanical_energy_oven
+        type: demand
+      - name: mechanical_energy_milling
+        type: demand
+    description: Total mechanical energy
+    units: TJ
+  - name: thermal_green_energy_demands
+    operation: thermal_energy_demand * (1 - FOSSIL_FUEL_PROPORTION)
+    args:
+      - name: thermal_energy_demand
+        type: demand
+      - name: FOSSIL_FUEL_PROPORTION
+        type: constants
+    units: TJ
+    description: Heat demand sourced by fuels
+  - name: fossil_fuel_demands
+    operation: total_cement_production * FOSSIL_FUEL_PROPORTION / FUEL_HC
+    args:
+      - name: total_cement_production
+        type: outcome
+      - name: FOSSIL_FUEL_PROPORTION
+        type: constants
+      - name: FUEL_HC
+        type: constants
+    units: kt
+    description: Total amount of fossil fuel required
+outputs:
+  - name: co2_overall_emissions
+    operation: total_cement_production * CO2_EMISSIONS_PROPORTION
+    args:
+      - name: total_cement_production
+        type: outcome
+      - name: CO2_EMISSIONS_PROPORTION
+        type: constants
+    description: Total C02 emissions
+    units: kt
+  - name: heat_overall_losses
+    operation: heat_losses_oven
+    args:
+      - name: heat_losses_oven
+        type: outputs
+        from: Cemento-process2-Oven
+    description: Total Heat losses
+    units: TJ
+  - name: pm10_overall_emission
+    operation: (pm10_emission_pre + pm10_emission_oven + cement_emission)
+    args:
+      - name: pm10_emission_pre
+        type: inputs
+        from: Cemento-process1-Pre
+      - name: pm10_emission_oven
+        type: inputs
+        from: Cemento-process2-Oven
+      - name: cement_emission
+        type: inputs
+        from: Cemento-process3-Milling
+    description: Total PM10 emissions
+    value: null
+    units: kt
+  - name: alternative_materials
+    operation: total_cement_production * ALTERNATIVE_MATERIALS
+    args:
+      - name: ALTERNATIVE_MATERIALS
+        type: constants
+      - name: total_cement_production
+        type: outcome
+    description: Total alternative materials
+    units: kt
