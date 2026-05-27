@@ -1,0 +1,83 @@
+id: Paper-SP3-PaperMach
+name: Paper and cardboard machine
+short_name: papermach
+type: process
+description: Paper process; Paper and cardboard production; Paper and cardboard machine
+version: 1.0.0
+debug: false
+constants:
+  - name: PERF_SP3
+    description: Performance for subprocess 3
+    citation: text
+    source: https://www.google.com
+    value: 0.91
+    units: p.u.
+  - name: WASTE_SP3
+    description: Water wasted ratio for subprocess 3
+    citation: text
+    source: https://www.google.com
+    value: 0.034
+    units: p.u.
+  - name: EMISSION_SP3
+    description: Emission ratio for subprocess 3
+    citation: text
+    source: https://www.google.com
+    value: 0.365
+    units: p.u.
+inputs:
+  - name: pulp_SP2
+    description: Pulp generated in process 2
+    value: null
+    units: kt
+    from: Paper-SP2-Pulp
+  - name: chemicals_SP3
+    description: Chemicals needed in subprocess 3
+    value:
+      - 0.03
+    units: kt
+    from: null
+  - name: electrical_energy_SP3
+    description: Electrical energy needed in subprocess 3
+    value:
+      - 3273.90
+    units: GJ
+    from: null
+  - name: therm_energy_SP3
+    description: Electrical energy needed in subprocess 3
+    value:
+      - 5480
+    units: GJ
+    from: null
+outputs:
+  - name: paper
+    operation: (pulp_SP2 * PERF_SP3)
+    args:
+      - name: pulp_SP2
+        type: inputs
+      - name: PERF_SP3
+        type: constants
+    description: Prepulp generated in subprocess 3
+    value: null
+    units: kt
+  - name: paper_waste
+    operation: (pulp_SP2 * WASTE_SP3)
+    args:
+      - name: pulp_SP2
+        type: inputs
+      - name: WASTE_SP3
+        type: constants
+    description: Waste water generated in subprocess 3
+    value: null
+    units: kt
+  - name: paper_emi
+    operation: (pulp_SP2 + chemicals_SP3) * EMISSION_SP3
+    args:
+      - name: pulp_SP2
+        type: inputs
+      - name: chemicals_SP3
+        type: inputs
+      - name: EMISSION_SP3
+        type: constants
+    description: Emissions generated in subprocess 3
+    value: null
+    units: kt
