@@ -11,19 +11,13 @@ constants:
     citation: text
     source: https://www.google.com
     value: 0.38
-    units: p.u.
-  - name: FUEL_HC
-    description: Fuel HC
-    citation: text
-    source: https://www.google.com
-    value: 0.02693
-    units: MJ/kg
+    units: percentage
   - name: ENERGY_LOSSES
     description: Energy losses
     citation: text
     source: https://www.google.com
     value: 0.1871
-    units: p.u.
+    units: percentage
 inputs:
   - name: raw_mix
     description: Mix description m1
@@ -35,15 +29,15 @@ inputs:
     value: null
     units: m3
     from: null
-  - name: fuel_demand
-    description: Fuel as a Material
+  - name: thermal_energy_demand
+    description: Energy required
     value: null
-    units: kt
+    units: TJ
     from: null
   - name: mechanical_energy_oven
     description: Mechanical energy description
     value: null
-    units: GJ
+    units: TJ
     from: null
   - name: pm10_emission_pre
     description: patricular matter emissions
@@ -56,21 +50,23 @@ outputs:
     args:
       - name: pm10_emission_pre
         type: inputs
-    description: PM10 emission (Limestone + Clay)
+      - name: raw_mix
+        type: inputs
+      - name: CLINKER_LOSSES
+        type: constants
+    description: PM10 emission (Limestone + Clay + clinker)
     value: null
     units: kt
   - name: heat_losses_oven
-    operation: fuel_demand  * FUEL_HC * ENERGY_LOSSES
+    operation: thermal_energy_demand * ENERGY_LOSSES
     args:
-      - name: fuel_demand
+      - name: thermal_energy_demand
         type: inputs
-      - name: FUEL_HC
-        type: constants
       - name: ENERGY_LOSSES
         type: constants
     description: Heat Losses in the process
     value: null
-    units: GJ
+    units: TJ
   - name: clinker_production_oven
     operation: raw_mix * ( 1 - CLINKER_LOSSES )
     args:

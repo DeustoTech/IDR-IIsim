@@ -26,7 +26,7 @@ inputs:
   - name: mechanical_energy_milling
     description: Mechanical Energy used by the process
     value: null
-    units: GJ
+    units: TJ
     from: null
 outputs:
   - name: cement_emission
