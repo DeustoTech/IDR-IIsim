@@ -80,7 +80,8 @@ class TestIntegration(unittest.TestCase):
                         self.assertIsInstance(string_repr, str)
                         self.assertEqual(
                             string_repr.split("\n", maxsplit=1)[0],
-                            f"{short_name} industry",
+                            # f"{short_name} industry",
+                            yaml["name"],
                         )
                         self.assertIsNone(instance.csv())
                         self.assertIsInstance(instance.csv_header(), list)
